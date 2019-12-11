@@ -88,12 +88,12 @@ public class LoginWindow extends javax.swing.JFrame {
     	
     	System.out.println("itt fog bejönni a kezelői oldal");
     	
-    	UserWindow secondForm = new UserWindow();
+    	UserWindow2 secondForm = new UserWindow2();
     	//secondForm.setBounds(0, 0, 1000	, 1000);
 
     	secondForm.setTitle("Ezeket a napokat szeretném módosítani");
     	secondForm.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-    	secondForm.setSize(1200, 900);
+    	secondForm.setSize(900, 700);
     	secondForm.setLocationRelativeTo(null);
 
     	secondForm.setVisible(true);
