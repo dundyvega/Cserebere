@@ -2,9 +2,9 @@ package windows;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
-import com.jgoodies.forms.layout.FormLayout;
-import com.jgoodies.forms.layout.ColumnSpec;
-import com.jgoodies.forms.layout.RowSpec;
+//import com.jgoodies.forms.layout.FormLayout;
+//import com.jgoodies.forms.layout.ColumnSpec;
+//import com.jgoodies.forms.layout.RowSpec;
 
 import objects.FileOperator;
 import objects.User;
@@ -387,7 +387,7 @@ public class UserWindow2 {
 		
 		alapszin = button_0.getBackground();
     	
-    	
+    	gombok.add(button_0);
     	gombok.add(button_1);
     	gombok.add(button_2);
     	gombok.add(button_3);
@@ -424,7 +424,7 @@ public class UserWindow2 {
     	gombok.add(button_34);
     	gombok.add(button_35);
     	gombok.add(button_36);
-    	gombok.add(button_0);
+
     	
     	for (int i = 0; i < gombok.size(); ++i) {
     		
@@ -784,12 +784,12 @@ public class UserWindow2 {
     				
     				
     				
-    				if (hetvege.contains(hasznalt.get(i))) {
+    				if (hetvege.contains(hasznalt.get(i)) && hasznalt.get(i).isEnabled()) {
     					
     					szabadHetvege.add(hasznalt.get(i));
     					
     					
-    				} else {
+    				} else if (hasznalt.get(i).isEnabled()){
     					szabadHetkoznap.add(hasznalt.get(i));
     					
     				}
@@ -894,6 +894,8 @@ public class UserWindow2 {
 	protected void szinezo(ActionEvent e) {
 		
 		
+
+		
 		if (!cserelniLehet) {
 				// TODO Auto-generated method stub
 				
@@ -934,14 +936,23 @@ public class UserWindow2 {
 		    			hasznalt.get(lenyomottGomb).setBackground(panel_7.getBackground());
 		    			
 		    			fixNapok -= 1;
+		    			if (szabadHetvege.contains(hasznalt.get(lenyomottGomb))) {
+		    				hetvegekSzabadok -= 1;
+		    			} else {
+		    				hetkoznapokSzabadok -= 1;
+		    			}
 		    			
-		    			System.out.println("mi ez1 " + fixNapok);
+		    			
 		    		} else {
 		    			hasznalt.get(lenyomottGomb).setBackground(alapszin);
 		    			
 		    			fixNapok += 1;
 		    			
-		    			System.out.println("mi ez2? " + fixNapok);
+		    			if (szabadHetvege.contains(hasznalt.get(lenyomottGomb))) {
+		    				hetvegekSzabadok += 1;
+		    			} else {
+		    				hetkoznapokSzabadok += 1;
+		    			}
 		    		}
 		    		
 		    		
@@ -952,22 +963,35 @@ public class UserWindow2 {
 			    	if (hasznalt.get(lenyomottGomb).getBackground().equals(alapszin)) {
 			    		
 			    		hasznalt.get(lenyomottGomb).setBackground(panel_3.getBackground());
+			    		hetvegekSzabadok -= 1;
 			    		
 			    	} else if (hasznalt.get(lenyomottGomb).getBackground().equals(panel_3.getBackground())) {
 			    		
 			    		if (delelottok.contains(hasznalt.get(lenyomottGomb))) { //ha nem szabadnap, hanem du szeretne dolgozni
-			    			hasznalt.get(lenyomottGomb).setBackground(panel_5.getBackground());	    		}
+			    			hasznalt.get(lenyomottGomb).setBackground(panel_5.getBackground());	    		
+			    			hetvegekSzabadok += 1;
+			    			delutanokSzabadok -= 1;
+			    		}
 			    		
 			    	
 			    		if (delutanok.contains(hasznalt.get(lenyomottGomb))) {
 			    			
 			    		hasznalt.get(lenyomottGomb).setBackground(panel_6.getBackground());
+			    		hetvegekSzabadok += 1;
+			    		delutanokSzabadok -= 1;
 			    		}
 			    	} else if (hasznalt.get(lenyomottGomb).getBackground().equals(panel_5.getBackground()) ||
 			    			hasznalt.get(lenyomottGomb).getBackground().equals(panel_6.getBackground())) {
+			    		     
+			    		   if (hasznalt.get(lenyomottGomb).getBackground().equals(panel_5.getBackground())) {
+			    			   delelottokSzabadok += 1;
+			    		   } else delutanokSzabadok +=1;
+			    			 
 			    		hasznalt.get(lenyomottGomb).setBackground(panel_7.getBackground());
+			    		fixNapok -= 1;
 			    	} else {
 			    		hasznalt.get(lenyomottGomb).setBackground(alapszin);
+			    		fixNapok += 1;
 			    	}
 			    	
 			    	
@@ -975,23 +999,38 @@ public class UserWindow2 {
 		    		
 		    		
 		    		if (hasznalt.get(lenyomottGomb).getBackground().equals(alapszin)) {
-			    		
+			    		hetkoznapokSzabadok -= 1;
 			    		hasznalt.get(lenyomottGomb).setBackground(panel_4.getBackground());
 			    		
 			    	} else if (hasznalt.get(lenyomottGomb).getBackground().equals(panel_4.getBackground())) {
 			    		
 			    		if (delelottok.contains(hasznalt.get(lenyomottGomb))) { //ha nem szabadnap, hanem du szeretne dolgozni
-			    			hasznalt.get(lenyomottGomb).setBackground(panel_5.getBackground());	    		}
+			    			hasznalt.get(lenyomottGomb).setBackground(panel_5.getBackground());	    		
+			    			
+			    			hetkoznapokSzabadok += 1;
+			    			delutanokSzabadok -= 1;
+			    		
+			    		}
 			    		
 			    	
 			    		if (delutanok.contains(hasznalt.get(lenyomottGomb))) {
 			    			
 			    		hasznalt.get(lenyomottGomb).setBackground(panel_6.getBackground());
+			    		hetkoznapokSzabadok += 1;
+			    		delelottokSzabadok -= 1;
 			    		}
 			    	} else if (hasznalt.get(lenyomottGomb).getBackground().equals(panel_5.getBackground()) ||
 			    			hasznalt.get(lenyomottGomb).getBackground().equals(panel_6.getBackground())) {
+			    		
+			    		if (hasznalt.get(lenyomottGomb).getBackground().equals(panel_5.getBackground())) {
+			    			delutanokSzabadok += 1;
+			    		} else delelottokSzabadok += 1;
+			    		
+			    		fixNapok -= 1;
+			    		
 			    		hasznalt.get(lenyomottGomb).setBackground(panel_7.getBackground());
 			    	} else {
+			    		fixNapok += 1;
 			    		hasznalt.get(lenyomottGomb).setBackground(alapszin);
 			    	}
 		    		
@@ -999,6 +1038,10 @@ public class UserWindow2 {
     	
     	
 		}
+		
+		
+		System.out.println("Statisztika:  \nhétvégék: " + hetvegekSzabadok + " \nhetkoznapok" + hetkoznapokSzabadok + "\n" +
+		 " du " + delutanokSzabadok + "de: " + delelottokSzabadok + " fix: " + fixNapok );
     	
 		
 		
@@ -1081,6 +1124,30 @@ public boolean configBetoltes() {
 			
 			String spec = br.readLine();
 			
+			String HVHT = br.readLine();
+			String HTHV = br.readLine();
+			
+			ArrayList<Integer> hetvegeHetkoznap = new ArrayList<Integer>();
+			ArrayList<Integer> hetkoznapHetvege = new ArrayList<Integer>();
+			
+			String valami = HVHT.split("=")[1];
+			String[] valamiString = valami.split(",");
+			
+			
+			for (int i = 0; i <  valamiString.length; i++ ) {
+				hetvegeHetkoznap.add(Integer.parseInt(valamiString[i]));
+				
+			}
+			
+			 valami = HTHV.split("=")[1];
+			valamiString = valami.split(",");
+			
+			for (int i = 0; i <  valamiString.length; i++ ) {
+				hetkoznapHetvege.add(Integer.parseInt(valamiString[i]));
+				
+			}
+		
+			
 			
 			//globális fájlok, mappák, változók beállítása
 			 expertMapa = expertM.split("=")[1];
@@ -1114,7 +1181,7 @@ public boolean configBetoltes() {
 			
 
 			
-			for (int i = kezdoNap; i <= napokSzama + kezdoNap - 1; ++i)  {
+			for (int i = kezdoNap; i <= napokSzama + kezdoNap -1; ++i)  {
 			
 				//gombok.get(i).setEnabled(true);
 				
@@ -1130,12 +1197,12 @@ public boolean configBetoltes() {
 				gombok.get(i).setText(honapSzama + "." + (datum++));
 				
 				hasznalt.add(gombok.get(i));
-				
-				if (i == 4 || i == 5 ||
-						i == 11 || i == 12 ||
-						i == 18 || i  == 19 ||
-						i == 25 || i == 26 ||
-						i == 32 || i == 33)  {
+			
+				if (i == 5 || i == 6 ||
+						i == 12 || i == 13 ||
+						i == 19 || i  == 20 ||
+						i == 26 || i == 27 ||
+						i == 33 || i == 34)  {
 					
 					hetvege.add(gombok.get(i));
 				
@@ -1145,6 +1212,26 @@ public boolean configBetoltes() {
 					
 				}
 		
+			}
+		
+			
+			if (hetvegeHetkoznap.get(0) != 0) {
+				System.out.println("valami " + hetvegeHetkoznap.size()); 
+				for (int i = 0; i < hetvegeHetkoznap.size(); ++i) {
+					hetvege.remove(gombok.get(hetvegeHetkoznap.get(i) + kezdoNap - 1));
+					hetkoznap.add(gombok.get(hetvegeHetkoznap.get(i) + kezdoNap - 1));
+				}
+				
+			}
+			
+			
+			if (hetkoznapHetvege.get(0) != 0) {
+				
+				for (int i = 0; i < hetkoznapHetvege.size(); ++i) {
+					hetkoznap.remove(gombok.get(hetkoznapHetvege.get(i) + kezdoNap - 1));
+					hetvege.add(gombok.get(hetkoznapHetvege.get(i) + kezdoNap - 1));
+				}
+				
 			}
 			
 			
