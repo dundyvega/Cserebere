@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JButton;
 import java.awt.Color;
 import java.awt.Component;
@@ -30,6 +31,9 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JComboBox;
 import java.awt.SystemColor;
+import javax.swing.JTextArea;
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
 
 public class UserWindow2 {
 
@@ -64,7 +68,11 @@ public class UserWindow2 {
     private ArrayList<JButton> delutanok = new ArrayList<JButton>();          /*X*/
     
     //de beosztásos gombok
-    private ArrayList<JButton> delelottok = new ArrayList<JButton>();          /*X*/
+    private ArrayList<JButton> delelottok = new ArrayList<JButton>(); 
+    
+    private JButton megjegyzes;
+    private JTextArea textArea;
+    /*X*/
     
    //ebben a hónapban vagyunk
     private int honapSzama;
@@ -87,6 +95,8 @@ public class UserWindow2 {
     private int delutanokSzabadok = 0;
     private int delelottokSzabadok = 0;
     
+    private JLabel label_11;
+    
     
     
     // End of variables declaration       
@@ -103,6 +113,7 @@ public class UserWindow2 {
 	private String t1t2Csiri;
 	//ennyi napot lehet lefixálni
 	private int fixNapok;
+	private int fixNapok2;
 	//ezekkel nem lehet cserélni
 	private String[] speckok;
 	
@@ -547,7 +558,7 @@ public class UserWindow2 {
 		);
 		panel_6.setLayout(gl_panel_6);
 		
-		JLabel label_11 = new JLabel();
+	 label_11 = new JLabel();
 		label_11.setText("maradjon");
 		panel_2.add(label_11);
 		
@@ -593,7 +604,7 @@ public class UserWindow2 {
 		panel_14.add(panel_21);
 		
 		panel_22 = new JPanel();
-		panel_22.setBackground(new Color(255, 204, 153));
+		panel_22.setBackground(Color.MAGENTA);
 		panel_14.add(panel_22);
 		
 		JPanel panel_23 = new JPanel();
@@ -620,6 +631,31 @@ public class UserWindow2 {
 		
 		JPanel panel_15 = new JPanel();
 		panel_1.add(panel_15);
+		panel_15.setLayout(new BorderLayout(0, 0));
+		
+		JScrollPane scrollPane = new JScrollPane();
+		panel_15.add(scrollPane, BorderLayout.CENTER);
+		
+		 textArea = new JTextArea();
+		scrollPane.setViewportView(textArea);
+		
+		megjegyzes = new JButton("Mentés");
+		megjegyzes.setVisible(false);
+		
+		megjegyzes.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				//ide jön
+			}
+			
+		});
+		
+
+		scrollPane.setColumnHeaderView(megjegyzes);
+		
+		textArea.setVisible(false);
 		
 		JPanel panel_10 = new JPanel();
 		frame.getContentPane().add(panel_10, BorderLayout.NORTH);
@@ -690,18 +726,176 @@ public class UserWindow2 {
 	
 	
     protected void csereGombMegnyomva() {
-		// TODO Auto-generated method stub
-		
-    	/*
-    	 * ide jön egy feltételes rendszer, aminek teljesülnie kell:
-    	 * 
-    	 * 1. maradjon napok száma <= a configban jelölt napok száma
-    	 * 2. szavad hétvégének jelölt <= szabad hétvégék
-    	 * 3. szabad hétköznapok jelölt <= szabad hétköznapok
-    	 * 4. du-nak jelölt <= du napok       - szabadnak jelölt du napok - maradjonnak jelölt du napok
-    	 * 5. de-nek jelölt <= de-nek jelölt  - szabadnak jelölt de napok - maradjonnak jelölt de napok
-    	 */
+    	if (!cserelniLehet) {
     	
+    	String felugroAblak = "";
+    	
+    	if (hetvegekSzabadok < 0) {
+    		felugroAblak += "Nem maradt elég szabad hétvége.\n";
+    	}
+    	
+    	if (hetkoznapokSzabadok < 0) {
+    		felugroAblak += "Nem maradt elég szabad hétköznap.\n";
+    	}
+    	
+    	if (delutanokSzabadok < 0) {
+    		felugroAblak += "Nem maradt elég délután.\n";
+    	}
+    	
+    	if (delelottokSzabadok < 0) {
+    		felugroAblak += "Nem maradt elég délelőtt.\n";
+    	}
+    	
+    	if (fixNapok < 0) {
+    		felugroAblak += "Maximum " + fixNapok2 + " fix nap jelölhető!\n";
+    	}
+    	
+    	if (!felugroAblak.contentEquals(""))  {
+    		//ha az egyik feltétel sérül
+    		JOptionPane.showMessageDialog(null, felugroAblak);
+    		
+    	} else {
+    		
+    		//figyelmeztetés, mivel vissza menni nem lehet
+    		int dialogResult = JOptionPane.showConfirmDialog(null, "Biztos vagy ebben?");
+    		
+    		if (dialogResult == JOptionPane.YES_OPTION) {
+    			System.out.println("taka");
+    			cserelniLehet = true;
+    			
+    			for (int i = 0; i < hasznalt.size(); ++i) {
+    				if (!hasznalt.get(i).getBackground().equals(alapszin)) {
+    					hasznalt.get(i).setEnabled(false);
+    				}
+    				
+    			}
+    			
+    			csereButton.setText("Következő");
+    			
+    			//cserék láthatóvá/láthatatlanná tétele
+    			
+    			/*panel_3.setVisible(false);
+    			panel_4.setVisible(false);
+    			panel_5.setVisible(false);
+    			panel_6.setVisible(false);
+    			panel_7.setVisible(false);
+    			*/
+    			//panel_7.setVisible(false);
+    			//label_11.setVisible(false);
+    			
+    			panel_16.setVisible(true);
+    			panel_18.setVisible(true);
+    			panel_20.setVisible(true);
+    			panel_22.setVisible(true);
+    			
+    			
+    		}
+    		
+    		
+    	}
+    	} else {
+    		
+    		
+    			
+    			
+    			ArrayList<Integer> panel3 = new ArrayList<Integer>();
+    			ArrayList<Integer> panel4 = new ArrayList<Integer>();
+    			ArrayList<Integer> panel5 = new ArrayList<Integer>();
+    			ArrayList<Integer> panel6 = new ArrayList<Integer>();
+    			ArrayList<Integer> panel7 = new ArrayList<Integer>();
+    			
+    			ArrayList<Integer> panel16 = new ArrayList<Integer>();
+    			ArrayList<Integer> panel18 = new ArrayList<Integer>();
+    			ArrayList<Integer> panel20 = new ArrayList<Integer>();
+    			ArrayList<Integer> panel22 = new ArrayList<Integer>();
+    			
+    			for (int i = 0; i < hasznalt.size(); ++i) {
+    				
+    				if (hasznalt.get(i).getBackground().equals(panel_3.getBackground())) {
+    					panel3.add(i);
+    				}
+    				
+    				if (hasznalt.get(i).getBackground().equals(panel_4.getBackground())) {
+    					panel4.add(i);
+    				}
+    				
+    				if (hasznalt.get(i).getBackground().equals(panel_5.getBackground())) {
+    					panel5.add(i);
+    				}
+    				
+    				if (hasznalt.get(i).getBackground().equals(panel_6.getBackground())) {
+    					panel6.add(i);
+    				}
+    				
+    				if (hasznalt.get(i).getBackground().equals(panel_7.getBackground())) {
+    					panel7.add(i);
+    				}
+    				
+    				if (hasznalt.get(i).getBackground().equals(panel_16.getBackground())) {
+    					panel16.add(i);
+    				}
+    				
+    				if (hasznalt.get(i).getBackground().equals(panel_18.getBackground())) {
+    					panel18.add(i);
+    				}
+    				
+    				if (hasznalt.get(i).getBackground().equals(panel_20.getBackground())) {
+    					panel20.add(i);
+    				}
+    				
+    				if (hasznalt.get(i).getBackground().equals(panel_22.getBackground())) {
+    					panel22.add(i);
+    				}
+
+    			}
+    			
+    			if (panel3.size() <= panel16.size() &&
+    					panel4.size() <= panel18.size() &&
+    					panel5.size() <= panel20.size() &&
+    					panel6.size() <= panel22.size()) {
+    				
+    				System.out.println("teljesül");
+    				
+    				int dialogResult = JOptionPane.showConfirmDialog(null, "Biztos vagy ebben?");
+    				
+    				
+    	    		
+    	    		if (dialogResult == JOptionPane.YES_OPTION) {
+    	    			
+    	    			megjegyzes.setVisible(true);
+    	    			textArea.setVisible(true);
+    	    			csereButton.setVisible(false);
+    	    			
+    	    		}
+    				
+    				
+    			} else {
+    				
+    				String szoveg = "";
+    				if (panel4.size() > panel18.size()) {
+    					szoveg += "Nem adtál meg elég szabad hétköznapot.\n";
+    				}
+    				
+    				if (panel3.size() > panel16.size()) {
+    					szoveg += "Nem adtál meg elég szabad hétköznapot.\n";
+    				}
+    				
+    				if (panel5.size() > panel20.size()) {
+    					szoveg += "Nem adtál meg elég délutánt\n";
+    				}
+    				
+    				if (panel6.size() > panel22.size()) {
+    					szoveg += "Nem adtál meg elég délelőttöt.";
+    				}
+    				
+    				JOptionPane.showMessageDialog(null, szoveg);
+    				
+    				
+    			}
+    			
+    			
+    			
+    	}
 	}
 
 
@@ -978,7 +1172,7 @@ public class UserWindow2 {
 			    			
 			    		hasznalt.get(lenyomottGomb).setBackground(panel_6.getBackground());
 			    		hetvegekSzabadok += 1;
-			    		delutanokSzabadok -= 1;
+			    		delelottokSzabadok -= 1;
 			    		}
 			    	} else if (hasznalt.get(lenyomottGomb).getBackground().equals(panel_5.getBackground()) ||
 			    			hasznalt.get(lenyomottGomb).getBackground().equals(panel_6.getBackground())) {
@@ -988,10 +1182,35 @@ public class UserWindow2 {
 			    		   } else delutanokSzabadok +=1;
 			    			 
 			    		hasznalt.get(lenyomottGomb).setBackground(panel_7.getBackground());
+			    		
+			    		
+			    		
 			    		fixNapok -= 1;
+			    		if (delutanok.contains(hasznalt.get(lenyomottGomb)))  {
+			    			delutanokSzabadok -= 1;
+			    			
+			    			//délutáni na
+			    		} else delelottokSzabadok -= 1;
+			    		
+			    		System.out.println("csökkentve");
+			    
+			    		
 			    	} else {
+			    		
+			    	
+			    		
 			    		hasznalt.get(lenyomottGomb).setBackground(alapszin);
 			    		fixNapok += 1;
+			    		if (delutanok.contains(hasznalt.get(lenyomottGomb)))  {
+			    			delutanokSzabadok += 1;
+			    			
+			    			//délutáni na
+			    		} else delelottokSzabadok += 1;
+			    		
+			    		
+			    		System.out.println("visszanovelve");
+			    		
+			    		
 			    	}
 			    	
 			    	
@@ -1027,25 +1246,86 @@ public class UserWindow2 {
 			    		} else delelottokSzabadok += 1;
 			    		
 			    		fixNapok -= 1;
+			    		if (delutanok.contains(hasznalt.get(lenyomottGomb)))  {
+			    			delutanokSzabadok -= 1;
+			    			
+			    			//délutáni na
+			    		} else delelottokSzabadok -= 1;
 			    		
 			    		hasznalt.get(lenyomottGomb).setBackground(panel_7.getBackground());
 			    	} else {
 			    		fixNapok += 1;
 			    		hasznalt.get(lenyomottGomb).setBackground(alapszin);
+			    		
+			    		if (delutanok.contains(hasznalt.get(lenyomottGomb)))  {
+			    			delutanokSzabadok += 1;
+			    			
+			    			//délutáni na
+			    		} else delelottokSzabadok += 1;
 			    	}
 		    		
 		    	}
     	
     	
+		} else {
+		
+			int lenyomottGomb = Integer.parseInt(e.getActionCommand().split("<br>")[0].split(">")[1].split("\\.")[1]) - 1;
+	    	System.out.println(lenyomottGomb);
+	    	
+	    	if (szabadHetvege.contains(hasznalt.get(lenyomottGomb)) && hasznalt.get(lenyomottGomb).getBackground().equals(alapszin)) {
+	    	
+	    		System.out.println("szabad hetvege");
+	    		
+	    		hasznalt.get(lenyomottGomb).setBackground(panel_16.getBackground());
+	    	} else if (szabadHetvege.contains(hasznalt.get(lenyomottGomb))) {
+	    		hasznalt.get(lenyomottGomb).setBackground(alapszin);
+	    	}
+	    	
+	    	
+	    	if (szabadHetkoznap.contains(hasznalt.get(lenyomottGomb)) && hasznalt.get(lenyomottGomb).getBackground().equals(alapszin)) {
+		    	
+	    		System.out.println("szabad hetvege");
+	    		
+	    		hasznalt.get(lenyomottGomb).setBackground(panel_18.getBackground());
+	    	} else if (szabadHetkoznap.contains(hasznalt.get(lenyomottGomb))) {
+	    		hasznalt.get(lenyomottGomb).setBackground(alapszin);
+	    	}
+	    	
+	    	
+	    	
+	    	if (delutanok.contains(hasznalt.get(lenyomottGomb)) && hasznalt.get(lenyomottGomb).getBackground().equals(alapszin)) {
+		    	
+	    		System.out.println("szabad hetvege");
+	    		
+	    		hasznalt.get(lenyomottGomb).setBackground(panel_20.getBackground());
+	    	} else if (delutanok.contains(hasznalt.get(lenyomottGomb))) {
+	    		hasznalt.get(lenyomottGomb).setBackground(alapszin);
+	    	}
+	    	
+	    	
+	    	
+	    	if (delelottok.contains(hasznalt.get(lenyomottGomb)) && hasznalt.get(lenyomottGomb).getBackground().equals(alapszin)) {
+		    	
+	    		System.out.println("szabad hetvege");
+	    		
+	    		hasznalt.get(lenyomottGomb).setBackground(panel_22.getBackground());
+	    	} else if (delelottok.contains(hasznalt.get(lenyomottGomb))) {
+	    		hasznalt.get(lenyomottGomb).setBackground(alapszin);
+	    	}
+	    	
+	    	
+		
 		}
 		
 		
-		System.out.println("Statisztika:  \nhétvégék: " + hetvegekSzabadok + " \nhetkoznapok" + hetkoznapokSzabadok + "\n" +
-		 " du " + delutanokSzabadok + "de: " + delelottokSzabadok + " fix: " + fixNapok );
+		
+		/*System.out.println("Statisztika:  hétvégék: " + hetvegekSzabadok + " hetkoznapok" + hetkoznapokSzabadok + "" +
+		 " du " + delutanokSzabadok + " de: " + delelottokSzabadok + " fix: " + fixNapok );*/
     	
+	} 
 		
 		
-	}
+
 
 	public void setTitle(String string) {
 		// TODO Auto-generated method stub
@@ -1155,6 +1435,7 @@ public boolean configBetoltes() {
 			 t1t2Mapa = t1t2M.split("=")[1];
 			 t1t2Csiri = t1t2Cs.split("=")[1];
 			 fixNapok = Integer.parseInt(fix.split("=")[1]);
+			 fixNapok2 = fixNapok;
 			 speckok = spec.split("=")[1].split(",");
 			
 			System.out.println(speckok[2]);
@@ -1267,7 +1548,4 @@ public boolean configBetoltes() {
 	
 	
 }
-
-
-
 }

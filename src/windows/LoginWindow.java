@@ -175,7 +175,7 @@ public class LoginWindow extends javax.swing.JFrame {
 	 */
     	
     	
-    	
+    /*	
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -195,6 +195,8 @@ public class LoginWindow extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
+    	
+    	
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new LoginWindow().setVisible(true);
