@@ -128,6 +128,8 @@ public class LoginWindow extends javax.swing.JFrame {
                 
                 System.out.println("itt fog bejönni az adminoldal");
                 
+                
+                
             }  else {
                 
              jPasswordField1.selectAll();
