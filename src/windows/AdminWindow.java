@@ -3,16 +3,24 @@ package windows;
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
+import objects.FileOperator;
+
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class AdminWindow extends JFrame {
 
 	private JPanel contentPane;
+	private JMenuItem mntmMappaLtrehozsa;
 
 	/**
 	 * Launch the application.
@@ -47,16 +55,52 @@ public class AdminWindow extends JFrame {
 		mnFeladatok.add(mnFjlSzerkeszts);
 		
 		JMenuItem mntmExcelFelbonts = new JMenuItem("Excel Felbontás");
+		mntmExcelFelbonts.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				JFileChooser chooser = new JFileChooser();
+		        FileNameExtensionFilter filter = new FileNameExtensionFilter(
+		                "xlsx", "XLSX");
+		        chooser.setFileFilter(filter);
+		        int returnVal = chooser.showOpenDialog(null);
+		        if(returnVal == JFileChooser.APPROVE_OPTION) {
+		        	
+		        	String fileName = chooser.getSelectedFile().getName();
+		          
+		        	if (!fileName.equals("") && fileName != null) {
+		            
+		        		FileOperator.fileRess(fileName);
+		        	}
+		        }
+				
+			}
+		});
 		mnFjlSzerkeszts.add(mntmExcelFelbonts);
 		
 		JMenuItem mntmConfigBellts = new JMenuItem("Config Beállítás");
 		mnFjlSzerkeszts.add(mntmConfigBellts);
 		
 		JMenuItem mntmresFjlokGenerlsa = new JMenuItem("Üres fájlok Generálása");
+		mntmresFjlokGenerlsa.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				FileOperator.generateEmptyTxt();
+				
+			}
+		});
 		mnFjlSzerkeszts.add(mntmresFjlokGenerlsa);
 		
 		JMenuItem mntmFjlokBetltse = new JMenuItem("Adatok Excelbe");
 		mnFjlSzerkeszts.add(mntmFjlokBetltse);
+		
+		mntmMappaLtrehozsa = new JMenuItem("Mappa Létrehozása");
+		mntmMappaLtrehozsa.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+				FileOperator.createFolder();
+			}
+		});
+		mnFjlSzerkeszts.add(mntmMappaLtrehozsa);
 		
 		JMenu mnIgnyek = new JMenu("Igények");
 		menuBar.add(mnIgnyek);

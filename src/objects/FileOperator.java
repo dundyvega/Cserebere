@@ -1,8 +1,15 @@
 package objects;
 
+import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -15,6 +22,18 @@ final public class FileOperator {
 	
 	
 	
+	private static int honap;
+	private static int napok;
+	private static int kezdo;
+	private static String expertM;
+	private static String expertCs;
+	private static String t1t2M;
+	private static String t1t2Cs;
+	private static String fix;
+	private static String spec;
+	private static String HVHT;
+	private static String HTHV;
+
 	public static User getUserInfo(String expertCsiri, String [] speckok) throws IOException {
 		
 		FileInputStream excelFile = new FileInputStream(expertCsiri);
@@ -236,6 +255,250 @@ final public class FileOperator {
 		
 		
 		return users;
+	}
+	
+	
+	public static  void configBetoltes() {
+			// TODO Auto-generated method stub
+			
+			File config = new File ("series.conf");
+			
+			//configBetoltes();
+			try {
+			
+				BufferedReader br = new BufferedReader(new FileReader("series.conf"));
+				
+				honap = Integer.parseInt(br.readLine().split("=")[1]);
+				
+				napok = Integer.parseInt(br.readLine().split("=")[1]);
+				
+				kezdo = Integer.parseInt(br.readLine().split("=")[1]);
+				
+				expertM = br.readLine().split("=")[1];
+				
+				expertCs = br.readLine().split("=")[1];
+		
+				t1t2M = br.readLine().split("=")[1];
+				
+				 t1t2Cs = br.readLine().split("=")[1];
+				
+				 fix = br.readLine().split("=")[1];
+				
+				 spec = br.readLine().split("=")[1];
+				
+				 HVHT = br.readLine().split("=")[1];
+				 HTHV = br.readLine().split("=")[1];
+			} catch (Exception ex) {}
+			
+				
+			}
+
+	public static void createFolder() {
+		// TODO Auto-generated method stub
+		
+		configBetoltes();
+		
+		//System.out.println(expertM);
+		
+		File theDir = new File(expertM);
+		File theDir2 = new File(t1t2M);
+
+		// if the directory does not exist, create it
+		if (!theDir.exists()) {
+		    System.out.println("creating directory: " + theDir.getName());
+		    boolean result = false;
+
+		    try{
+		        theDir.mkdir();
+		        result = true;
+		    } 
+		    catch(SecurityException se){
+		        //handle it
+		    }        
+		    if(result) {    
+		        System.out.println("DIR created");  
+		    }
+		}
+		
+		if (!theDir2.exists()) {
+		    System.out.println("creating directory: " + theDir.getName());
+		    boolean result = false;
+
+		    try{
+		        theDir2.mkdir();
+		        result = true;
+		    } 
+		    catch(SecurityException se){
+		        //handle it
+		    }        
+		    if(result) {    
+		        System.out.println("DIR created");  
+		    }
+		}
+		
+		
+		
+	}
+
+	public static void fileRess(String fileName) {
+		// TODO Auto-generated method stub
+		
+		configBetoltes();
+		
+		String [] speckok = {""};
+		try {
+			ArrayList<User> users = FileOperator.getInfoFromFile(fileName, speckok);
+			
+			ArrayList<User> expertList = new ArrayList<User>();
+			ArrayList<User> t1t2List = new ArrayList<User>();
+			
+			//ketté bontjuk a fájlt
+			
+			for (int i = 0; i < users.size(); ++i) {
+				
+				boolean expert = false;
+				
+				for (int j = 0; j < users.get(i).getList().size() && !expert; ++j) {
+					
+					if (users.get(i).get(j).getLeiras().contains("EXP")) {
+						expert = true;
+					}
+					
+				}
+				
+				if (expert) {
+					expertList.add(users.get(i));
+				} else {
+					t1t2List.add(users.get(i));
+				}		
+			}
+			
+			FileOperator.toExcelFile(expertList, expertCs);
+			
+			t1t2List.remove(0);
+			FileOperator.toExcelFile(t1t2List, t1t2Cs);
+			
+			
+			
+			//System.out.println(t1t2List.get(0).getName());
+			
+			 // System.out.println(t1t2Cs);
+			
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		
+	}
+
+	//fájlba írja adatokat
+	private static void toExcelFile(ArrayList<User> users, String fileName)  {
+		// TODO Auto-generated method stub
+		
+		
+		System.out.println("Emberek " + users.size());
+		try {
+		
+		  XSSFWorkbook workbook = new XSSFWorkbook();
+		  XSSFSheet sheet = workbook.createSheet("beo");
+		  
+		
+		  
+		  int rowIndex = 0;
+		  
+		  Row row = sheet.createRow(rowIndex++);
+		  
+		  int cellIndex = 0;
+		  
+		  Cell cell = row.createCell(cellIndex++);
+		  
+		  cell.setCellValue("kezelő");
+		  
+		 
+		  
+		  //napok kiírása
+		  
+		  for (int i = 1; i < napok; i++) {
+			  
+			  cell = row.createCell(cellIndex++);
+			  cell.setCellValue(honap + "." + i);  
+		  }
+		  
+		  
+		  for (int i = 0; i < users.size(); ++i) {
+			  
+			 // System.out.println(users.get(i).getName());
+			  row = sheet.createRow(rowIndex++);
+			  cellIndex = 0;
+			  
+			  cell = row.createCell(cellIndex++);
+			  
+			  cell.setCellValue(users.get(i).getName());
+			 
+			  
+			  for (int j = 0; j < napok - 1; ++j) {
+				  
+				  cell = row.createCell(cellIndex++);
+				  
+				  cell.setCellValue(users.get(i).get(j).getLeiras());
+				  
+			  }
+			  
+		  }
+		  
+		 
+		  FileOutputStream excelFile = new FileOutputStream(fileName);
+		  
+		  
+		
+		  workbook.write(excelFile);
+		  
+		  excelFile.close();
+		  
+		} catch (Exception ex) {
+			
+			System.out.println(ex);
+		}
+		  
+		  
+		  
+		
+	}
+	
+	private static void createTxt(ArrayList<User> users, String fileName) throws IOException {
+		for (int i = 0; i < users.size(); ++i) {
+			String fullPathName = "./" + fileName + "/" + users.get(i).getName() + ".txt";
+			Path path = Paths.get(fullPathName);
+			
+			Files.createFile(path);
+		}
+	}
+
+	public static void generateEmptyTxt() {
+		// TODO Auto-generated method stub
+		
+		try {
+			
+			configBetoltes();
+			
+			String[] speckok = {};
+			ArrayList<User> users = FileOperator.getInfoFromFile(expertCs, speckok);
+			users.remove(0);
+			
+			createTxt(users, expertM);
+			
+			users = FileOperator.getInfoFromFile(t1t2Cs, speckok);
+			users.remove(0);
+			
+			createTxt(users, t1t2M);
+			
+			
+			
+		} catch (Exception ex) {}
+		
 	}
 
 }
