@@ -1,11 +1,13 @@
 package objects;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -295,6 +297,8 @@ final public class FileOperator {
 				
 				 HVHT = br.readLine().split("=")[1];
 				 HTHV = br.readLine().split("=")[1];
+				 
+				 br.close();
 			} catch (Exception ex) {}
 			
 				
@@ -513,6 +517,56 @@ final public class FileOperator {
 			
 			
 		} catch (Exception ex) {}
+		
+	}
+
+	public static void WriteAssigmentsToTxtFile(String tipus, String fileName, String igeny) {
+		// TODO Auto-generated method stub
+		
+		configBetoltes();
+		
+		try {
+			String fullPathName = "./";
+			fullPathName += tipus.equals("Expert")?expertM:t1t2M;
+			fullPathName = fullPathName + "/" + fileName;
+			
+			File file = new File(fullPathName);
+			BufferedWriter br = new BufferedWriter(new FileWriter(fullPathName));
+			br.write(igeny);
+			br.close();
+			
+		
+		} catch (Exception ex) {}
+		
+	}
+
+	public static String getAssigment(String tipus, String fileName) {
+		// TODO Auto-generated method stub
+		
+		configBetoltes();
+		
+		try {
+			String fullPathName = "./";
+			fullPathName += tipus.equals("Expert")?expertM:t1t2M;
+			fullPathName = fullPathName + "/" + fileName;
+			
+			File file = new File(fullPathName);
+			BufferedReader br = new BufferedReader(new FileReader(fullPathName));
+			
+			String elso = br.readLine();
+			
+			if (elso == null || elso.equals("")) {
+				throw new Exception("Üres file");
+			}
+			
+			
+			return elso + "\n" + br.readLine() + "\n" + br.readLine() +
+					"\n" + br.readLine()+ "\n"  + br.readLine() + "\n" +  br.readLine();
+			
+			
+		} catch (Exception ex) {
+			return "";
+		}
 		
 	}
 

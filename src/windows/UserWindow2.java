@@ -703,62 +703,72 @@ public class UserWindow2 {
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				//ide jön
-				String szabadHetvSzoveg = "=";
-				String szabadHetkSzoveg = "=";
-				String delutanokSzoveg = "=";
-				String delelottokSzoveg = "=";
-				String maradjonSzoveg = "";
+				String szabadHetvSzoveg = "0=0";
+				String szabadHetkSzoveg = "0=0";
+				String delutanokSzoveg = "0=0";
+				String delelottokSzoveg = "0=0";
+				String maradjonSzoveg = "0";
+				String megj = textArea.getText();
 				
 				for (int i = 0; i < hasznalt.size(); ++i) {
 					
-					if (hasznalt.get(i).getBackground().equals(panel_3)) {
+					if (hasznalt.get(i).getBackground().equals(panel_3.getBackground())) {
 						//dolgozik hétvégén, szabad szeretne lenni
-						szabadHetvSzoveg = (i + 1) + "," + szabadHetkSzoveg;
+						//System.out.println("Kacsassd");
+						szabadHetvSzoveg = (i + 1) + "," + szabadHetvSzoveg;
 					}
 					
-					if (hasznalt.get(i).getBackground().equals(panel_4)) {
+					if (hasznalt.get(i).getBackground().equals(panel_4.getBackground())) {
 						//dolgozik hétköznap, szabad  szeretne lenni
 						szabadHetkSzoveg = (i + 1) + "," + szabadHetkSzoveg;
 					}
 					
-					if (hasznalt.get(i).getBackground().equals(panel_5)) {
+					if (hasznalt.get(i).getBackground().equals(panel_6.getBackground())) {
 						//délelőtt dolgozik, délután szeretne
 						delelottokSzoveg = (i + 1) + "," + delelottokSzoveg;
 					}
 					
-					if (hasznalt.get(i).getBackground().equals(panel_6)) {
+					if (hasznalt.get(i).getBackground().equals(panel_5.getBackground())) {
 						//délután dolgozik, délelőtt szeretne
 						delutanokSzoveg = (i + 1) + "," + delutanokSzoveg;
 					}
 					
-					if (hasznalt.get(i).getBackground().equals(panel_7)) {
+					if (hasznalt.get(i).getBackground().equals(panel_7.getBackground())) {
 						//maradjon napok
 						maradjonSzoveg = (i + 1) + "," + maradjonSzoveg;
 					}
 					
-					if (hasznalt.get(i).getBackground().equals(panel_16)) {
+					if (hasznalt.get(i).getBackground().equals(panel_16.getBackground())) {
 						//szabad hétvégét add hétvégére
-						szabadHetvSzoveg = szabadHetkSzoveg + "," + (i + 1);
+						szabadHetvSzoveg = szabadHetvSzoveg + "," + (i + 1);
 					}
 					
-					if (hasznalt.get(i).getBackground().equals(panel_18)) {
+					if (hasznalt.get(i).getBackground().equals(panel_18.getBackground())) {
 						//szabad hétköznapot ad hétköznapra
 						szabadHetkSzoveg = szabadHetkSzoveg + "," + (i + 1);
 					}
 					
-					if (hasznalt.get(i).getBackground().equals(panel_20)) {
+					if (hasznalt.get(i).getBackground().equals(panel_22.getBackground())) {
 						//szabad hétvégét add hétvégére
 						delelottokSzoveg = delelottokSzoveg + "," + (i + 1);
 					}
 					
-					if (hasznalt.get(i).getBackground().equals(panel_22)) {
+					if (hasznalt.get(i).getBackground().equals(panel_20.getBackground())) {
 						//szabad hétvégét add hétvégére
 						delutanokSzoveg = delutanokSzoveg + "," + (i + 1);
 					}
 					
 				}
 				
-				System.out.println(szabadHetkSzoveg + "\n" + szabadHetvSzoveg + "\n" + delelottokSzoveg + "\n" + delutanokSzoveg + "\n" + maradjonSzoveg);
+				String vegleges = szabadHetvSzoveg + "\n" +  szabadHetkSzoveg  + "\n" + delutanokSzoveg + 
+				"\n" + delelottokSzoveg + "\n" + maradjonSzoveg + "\n" + megj;
+				
+				User us = (User)jComboBox1.getSelectedItem();
+				
+				String tipus = (String)custTipe.getSelectedItem();
+				
+				
+				FileOperator.WriteAssigmentsToTxtFile(tipus, us.getName() + ".txt", vegleges);
 				
 				// szabad hétvégék:
 				
@@ -804,7 +814,127 @@ public class UserWindow2 {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				jComboBox1ActionPerformed(e);
+					
+				
+					String tipus = (String)custTipe.getSelectedItem();
+					User us = (User)jComboBox1.getSelectedItem();
+					
+					String ass = FileOperator.getAssigment(tipus, us.getName() + ".txt");
+					//System.out.println("a fájl tartalma: " + ass);
+					
+					if (ass.equals("")) {
+						jComboBox1ActionPerformed(e);
+					} else {
+						
+						int dialogResult = JOptionPane.showConfirmDialog(null, "Szeretnéd betölteni a korábbi fájlt?");
+			    		
+			    		if (dialogResult == JOptionPane.YES_OPTION) {
+			    			
+			    			
+			    			String[] sorok = ass.split("\n");
+			    			
+			    			String hetV = sorok[0].split("=")[0];
+			    			String hetVCs = sorok[0].split("=")[1];
+			    			
+			    			String hetK = sorok[1].split("=")[0];
+			    			String hetKCs = sorok[1].split("=")[1];
+			    			
+			    			
+			    			String de = sorok[2].split("=")[0];
+			    			String deCs = sorok[2].split("=")[1];
+			    			
+			    			String du = sorok[3].split("=")[0];
+			    			String duCs = sorok[3].split("=")[1];
+			    			
+			    			String fx = sorok[4];
+			    			
+			    			//System.out.println(sorok[5] + "fdsfsdf");
+			    			textArea.setVisible(true);
+			    			textArea.setEnabled(false);
+			    			textArea.setText(sorok[5]);
+			    			
+			    			panel_16.setVisible(true);
+			    			panel_18.setVisible(true);
+			    			panel_20.setVisible(true);
+			    			panel_22.setVisible(true);
+			    			jComboBox1.setEnabled(false);
+			    			
+			    			//szabadHétvégének jelölve
+			    			
+			    			String []napok = hetV.split(",");
+			    			for (int i = 0; i < napok.length - 1; ++i) {
+			    				
+			    				hasznalt.get(Integer.parseInt(napok[i]) - 1).setBackground(panel_3.getBackground());
+			    			}
+			    			
+			    			
+			    			napok = hetVCs.split(",");
+			    			for (int i = 1; i < napok.length; ++i) {
+			    				
+			    				hasznalt.get(Integer.parseInt(napok[i]) - 1).setBackground(panel_16.getBackground());
+			    			}
+			    			
+			    			
+			    			
+			    			//szabad hétköznapokű
+			    			
+			    			napok = hetK.split(",");
+			    			for (int i = 0; i < napok.length - 1; ++i) {
+			    				
+			    				hasznalt.get(Integer.parseInt(napok[i]) - 1).setBackground(panel_4.getBackground());
+			    			}
+			    			
+			    			
+			    			napok = hetKCs.split(",");
+			    			for (int i = 1; i < napok.length; ++i) {
+			    				
+			    				hasznalt.get(Integer.parseInt(napok[i]) - 1).setBackground(panel_18.getBackground());
+			    			}
+			    			
+			    			
+			    			//de napok
+			    			napok = de.split(",");
+			    			for (int i = 0; i < napok.length - 1; ++i) {
+			    				
+			    				hasznalt.get(Integer.parseInt(napok[i]) - 1).setBackground(panel_5.getBackground());
+			    			}
+			    			
+			    			
+			    			napok = deCs.split(",");
+			    			for (int i = 1; i < napok.length; ++i) {
+			    				
+			    				hasznalt.get(Integer.parseInt(napok[i]) - 1).setBackground(panel_20.getBackground());
+			    			}
+			    			
+			    			napok = du.split(",");
+			    			for (int i = 0; i < napok.length - 1; ++i) {
+			    				
+			    				hasznalt.get(Integer.parseInt(napok[i]) - 1).setBackground(panel_6.getBackground());
+			    			}
+			    			
+			    			
+			    			napok = duCs.split(",");
+			    			for (int i = 1; i < napok.length; ++i) {
+			    				
+			    				hasznalt.get(Integer.parseInt(napok[i]) - 1).setBackground(panel_22.getBackground());
+			    			}
+			    			
+			    			napok = fx.split(",");
+			    			
+			    			for (int i = 0; i < napok.length - 1;++i) {
+			    				hasznalt.get(Integer.parseInt(napok[i]) - 1).setBackground(panel_7.getBackground());
+			    			}
+			    			
+			    			
+			    			
+			    		} else {
+			    			jComboBox1ActionPerformed(e);
+			    			
+			    			
+			    		}
+						
+						
+					}
 			}
         	
         });
@@ -843,24 +973,51 @@ public class UserWindow2 {
 	
     protected void csereGombMegnyomva() {
     	if (!cserelniLehet) {
+    		
+    		int hvSz = 0;
+    		int hkSz = 0;
+    		int du = 0;
+    		int de = 0;
+    		
+    		for (int i = 0; i < hasznalt.size(); ++i) {
+    			if (hasznalt.get(i).getBackground().equals(panel_3.getBackground())) {
+    				hvSz++;
+    			}
+    			
+    			if (hasznalt.get(i).getBackground().equals(panel_4.getBackground())) {
+    				hkSz++;
+    			}
+    			
+    			if (hasznalt.get(i).getBackground().equals(panel_6.getBackground())) {
+    				de++;
+    			}
+    			
+    			if (hasznalt.get(i).getBackground().equals(panel_5.getBackground())) {
+    				du++;
+    			}
+    			
+    		}
     	
+    			
     	String felugroAblak = "";
-    	
-    	if (hetvegekSzabadok < 0) {
+   	
+    	if (hvSz > this.szabadHetvege.size()) {
     		felugroAblak += "Nem maradt elég szabad hétvége.\n";
     	}
     	
-    	if (hetkoznapokSzabadok < 0) {
+    	if (hkSz > this.szabadHetvege.size()) {
     		felugroAblak += "Nem maradt elég szabad hétköznap.\n";
     	}
     	
-    	if (delutanokSzabadok < 0) {
+    	if (de > delelottok.size() - du) {
     		felugroAblak += "Nem maradt elég délután.\n";
     	}
     	
-    	if (delelottokSzabadok < 0) {
+    	if (du > delutanok.size() - de) {
     		felugroAblak += "Nem maradt elég délelőtt.\n";
     	}
+    	
+    	
     	
     	if (fixNapok < 0) {
     		felugroAblak += "Maximum " + fixNapok2 + " fix nap jelölhető!\n";
@@ -876,7 +1033,6 @@ public class UserWindow2 {
     		int dialogResult = JOptionPane.showConfirmDialog(null, "Biztos vagy ebben?");
     		
     		if (dialogResult == JOptionPane.YES_OPTION) {
-    			System.out.println("taka");
     			cserelniLehet = true;
     			
     			boolean hetvegeB = false;
@@ -1020,10 +1176,10 @@ public class UserWindow2 {
     			
     			if (panel3.size() <= panel16.size() &&
     					panel4.size() <= panel18.size() &&
-    					panel5.size() <= panel20.size() &&
-    					panel6.size() <= panel22.size()) {
+    					panel5.size() <= panel20.size() + panel6.size() &&
+    					panel6.size() <= panel22.size() + panel5.size()) {
     				
-    				System.out.println("teljesül");
+   
     				
     				int dialogResult = JOptionPane.showConfirmDialog(null, "Biztos vagy ebben?");
     				
@@ -1365,7 +1521,7 @@ public class UserWindow2 {
 			    			//délutáni na
 			    		} else delelottokSzabadok -= 1;
 			    		
-			    		System.out.println("csökkentve");
+			    		//System.out.println("csökkentve");
 			    
 			    		
 			    	} else {
@@ -1381,7 +1537,7 @@ public class UserWindow2 {
 			    		} else delelottokSzabadok += 1;
 			    		
 			    		
-			    		System.out.println("visszanovelve");
+			    		//System.out.println("visszanovelve");
 			    		
 			    		
 			    	}
@@ -1443,11 +1599,11 @@ public class UserWindow2 {
 		} else {
 		
 			int lenyomottGomb = Integer.parseInt(e.getActionCommand().split("<br>")[0].split(">")[1].split("\\.")[1]) - 1;
-	    	System.out.println(lenyomottGomb);
+	    	//System.out.println(lenyomottGomb);
 	    	
 	    	if (szabadHetvege.contains(hasznalt.get(lenyomottGomb)) && hasznalt.get(lenyomottGomb).getBackground().equals(alapszin)) {
 	    	
-	    		System.out.println("szabad hetvege");
+	    		//System.out.println("szabad hetvege");
 	    		
 	    		hasznalt.get(lenyomottGomb).setBackground(panel_16.getBackground());
 	    	} else if (szabadHetvege.contains(hasznalt.get(lenyomottGomb))) {
@@ -1457,7 +1613,7 @@ public class UserWindow2 {
 	    	
 	    	if (szabadHetkoznap.contains(hasznalt.get(lenyomottGomb)) && hasznalt.get(lenyomottGomb).getBackground().equals(alapszin)) {
 		    	
-	    		System.out.println("szabad hetvege");
+	    		//System.out.println("szabad hetvege");
 	    		
 	    		hasznalt.get(lenyomottGomb).setBackground(panel_18.getBackground());
 	    	} else if (szabadHetkoznap.contains(hasznalt.get(lenyomottGomb))) {
@@ -1468,7 +1624,7 @@ public class UserWindow2 {
 	    	
 	    	if (delutanok.contains(hasznalt.get(lenyomottGomb)) && hasznalt.get(lenyomottGomb).getBackground().equals(alapszin)) {
 		    	
-	    		System.out.println("szabad hetvege");
+	    		//System.out.println("szabad hetvege");
 	    		
 	    		hasznalt.get(lenyomottGomb).setBackground(panel_20.getBackground());
 	    	} else if (delutanok.contains(hasznalt.get(lenyomottGomb))) {
@@ -1479,7 +1635,7 @@ public class UserWindow2 {
 	    	
 	    	if (delelottok.contains(hasznalt.get(lenyomottGomb)) && hasznalt.get(lenyomottGomb).getBackground().equals(alapszin)) {
 		    	
-	    		System.out.println("szabad hetvege");
+	    		//System.out.println("szabad hetvege");
 	    		
 	    		hasznalt.get(lenyomottGomb).setBackground(panel_22.getBackground());
 	    	} else if (delelottok.contains(hasznalt.get(lenyomottGomb))) {
@@ -1611,7 +1767,7 @@ public boolean configBetoltes() {
 			 fixNapok2 = fixNapok;
 			 speckok = spec.split("=")[1].split(",");
 			
-			System.out.println(speckok[2]);
+			//System.out.println(speckok[2]);
 			
 			/*a kezdő nap lekérése*/
 			
