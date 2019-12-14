@@ -69,7 +69,7 @@ public class AdminWindow extends JFrame {
 		          
 		        	if (!fileName.equals("") && fileName != null) {
 		            
-		        		FileOperator.fileRess(fileName);
+		        		FileOperator.fileRess(chooser.getSelectedFile().getPath());
 		        	}
 		        }
 				

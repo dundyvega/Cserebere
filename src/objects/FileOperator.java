@@ -36,7 +36,7 @@ final public class FileOperator {
 
 	public static User getUserInfo(String expertCsiri, String [] speckok) throws IOException {
 		
-		FileInputStream excelFile = new FileInputStream(expertCsiri);
+		FileInputStream excelFile = new FileInputStream("./" + expertCsiri);
 		XSSFWorkbook workbook = new XSSFWorkbook(excelFile);
 		XSSFSheet datatypeSheet = workbook.getSheetAt(0);
 		
@@ -449,8 +449,9 @@ final public class FileOperator {
 			  
 		  }
 		  
+		  
 		 
-		  FileOutputStream excelFile = new FileOutputStream(fileName);
+		  FileOutputStream excelFile = new FileOutputStream("./" + fileName);
 		  
 		  
 		

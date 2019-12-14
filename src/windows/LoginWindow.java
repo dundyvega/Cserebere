@@ -128,6 +128,17 @@ public class LoginWindow extends javax.swing.JFrame {
                 
                 System.out.println("itt fog bejönni az adminoldal");
                 
+                AdminWindow admin = new AdminWindow();
+                admin.setTitle("Ezeket a napokat szeretném módosítani");
+            	admin.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            	admin.setSize(900, 700);
+            	admin.setLocationRelativeTo(null);
+
+            	admin.setVisible(true);
+
+            	this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+            	
+                
                 
                 
             }  else {
