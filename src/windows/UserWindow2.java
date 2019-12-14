@@ -667,8 +667,8 @@ public class UserWindow2 {
 		custTipe = new JComboBox<String>();
 		panel_10.add(custTipe);
 		custTipe.addItem("Választás");
-		custTipe.addItem("T1/T2");
 		custTipe.addItem("Expert");
+		custTipe.addItem("T1/T2");
 		
 		
 		custTipe.addActionListener(new java.awt.event.ActionListener() {

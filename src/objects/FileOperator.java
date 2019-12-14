@@ -36,7 +36,7 @@ final public class FileOperator {
 
 	public static User getUserInfo(String expertCsiri, String [] speckok) throws IOException {
 		
-		FileInputStream excelFile = new FileInputStream("./" + expertCsiri);
+		FileInputStream excelFile = new FileInputStream(expertCsiri);
 		XSSFWorkbook workbook = new XSSFWorkbook(excelFile);
 		XSSFSheet datatypeSheet = workbook.getSheetAt(0);
 		
@@ -97,6 +97,7 @@ final public class FileOperator {
 					/*
 					 * mivel még nem tudjuk, hogy hol vannak a hétvégék/hétköznapok, a szabad napokat bejelöljük,
 					 */
+					if (!name.equals("") && !name.equals(null))
 					if (name.charAt(0) == '0' || (name.charAt(0) == '1' && (name.charAt(1) == '0' || name.charAt(1) == '1'))) {
 						
 						beo.setUserke(dolgozik.dolgVde);
@@ -204,6 +205,8 @@ final public class FileOperator {
 				/*
 				 * mivel még nem tudjuk, hogy hol vannak a hétvégék/hétköznapok, a szabad napokat bejelöljük,
 				 */
+				
+				if (!name.equals("") && !name.equals(null))
 				if (name.charAt(0) == '0' || (name.charAt(0) == '1' && (name.charAt(1) == '0' || name.charAt(1) == '1'))) {
 					
 					beo.setUserke(dolgozik.dolgVde);
@@ -451,7 +454,7 @@ final public class FileOperator {
 		  
 		  
 		 
-		  FileOutputStream excelFile = new FileOutputStream("./" + fileName);
+		  FileOutputStream excelFile = new FileOutputStream(fileName);
 		  
 		  
 		
