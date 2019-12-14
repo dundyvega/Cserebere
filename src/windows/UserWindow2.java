@@ -126,6 +126,8 @@ public class UserWindow2 {
 	private JPanel panel_3, panel_4, panel_5, panel_6, panel_7, panel_16, panel_18, panel_20, panel_22;
 
 	private int visszaertek;
+
+	private ArrayList<JButton> buttonsInactive;
 	
 
 	
@@ -636,6 +638,10 @@ public class UserWindow2 {
 					panel_20.setVisible(false);
 					panel_22.setVisible(false);
 					
+					
+					for (int i = 0; i < buttonsInactive.size(); ++i) {
+						buttonsInactive.get(i).setEnabled(true);
+					}
 					panel_7.setVisible(true);
 					
 					for (int i = 0; i < hasznalt.size(); ++i) {
@@ -644,6 +650,7 @@ public class UserWindow2 {
 								hasznalt.get(i).getBackground().equals(panel_18.getBackground()) ||
 								hasznalt.get(i).getBackground().equals(panel_20.getBackground()) || 
 								hasznalt.get(i).getBackground().equals(panel_22.getBackground())) {
+							
 							hasznalt.get(i).setBackground(alapszin);
 						}
 						
@@ -696,6 +703,67 @@ public class UserWindow2 {
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				//ide jön
+				String szabadHetvSzoveg = "=";
+				String szabadHetkSzoveg = "=";
+				String delutanokSzoveg = "=";
+				String delelottokSzoveg = "=";
+				String maradjonSzoveg = "";
+				
+				for (int i = 0; i < hasznalt.size(); ++i) {
+					
+					if (hasznalt.get(i).getBackground().equals(panel_3)) {
+						//dolgozik hétvégén, szabad szeretne lenni
+						szabadHetvSzoveg = (i + 1) + "," + szabadHetkSzoveg;
+					}
+					
+					if (hasznalt.get(i).getBackground().equals(panel_4)) {
+						//dolgozik hétköznap, szabad  szeretne lenni
+						szabadHetkSzoveg = (i + 1) + "," + szabadHetkSzoveg;
+					}
+					
+					if (hasznalt.get(i).getBackground().equals(panel_5)) {
+						//délelőtt dolgozik, délután szeretne
+						delelottokSzoveg = (i + 1) + "," + delelottokSzoveg;
+					}
+					
+					if (hasznalt.get(i).getBackground().equals(panel_6)) {
+						//délután dolgozik, délelőtt szeretne
+						delutanokSzoveg = (i + 1) + "," + delutanokSzoveg;
+					}
+					
+					if (hasznalt.get(i).getBackground().equals(panel_7)) {
+						//maradjon napok
+						maradjonSzoveg = (i + 1) + "," + maradjonSzoveg;
+					}
+					
+					if (hasznalt.get(i).getBackground().equals(panel_16)) {
+						//szabad hétvégét add hétvégére
+						szabadHetvSzoveg = szabadHetkSzoveg + "," + (i + 1);
+					}
+					
+					if (hasznalt.get(i).getBackground().equals(panel_18)) {
+						//szabad hétköznapot ad hétköznapra
+						szabadHetkSzoveg = szabadHetkSzoveg + "," + (i + 1);
+					}
+					
+					if (hasznalt.get(i).getBackground().equals(panel_20)) {
+						//szabad hétvégét add hétvégére
+						delelottokSzoveg = delelottokSzoveg + "," + (i + 1);
+					}
+					
+					if (hasznalt.get(i).getBackground().equals(panel_22)) {
+						//szabad hétvégét add hétvégére
+						delutanokSzoveg = delutanokSzoveg + "," + (i + 1);
+					}
+					
+				}
+				
+				System.out.println(szabadHetkSzoveg + "\n" + szabadHetvSzoveg + "\n" + delelottokSzoveg + "\n" + delutanokSzoveg + "\n" + maradjonSzoveg);
+				
+				// szabad hétvégék:
+				
+				
+				
 			}
 			
 		});
@@ -811,12 +879,63 @@ public class UserWindow2 {
     			System.out.println("taka");
     			cserelniLehet = true;
     			
+    			boolean hetvegeB = false;
+    			boolean hetkoznapB = false;
+    			boolean delelottB = false;
+    			boolean delutanB = false;
+    			
     			for (int i = 0; i < hasznalt.size(); ++i) {
     				if (!hasznalt.get(i).getBackground().equals(alapszin)) {
     					hasznalt.get(i).setEnabled(false);
     				}
     				
+    				if (hasznalt.get(i).getBackground().equals(panel_3.getBackground())) {
+    					hetvegeB = true;
+    				}
+    				
+    				if (hasznalt.get(i).getBackground().equals(panel_4.getBackground())) {
+    					hetkoznapB = true;
+    				}
+    				
+    				if (hasznalt.get(i).getBackground().equals(panel_5.getBackground())) {
+    					delelottB = true;
+    				}
+    				
+    				if (hasznalt.get(i).getBackground().equals(panel_6.getBackground())) {
+    					delutanB = true;
+    				}
+    			
+    				
+    				
+    				
     			}
+    			
+    			// minden aktív alapszínű gombot disablere emelünk
+    			buttonsInactive = new ArrayList<JButton>();
+    			for (int i = 0; i < hasznalt.size(); ++i) {
+    				if (hasznalt.get(i).getBackground().equals(alapszin) && hasznalt.get(i).isEnabled()) {
+    					buttonsInactive.add(hasznalt.get(i));
+    					hasznalt.get(i).setEnabled(false);
+    				}
+    				
+    				if (hetvegeB && szabadHetvege.contains(hasznalt.get(i)) && hasznalt.get(i).getBackground().equals(alapszin)) {
+    					hasznalt.get(i).setEnabled(true);
+    				}
+    				
+    				if (hetkoznapB && szabadHetkoznap.contains(hasznalt.get(i)) && hasznalt.get(i).getBackground().equals(alapszin)) {
+    					hasznalt.get(i).setEnabled(true);
+    				}
+    				
+    				if (delelottB && delutanok.contains(hasznalt.get(i))  && hasznalt.get(i).getBackground().equals(alapszin)) {
+    					hasznalt.get(i).setEnabled(true);
+    				}
+    				
+    				if (delutanB && delelottok.contains(hasznalt.get(i)) && hasznalt.get(i).getBackground().equals(alapszin)) {
+    					hasznalt.get(i).setEnabled(true);
+    				}
+    			}
+    			
+    			// ha szabad hétvégét kért, akkor a szabad hétvégéket tegyük vissza
     			
     			visszaButton.setVisible(true);
     			visszaertek = 1;
