@@ -434,7 +434,7 @@ final public class FileOperator {
 		  
 		  //napok kiírása
 		  
-		  for (int i = 1; i < napok; i++) {
+		  for (int i = 1; i <= napok; i++) {
 			  
 			  cell = row.createCell(cellIndex++);
 			  cell.setCellValue(honap + "." + i);  
@@ -452,7 +452,7 @@ final public class FileOperator {
 			  cell.setCellValue(users.get(i).getName());
 			 
 			  
-			  for (int j = 0; j < napok - 1; ++j) {
+			  for (int j = 0; j < napok; ++j) {
 				  
 				  cell = row.createCell(cellIndex++);
 				  cell.setCellStyle(yellow);

@@ -124,6 +124,8 @@ public class UserWindow2 {
 	private Color alapszin;
 	
 	private JPanel panel_3, panel_4, panel_5, panel_6, panel_7, panel_16, panel_18, panel_20, panel_22;
+
+	private int visszaertek;
 	
 
 	
@@ -624,6 +626,52 @@ public class UserWindow2 {
 		panel_9.add(panel_12);
 		
 		visszaButton = new JButton("Vissza");
+		visszaButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+				if (visszaertek == 1) {
+					visszaertek = 0;
+					panel_16.setVisible(false);
+					panel_18.setVisible(false);
+					panel_20.setVisible(false);
+					panel_22.setVisible(false);
+					
+					panel_7.setVisible(true);
+					
+					for (int i = 0; i < hasznalt.size(); ++i) {
+						
+						if (hasznalt.get(i).getBackground().equals(panel_16.getBackground()) ||
+								hasznalt.get(i).getBackground().equals(panel_18.getBackground()) ||
+								hasznalt.get(i).getBackground().equals(panel_20.getBackground()) || 
+								hasznalt.get(i).getBackground().equals(panel_22.getBackground())) {
+							hasznalt.get(i).setBackground(alapszin);
+						}
+						
+						
+						if (hasznalt.get(i).getBackground().equals(panel_3.getBackground()) ||
+								hasznalt.get(i).getBackground().equals(panel_4.getBackground()) ||
+								hasznalt.get(i).getBackground().equals(panel_5.getBackground()) ||
+								hasznalt.get(i).getBackground().equals(panel_6.getBackground()) ||
+								hasznalt.get(i).getBackground().equals(panel_7.getBackground())) {
+									
+									hasznalt.get(i).setEnabled(true);
+								}
+					}
+					
+					visszaButton.setVisible(false);
+					
+					cserelniLehet = false;
+				
+			} else if (visszaertek == 2) {
+				System.out.println("megegyzésből visszalépés");
+				visszaertek = 1;
+				csereButton.setVisible(true);
+				textArea.setVisible(false);
+				megjegyzes.setVisible(false);
+				visszaertek = 1;
+			}
+			}
+		});
 		panel_9.add(visszaButton);
 		
 		JPanel panel_13 = new JPanel();
@@ -770,6 +818,8 @@ public class UserWindow2 {
     				
     			}
     			
+    			visszaButton.setVisible(true);
+    			visszaertek = 1;
     			csereButton.setText("Következő");
     			
     			//cserék láthatóvá/láthatatlanná tétele
@@ -865,6 +915,10 @@ public class UserWindow2 {
     	    			megjegyzes.setVisible(true);
     	    			textArea.setVisible(true);
     	    			csereButton.setVisible(false);
+    	    			
+    	    			visszaertek = 2;
+    	    			
+    	    			
     	    			
     	    		}
     				
@@ -1088,7 +1142,7 @@ public class UserWindow2 {
 	protected void szinezo(ActionEvent e) {
 		
 		
-
+		if (visszaertek != 2)
 		
 		if (!cserelniLehet) {
 				// TODO Auto-generated method stub
