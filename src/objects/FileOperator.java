@@ -13,7 +13,11 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import org.apache.poi.sl.usermodel.VerticalAlignment;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.FillPatternType;
+import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -408,6 +412,10 @@ final public class FileOperator {
 		  XSSFWorkbook workbook = new XSSFWorkbook();
 		  XSSFSheet sheet = workbook.createSheet("beo");
 		  
+		  CellStyle yellow = workbook.createCellStyle();
+
+
+
 		
 		  
 		  int rowIndex = 0;
@@ -417,6 +425,8 @@ final public class FileOperator {
 		  int cellIndex = 0;
 		  
 		  Cell cell = row.createCell(cellIndex++);
+		  
+		  cell.setCellStyle(yellow);
 		  
 		  cell.setCellValue("kezelő");
 		  
@@ -445,6 +455,7 @@ final public class FileOperator {
 			  for (int j = 0; j < napok - 1; ++j) {
 				  
 				  cell = row.createCell(cellIndex++);
+				  cell.setCellStyle(yellow);
 				  
 				  cell.setCellValue(users.get(i).get(j).getLeiras());
 				  
