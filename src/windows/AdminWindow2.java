@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.GridLayout;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -19,11 +20,16 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 
 public class AdminWindow2 extends JFrame {
 
+	private static int honap;
 	private JPanel contentPane;
 	private JMenuItem mntmMappaLtrehozsa;
 	private JPanel nap1;
@@ -52,7 +58,19 @@ public class AdminWindow2 extends JFrame {
 	private JButton btnElfogads;
 	private JLabel lNap2;
 	private JLabel lbVele1;
+	
 	private int napokIndex;
+	private ArrayList<String> napok;
+	private int napokH;
+	private int kezdo;
+	private String expertM;
+	private String expertCs;
+	private String t1t2M;
+	private String t1t2Cs;
+	private String fix;
+	private String spec;
+	private String HVHT;
+	private String HTHV;
 
 	/**
 	 * Launch the application.
@@ -231,7 +249,11 @@ public class AdminWindow2 extends JFrame {
 		JMenuItem mntmExpertIgnyek = new JMenuItem("Expert Igények");
 		mnIgnyek.add(mntmExpertIgnyek);
 		
+		mntmExpertIgnyek.addActionListener(e->igenyRendereles(1));
+		
 		JMenuItem mntmTtIgnyek = new JMenuItem("T1/T2 Igények");
+		mntmTtIgnyek.addActionListener(e->igenyRendereles(2));
+		
 		mnIgnyek.add(mntmTtIgnyek);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -257,6 +279,7 @@ public class AdminWindow2 extends JFrame {
 		nap1.setBackground(Color.GREEN);
 		getContentPane().add(nap1);
 		nap1.setLayout(new BorderLayout(0, 0));
+		nap1.setBorder(BorderFactory.createLineBorder(Color.black));
 		
 		lNap1 = new JLabel("11.01");
 		nap1.add(lNap1, BorderLayout.CENTER);
@@ -431,9 +454,130 @@ public class AdminWindow2 extends JFrame {
 		
 	}
 
-	private Object napEltolas(int i) {
+	private Object igenyRendereles(int mode) {
 		// TODO Auto-generated method stub
+		
+		contentPane.setVisible(true);
+		
+		configBetoltes();
+		
+		napokIndex = napokH;
+		
+		napok = new ArrayList<String>();
+		
+		System.out.println(napokIndex);
+		
+		for (int i = 0; i < napokIndex; ++i) {
+			
+			napok.add(honap+ "." +  (i + 1));
+		}
+		
+		napokIndex = 0;
+		
+		lNap1.setText(napok.get(0) + "");
+		lNap2.setText(napok.get(1) + "");
+		lNap3.setText(napok.get(2) + "");
+		
+		
+		
+		
 		return null;
 	}
+
+	private void napEltolas(int i) {
+		
+		if (i == 0) {
+			
+			btnNapVissza.setEnabled(false);
+			lNap1.setText(napok.get(0) + "");
+			lNap2.setText(napok.get(1) + "");
+			lNap3.setText(napok.get(2) + "");
+			
+			nap1.setBackground(Color.GREEN);
+			nap2.setBackground(Color.ORANGE);
+			nap3.setBackground(Color.ORANGE);
+			
+			nap1.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+			nap2.setBorder(BorderFactory.createLineBorder(Color.ORANGE));
+			nap3.setBorder(BorderFactory.createLineBorder(Color.ORANGE));
+			
+		} else if (i == napok.size() - 1) {
+			
+			btnNapNext.setEnabled(false);
+			int length = napok.size() - 1;
+			
+			lNap1.setText(napok.get(length - 2) + "");
+			lNap2.setText(napok.get(length - 1) + "");
+			lNap3.setText(napok.get(length) + "");
+			
+			
+			nap1.setBackground(Color.ORANGE);
+			nap2.setBackground(Color.ORANGE);
+			nap3.setBackground(Color.GREEN);
+			
+			nap3.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+			nap1.setBorder(BorderFactory.createLineBorder(Color.ORANGE));
+			nap2.setBorder(BorderFactory.createLineBorder(Color.ORANGE));
+			
+		}
+		
+		else {
+			
+			btnNapNext.setEnabled(true);
+			btnNapVissza.setEnabled(true);
+			lNap1.setText(napok.get(i - 1) + "");
+			lNap2.setText(napok.get(i) + "");
+			lNap3.setText(napok.get(i + 1) + "");
+			
+			nap1.setBackground(Color.ORANGE);
+			nap2.setBackground(Color.GREEN);
+			nap3.setBackground(Color.ORANGE);
+			
+			nap2.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+			nap1.setBorder(BorderFactory.createLineBorder(Color.ORANGE));
+			nap3.setBorder(BorderFactory.createLineBorder(Color.ORANGE));
+		}
+	}
+	
+	
+	
+	public void configBetoltes() {
+		// TODO Auto-generated method stub
+		
+		File config = new File ("series.conf");
+		
+		//configBetoltes();
+		try {
+		
+			BufferedReader br = new BufferedReader(new FileReader("series.conf"));
+			
+			honap = Integer.parseInt(br.readLine().split("=")[1]);
+			
+			napokH = Integer.parseInt(br.readLine().split("=")[1]);
+			
+			kezdo = Integer.parseInt(br.readLine().split("=")[1]);
+			
+			expertM = br.readLine().split("=")[1];
+			
+			expertCs = br.readLine().split("=")[1];
+	
+			t1t2M = br.readLine().split("=")[1];
+			
+			 t1t2Cs = br.readLine().split("=")[1];
+			
+			 fix = br.readLine().split("=")[1];
+			
+			 spec = br.readLine().split("=")[1];
+			
+			 HVHT = br.readLine().split("=")[1];
+			 HTHV = br.readLine().split("=")[1];
+			 
+			 br.close();
+		} catch (Exception ex) {}
+		
+			
+		}
+	
+	
 
 }
