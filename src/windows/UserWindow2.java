@@ -770,6 +770,10 @@ public class UserWindow2 {
 				
 				FileOperator.WriteAssigmentsToTxtFile(tipus, us.getName() + ".txt", vegleges);
 				
+				JOptionPane.showMessageDialog(null, "Elmentve");
+				megjegyzes.setEnabled(false);
+				
+				
 				// szabad hétvégék:
 				
 				

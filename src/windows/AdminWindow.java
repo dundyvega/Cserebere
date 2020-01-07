@@ -15,6 +15,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.awt.event.ActionEvent;
 
 public class AdminWindow extends JFrame {
@@ -54,7 +55,16 @@ public class AdminWindow extends JFrame {
 		JMenu mnFjlSzerkeszts = new JMenu("Fájl Szerkesztés");
 		mnFeladatok.add(mnFjlSzerkeszts);
 		
-		JMenuItem mntmExcelFelbonts = new JMenuItem("Excel Felbontás");
+		JMenu csiribiriExp = new JMenu("Csiribiri export szerk.");
+		
+		JMenuItem mtmExcelT1T2 = new JMenuItem("T1T2.xlsx fájl létrehozása");
+		JMenuItem mtmExcelExpert = new JMenuItem("Expert.xlsx létrehozása");
+		JMenuItem mntmExcelFelbonts = new JMenuItem("Excel Kettébontása");
+		
+		
+		/*listenerek*/
+		
+		//felbontas
 		mntmExcelFelbonts.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
@@ -75,12 +85,19 @@ public class AdminWindow extends JFrame {
 				
 			}
 		});
-		mnFjlSzerkeszts.add(mntmExcelFelbonts);
+		
+		
+		JMenu excelFileSzerk = new JMenu("Csiribiri export");
+		excelFileSzerk.add(mntmExcelFelbonts);
+		excelFileSzerk.add(mtmExcelT1T2);
+		excelFileSzerk.add(mtmExcelExpert);
+		
+		mnFjlSzerkeszts.add(excelFileSzerk);
 		
 		JMenuItem mntmConfigBellts = new JMenuItem("Config Beállítás");
 		mnFjlSzerkeszts.add(mntmConfigBellts);
 		
-		JMenuItem mntmresFjlokGenerlsa = new JMenuItem("Üres fájlok Generálása");
+		JMenuItem mntmresFjlokGenerlsa = new JMenuItem("mindkettőnek");
 		mntmresFjlokGenerlsa.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
@@ -88,10 +105,81 @@ public class AdminWindow extends JFrame {
 				
 			}
 		});
-		mnFjlSzerkeszts.add(mntmresFjlokGenerlsa);
 		
-		JMenuItem mntmFjlokBetltse = new JMenuItem("Adatok Excelbe");
-		mnFjlSzerkeszts.add(mntmFjlokBetltse);
+		JMenuItem mtmuresT1T2 = new JMenuItem("T1T2-nek");
+		JMenuItem mtmuresExpert = new JMenuItem("T1T2-nek");
+		
+		JMenu urs = new JMenu("Üres fájlok generálása");
+		
+		urs.add(mtmuresT1T2);
+		urs.add(mtmuresExpert);
+		urs.add(mntmresFjlokGenerlsa);
+		
+		mnFjlSzerkeszts.add(urs);
+		
+		JMenuItem mntmFjlokBetltse = new JMenuItem("Mindkét csoportnak");
+		JMenuItem mntmExpertFl = new JMenuItem("Beo igény experteknek");
+		JMenuItem mntmT1T2Fl = new JMenuItem("Beo igény t1t2");
+		
+		mntmT1T2Fl.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				// TODO Auto-generated method stub
+				
+				try {
+					FileOperator.igenyExcelElkeszites(0);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+			}
+			
+		});
+		
+		
+		mntmExpertFl.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				// TODO Auto-generated method stub
+				
+				try {
+					FileOperator.igenyExcelElkeszites(1);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+			}
+			
+		});
+		
+		
+		mntmFjlokBetltse.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				// TODO Auto-generated method stub
+				
+				try {
+					FileOperator.igenyExcelElkeszites(2);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+			}
+			
+		});
+		
+		JMenu igeny = new JMenu("Igények excelbe");
+		igeny.add(mntmT1T2Fl);
+		igeny.add(mntmExpertFl);
+		igeny.add(mntmFjlokBetltse);
+		
+		mnFjlSzerkeszts.add(igeny);
 		
 		mntmMappaLtrehozsa = new JMenuItem("Mappa Létrehozása");
 		mntmMappaLtrehozsa.addActionListener(new ActionListener() {

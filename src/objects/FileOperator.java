@@ -569,5 +569,150 @@ final public class FileOperator {
 		}
 		
 	}
+	
+	
+	
+	/*
+	 * kinek: 0 - t1t2, 1 - expert; 2 mindkettőnek
+	 */
+	public static void igenyExcelElkeszites(int kinek) throws IOException {
+		
+		configBetoltes();
+		
+		
+		
+		switch (kinek) {
+		
+		case 0: generaldIgenyeket(t1t2M);
+		
+		case 1: generaldIgenyeket(expertM);
+			
+		case 2: generaldMindenkinek();
+		}
+		
+		
+		
+	}
+
+	private static void generaldMindenkinek() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/**excelbe írja a mappa neveként kapott mappába 
+	 * @throws IOException */
+	private static void generaldIgenyeket(String mappa) throws IOException {
+		// TODO Auto-generated method stub
+		String fullPathName = "./" + mappa + "/";
+		
+		File folder = new File(fullPathName);
+		
+		File[] listOfFiles = folder.listFiles();
+		
+		/**
+		 * az összes fájlt kinézzük
+		 */
+		
+		String lineSzabadHV = "";
+		String lineSzabadHK = "";
+		String lineDelutanok = "";
+		String lineDelelottok = "";
+		String maradjon = "";
+		String megj = "";
+		
+		String st1, st2, megjegyzesS;
+		
+		XSSFWorkbook workbook = new XSSFWorkbook();
+		XSSFSheet sheet = workbook.createSheet(mappa.split("\\.")[0]);
+		
+		int rowIndex = 0;
+		int cellIndex = 0;
+		
+		Row foRow = sheet.createRow(rowIndex++);
+		foRow.createCell(0).setCellValue("Kezelő");
+		foRow.createCell(1).setCellValue("Módosítást kérek");
+		foRow.createCell(2).setCellValue("Helyette szívesen bejövök");
+		foRow.createCell(3).setCellValue("Egyéb megjegyzés");
+		
+		for (File file: listOfFiles) {
+			
+			BufferedReader br = new BufferedReader(new FileReader(file));
+			try {
+				  lineSzabadHV = br.readLine();
+				 lineSzabadHK = br.readLine();
+				 lineDelutanok = br.readLine();
+				 lineDelelottok = br.readLine();
+				 maradjon = br.readLine();
+				 megj = br.readLine();
+				 
+				 
+				
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				
+				 lineSzabadHV = "0=0";
+				 lineSzabadHK = "0=0";
+				 lineDelutanok = "0=0";
+				 lineDelelottok = "0=0";
+				 maradjon = "0";
+				 megj = "";
+			}
+			
+			
+			Row row = sheet.createRow(rowIndex++);
+			cellIndex = 0;
+			
+			Cell cell = row.createCell(cellIndex++);
+			
+			cell.setCellValue(file.getName().split("\\.")[0]);
+			
+			Cell cell1 = row.createCell(cellIndex++);
+			Cell cell2 = row.createCell(cellIndex++);
+			Cell cell3 = row.createCell(cellIndex++);
+			
+			//igények
+			
+			try {
+			String[] cser1 = lineSzabadHV.split("=");
+			String[] cser2 = lineSzabadHK.split("=");
+			String[] cser3 = lineDelutanok.split("=");
+			String[] cser4 = lineDelelottok.split("=");
+			
+			 st1 = "Szabad hétvégét szeretnék: " + cser1[0] + "; " + "Szabad hétköznapot szeretnék: " +
+						cser2[0] + "; " + "Délután szeretnék dolgozni: " + cser3[0] + "; " + "délelőtt szeretnék dolgozni: " + cser4[0];
+			
+			 st2 = "Szabad hétvégéket adnám: " + cser1[1] + "; " + "Szabad hétkoznapokat adnám: " + cser2[1] + "; "
+					+ "Délutánokat adnám: " + cser3[1] + "; Délelőttöket adnám: " + cser4[1];
+			
+			
+			 megjegyzesS = "Maradjon így: " + maradjon + "; " + megj;
+			
+			} catch (Exception ex) {
+			
+				st1 = "";
+				st2 = "";
+				megjegyzesS = "";
+			}
+			
+			cell1.setCellValue(st1);
+			cell2.setCellValue(st2);
+			cell3.setCellValue(megjegyzesS);
+			
+		}
+		
+		String fPath = "./" + mappa + "Igenyek.xlsx";
+		
+		FileOutputStream excelFile = new FileOutputStream(fPath);
+		  
+		
+		
+		  workbook.write(excelFile);
+		  workbook.close();
+		  
+		  excelFile.close();
+		
+		
+	}
+	
 
 }
