@@ -635,7 +635,9 @@ final public class FileOperator {
 		String maradjon = "";
 		String megj = "";
 		
-		String st1, st2, megjegyzesS;
+		String st1 = "";
+		String st2 = "";
+		String megjegyzesS = "";
 		
 	
 		XSSFSheet sheet = workbook.createSheet(mappa.split("\\.")[0]);
@@ -693,11 +695,51 @@ final public class FileOperator {
 			String[] cser3 = lineDelutanok.split("=");
 			String[] cser4 = lineDelelottok.split("=");
 			
-			 st1 = "Szabad hétvégét szeretnék: " + cser1[0] + "; " + "Szabad hétköznapot szeretnék: " +
-						cser2[0] + "; " + "Délután szeretnék dolgozni: " + cser3[0] + "; " + "délelőtt szeretnék dolgozni: " + cser4[0];
+			if(!cser1[0].equals("0")) {
+				
+				st1 = "Szabad hétvégét szeretnék:  " + cser1[0].substring(0, cser1[0].length() - 2) + "; ";
+				
+			}
 			
-			 st2 = "Szabad hétvégéket adnám: " + cser1[1] + "; " + "Szabad hétkoznapokat adnám: " + cser2[1] + "; "
-					+ "Délutánokat adnám: " + cser3[1] + "; Délelőttöket adnám: " + cser4[1];
+			if (!cser1[1].equals("0")) {
+				st2 = "Szabad hétvégéket adnám: " + cser1[1].substring(2, cser1[1].length())+ "; ";
+			}
+			
+			
+			if(!cser2[0].equals("0")) {
+				
+				st1 += "Szabad hétköznapokat szeretnék:  " + cser2[0].substring(0, cser2[0].length() - 2) + "; ";
+				
+			}
+			
+			if (!cser2[1].equals("0")) {
+				st2 += "Szabad hétköznapokat adnám: " + cser2[1].substring(2, cser2[1].length()) + "; ";
+			}
+			
+			
+			if(!cser3[0].equals("0")) {
+				
+				st1 += "Délután szeretnék dolgozni:  " + cser3[0].substring(0, cser3[0].length() - 2) + "; ";
+				
+			}
+			
+			if (!cser3[1].equals("0")) {
+				st2 += "Délutánt adnám: " + cser3[1].substring(2, cser3[1].length()) + "; ";
+			}
+			
+			if(!cser4[0].equals("0")) {
+				
+				st1 += "Délelőtt szeretnék dolgozni:  " + cser4[0].substring(0, cser4[0].length() - 2) + "; ";
+				
+			}
+			
+			if (!cser4[1].equals("0")) {
+				st2 += "Délelőttöt adnám: " + cser4[1].substring(2, cser4[1].length()) + "; ";
+			}
+			
+			
+			
+			
 			
 			
 			 megjegyzesS = "Maradjon így: " + maradjon + "; " + megj;
