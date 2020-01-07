@@ -580,15 +580,30 @@ final public class FileOperator {
 		configBetoltes();
 		
 		
+		String nameFile = "";
+		XSSFWorkbook workbook = new XSSFWorkbook();
 		
 		switch (kinek) {
 		
-		case 0: generaldIgenyeket(t1t2M);
+		case 0: generaldIgenyeket(t1t2M, workbook); nameFile = t1t2M; break;
 		
-		case 1: generaldIgenyeket(expertM);
+		case 1: generaldIgenyeket(expertM, workbook); nameFile = expertM; break;
 			
-		case 2: generaldMindenkinek();
+		case 2: generaldIgenyeket(expertM, workbook); generaldIgenyeket(t1t2M, workbook); nameFile = ""; break;
 		}
+		
+		
+		
+		String fPath = "./" + nameFile + "Igenyek.xlsx";
+		
+		FileOutputStream excelFile = new FileOutputStream(fPath);
+		  
+		
+		
+		  workbook.write(excelFile);
+		  workbook.close();
+		  
+		  excelFile.close();
 		
 		
 		
@@ -601,7 +616,7 @@ final public class FileOperator {
 
 	/**excelbe írja a mappa neveként kapott mappába 
 	 * @throws IOException */
-	private static void generaldIgenyeket(String mappa) throws IOException {
+	private static void generaldIgenyeket(String mappa, XSSFWorkbook workbook) throws IOException {
 		// TODO Auto-generated method stub
 		String fullPathName = "./" + mappa + "/";
 		
@@ -622,7 +637,7 @@ final public class FileOperator {
 		
 		String st1, st2, megjegyzesS;
 		
-		XSSFWorkbook workbook = new XSSFWorkbook();
+	
 		XSSFSheet sheet = workbook.createSheet(mappa.split("\\.")[0]);
 		
 		int rowIndex = 0;
@@ -700,16 +715,6 @@ final public class FileOperator {
 			
 		}
 		
-		String fPath = "./" + mappa + "Igenyek.xlsx";
-		
-		FileOutputStream excelFile = new FileOutputStream(fPath);
-		  
-		
-		
-		  workbook.write(excelFile);
-		  workbook.close();
-		  
-		  excelFile.close();
 		
 		
 	}
