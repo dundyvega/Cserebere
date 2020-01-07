@@ -101,13 +101,17 @@ public class AdminWindow extends JFrame {
 		mntmresFjlokGenerlsa.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				FileOperator.generateEmptyTxt();
+				FileOperator.generateEmptyTxt(2);
 				
 			}
 		});
 		
 		JMenuItem mtmuresT1T2 = new JMenuItem("T1T2-nek");
-		JMenuItem mtmuresExpert = new JMenuItem("T1T2-nek");
+		mtmuresT1T2.addActionListener(e->FileOperator.generateEmptyTxt(1));
+		
+		
+		JMenuItem mtmuresExpert = new JMenuItem("Expert-nek");
+		mtmuresExpert.addActionListener(e->FileOperator.generateEmptyTxt(0));
 		
 		JMenu urs = new JMenu("Üres fájlok generálása");
 		

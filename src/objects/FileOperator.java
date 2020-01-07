@@ -496,7 +496,7 @@ final public class FileOperator {
 		}
 	}
 
-	public static void generateEmptyTxt() {
+	public static void generateEmptyTxt(int mode) {
 		// TODO Auto-generated method stub
 		
 		try {
@@ -504,15 +504,42 @@ final public class FileOperator {
 			configBetoltes();
 			
 			String[] speckok = {};
-			ArrayList<User> users = FileOperator.getInfoFromFile(expertCs, speckok);
-			users.remove(0);
 			
-			createTxt(users, expertM);
+			switch (mode) {
 			
-			users = FileOperator.getInfoFromFile(t1t2Cs, speckok);
-			users.remove(0);
+			case 0: {
+				
+				ArrayList<User> users = FileOperator.getInfoFromFile(expertCs, speckok);
+				users.remove(0);
+				createTxt(users, expertM);
+				
+				break;
+				
+			}
 			
-			createTxt(users, t1t2M);
+			case 1: {
+				ArrayList<User> users = FileOperator.getInfoFromFile(t1t2Cs, speckok);
+				users.remove(0);
+				
+				createTxt(users, t1t2M);
+				
+				break;
+			}
+			
+			case 2: {
+				ArrayList<User> users = FileOperator.getInfoFromFile(expertCs, speckok);
+				users.remove(0);
+				
+				
+				createTxt(users, expertM);
+				
+				users = FileOperator.getInfoFromFile(t1t2Cs, speckok);
+				users.remove(0);
+				
+				createTxt(users, t1t2M);
+				
+			}
+			}
 			
 			
 			
