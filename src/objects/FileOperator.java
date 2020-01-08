@@ -39,6 +39,11 @@ final public class FileOperator {
 	private static String spec;
 	private static String HVHT;
 	private static String HTHV;
+	private static String lineSzabadHK;
+	private static String lineDelutanok;
+	private static String lineDelelottok;
+	private static String maradjon;
+	private static String megj;
 
 	public static User getUserInfo(String expertCsiri, String [] speckok) throws IOException {
 		
@@ -784,6 +789,127 @@ final public class FileOperator {
 			
 		}
 		
+		
+		
+	}
+
+	public static ArrayList<Igeny> getIgenyek(int mode) throws IOException {
+		// TODO Auto-generated method stub
+		
+		configBetoltes();
+		switch (mode) {
+		
+		case 0: return getIgenyek(t1t2M);
+		case 1: return getIgenyek(expertM);
+		
+		}
+		return null;
+	}
+
+	private static ArrayList<Igeny> getIgenyek(String mappa) throws IOException {
+		// TODO Auto-generated method stub
+		
+	
+		
+		String fullPathName = "./" + mappa + "/";
+		
+		File folder = new File(fullPathName);
+		
+		File[] listOfFiles = folder.listFiles();
+		
+		ArrayList<Igeny> leadottIgenyek = new ArrayList<Igeny>();
+		
+		System.out.println(fullPathName);
+		
+	for (File file: listOfFiles) {
+			
+			BufferedReader br = new BufferedReader(new FileReader(file));
+			String lineSzabadHV;
+			try {
+				  lineSzabadHV = br.readLine();
+				 lineSzabadHK = br.readLine();
+				 lineDelutanok = br.readLine();
+				 lineDelelottok = br.readLine();
+				 maradjon = br.readLine();
+				 megj = br.readLine();
+				 
+				
+				 
+				 
+				
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				
+				 lineSzabadHV = "0=0";
+				 lineSzabadHK = "0=0";
+				 lineDelutanok = "0=0";
+				 lineDelelottok = "0=0";
+				 maradjon = "0";
+				 megj = "";
+			}
+			
+			br.close();
+			
+			
+			
+			String fname = file.getName().split("\\.")[0];
+			if (lineSzabadHV != null)  {
+				igenyBeallitas(lineSzabadHV, leadottIgenyek, IgenyTipus.SzabadHetvege, fname);
+				igenyBeallitas(lineSzabadHK, leadottIgenyek, IgenyTipus.SzabadHetkoznap, fname);
+				igenyBeallitas(lineDelutanok, leadottIgenyek, IgenyTipus.Delutan, fname);
+				igenyBeallitas(lineDelelottok, leadottIgenyek, IgenyTipus.Delelott, fname);
+				igenyBeallitas(maradjon, leadottIgenyek, IgenyTipus.Maradjon, fname);
+			}
+			
+			
+
+			
+	}
+	
+	return leadottIgenyek;
+			
+	}
+
+	private static void igenyBeallitas(String szoveg, ArrayList<Igeny> igenyek, IgenyTipus tip, String fileName) {
+		// TODO Auto-generated method stub
+		
+		//System.out.println(szoveg + " " + fileName);
+		
+		String[] szovegEgyenlo = szoveg.split("=");
+		
+		if (!szovegEgyenlo[0].equals("0")) {
+			
+			String[] kellNapok = szovegEgyenlo[0].split(",");
+			
+			String[] adomNapok = {"0"};
+			
+			if (tip != IgenyTipus.Maradjon) {
+			 adomNapok = szovegEgyenlo[1].split(",");
+			}
+			
+			for (int i = 0; i < kellNapok.length - 1; ++i) {
+				//a nullás a végéről nem kell
+				
+				Igeny ig = new Igeny();
+				
+				ig.setTipus(tip);
+				
+				ig.setName(fileName);
+				ig.setNap(Integer.parseInt(kellNapok[i]));
+				
+				for (int j = 1; j < adomNapok.length; ++j) {
+					ig.addToAdnaErte(Integer.parseInt(adomNapok[j]));
+				}
+				
+				igenyek.add(ig);
+				
+				//System.out.println(ig.toString());
+				
+		}
+			
+			
+			
+		}
 		
 		
 	}

@@ -4,28 +4,31 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import objects.FileOperator;
-
-import javax.swing.JMenuBar;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import java.awt.event.ActionListener;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.awt.event.ActionEvent;
+import objects.Igeny;
+import objects.IgenyTipus;
+import objects.NapiIgenyek;
 
 public class AdminWindow2 extends JFrame {
 
@@ -71,6 +74,8 @@ public class AdminWindow2 extends JFrame {
 	private String spec;
 	private String HVHT;
 	private String HTHV;
+	private ArrayList<Igeny> leadottIgenyek;
+	private ArrayList<NapiIgenyek> haviIgenyek;
 
 	/**
 	 * Launch the application.
@@ -461,6 +466,8 @@ public class AdminWindow2 extends JFrame {
 		
 		configBetoltes();
 		
+		// napok rész
+		
 		napokIndex = napokH;
 		
 		napok = new ArrayList<String>();
@@ -478,6 +485,47 @@ public class AdminWindow2 extends JFrame {
 		lNap2.setText(napok.get(1) + "");
 		lNap3.setText(napok.get(2) + "");
 		
+		
+		try {
+			leadottIgenyek = FileOperator.getIgenyek(mode);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		//kulonvalasszuk az igenyeket
+		
+		
+		
+		
+		// Igények
+		
+		haviIgenyek = new ArrayList<NapiIgenyek>();
+		
+		if (leadottIgenyek.size() > 0) {
+		
+		for (int i = 1; i <= napokH; ++i) {
+			
+			NapiIgenyek napiIgenyek = new NapiIgenyek();
+			
+			
+			for (int j = 0; j < leadottIgenyek.size(); ++j) {
+				
+				if (i == leadottIgenyek.get(j).getNap() && leadottIgenyek.get(j).getTipus() != IgenyTipus.Maradjon) {
+					
+					napiIgenyek.addNapiIgenyek(leadottIgenyek.get(j));
+					
+				}
+			}
+			
+			//csak akkor vizsgáljuk a napokra leadott igényeket, ha voltak rá igények
+			if (napiIgenyek.getLengthOfNap() > 0) {
+				haviIgenyek.add(napiIgenyek);
+			}
+			
+			
+		}
+		}
 		
 		
 		
