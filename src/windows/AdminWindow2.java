@@ -63,6 +63,7 @@ public class AdminWindow2 extends JFrame {
 	private JLabel lbVele1;
 	
 	private int napokIndex;
+	private int szeretneIndex;
 	private ArrayList<String> napok;
 	private int napokH;
 	private int kezdo;
@@ -76,6 +77,8 @@ public class AdminWindow2 extends JFrame {
 	private String HTHV;
 	private ArrayList<Igeny> leadottIgenyek;
 	private ArrayList<NapiIgenyek> haviIgenyek;
+	private ArrayList<NapiIgenyek> haviModositasok;
+	private int modositasIndex;
 
 	/**
 	 * Launch the application.
@@ -332,6 +335,7 @@ public class AdminWindow2 extends JFrame {
 		panel_7.setLayout(new BorderLayout(0, 0));
 		
 		btnSzabadN = new JButton("Szabadnap");
+		btnSzabadN.setBackground(Color.GREEN);
 		panel_7.add(btnSzabadN, BorderLayout.CENTER);
 		
 		JPanel panel_8 = new JPanel();
@@ -339,6 +343,7 @@ public class AdminWindow2 extends JFrame {
 		panel_8.setLayout(new BorderLayout(0, 0));
 		
 		btnHVK = new JButton("HT");
+		btnHVK.setBackground(Color.ORANGE);
 		panel_8.add(btnHVK, BorderLayout.CENTER);
 		
 		JPanel panel_9 = new JPanel();
@@ -388,6 +393,7 @@ public class AdminWindow2 extends JFrame {
 		
 		btnSzeretneVisszsa = new JButton("<<");
 		panel_16.add(btnSzeretneVisszsa, BorderLayout.EAST);
+		btnSzeretneVisszsa.addActionListener(e->valamitSzeretne(--szeretneIndex));
 		
 		JPanel panel_17 = new JPanel();
 		getContentPane().add(panel_17);
@@ -395,6 +401,8 @@ public class AdminWindow2 extends JFrame {
 		
 		btnSzeretneNext = new JButton(">>");
 		panel_17.add(btnSzeretneNext, BorderLayout.WEST);
+		
+		btnSzeretneNext.addActionListener(e->valamitSzeretne(++szeretneIndex));
 		
 		JPanel panel_18 = new JPanel();
 		getContentPane().add(panel_18);
@@ -458,6 +466,145 @@ public class AdminWindow2 extends JFrame {
 		
 		
 	}
+	
+	private void valamitSzeretne(int i) {
+		
+		if (napokIndex < this.modositasIndex) {
+			
+			System.out.println("érték: " + i);
+			
+			szeretne(i);
+		} else {
+			
+			modositaniSz(i);
+		}
+		
+	}
+
+	private void modositaniSz(int i) {
+		// TODO Auto-generated method stub
+		
+	// TODO Auto-generated method stub
+		
+		
+		if (i == 0) {
+			
+			btnSzeretneVisszsa.setEnabled(false);
+			lbSzeretne1.setText(haviModositasok.get(napokIndex - modositasIndex).getNapiIgenyek(0).getName() + "");
+			lbSzeretne2.setText(haviModositasok.get(napokIndex - modositasIndex).getNapiIgenyek(2).getName() + "");
+			lbSzeretne3.setText(haviModositasok.get(napokIndex - modositasIndex).getNapiIgenyek(3).getName() + "");
+			
+			szeretne1.setBackground(Color.GREEN);
+			szeretne2.setBackground(Color.ORANGE);
+			szeretne3.setBackground(Color.ORANGE);
+			
+			szeretne1.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+			szeretne2.setBorder(BorderFactory.createLineBorder(Color.ORANGE));
+			szeretne3.setBorder(BorderFactory.createLineBorder(Color.ORANGE));
+			
+		} else 
+			
+			if (i == haviModositasok.get(napokIndex - modositasIndex).getLengthOfNap() - 1) {
+			
+			btnSzeretneNext.setEnabled(false);
+			int length = haviModositasok.get(napokIndex - modositasIndex).getLengthOfNap() - 1;
+			
+			lbSzeretne1.setText(haviModositasok.get(napokIndex - modositasIndex).getNapiIgenyek(length - 2).getName()  + "");
+			lbSzeretne2.setText(haviModositasok.get(napokIndex - modositasIndex).getNapiIgenyek(length - 1).getName() + "");
+			lbSzeretne3.setText(haviModositasok.get(napokIndex - modositasIndex).getNapiIgenyek(length).getName() + "");
+			
+			
+			szeretne1.setBackground(Color.ORANGE);
+			szeretne2.setBackground(Color.ORANGE);
+			szeretne3.setBackground(Color.GREEN);
+			
+			szeretne3.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+			szeretne1.setBorder(BorderFactory.createLineBorder(Color.ORANGE));
+			szeretne2.setBorder(BorderFactory.createLineBorder(Color.ORANGE));
+			
+		}
+		
+		else {
+			
+			btnSzeretneNext.setEnabled(true);
+			btnSzeretneVisszsa.setEnabled(true);
+			lbSzeretne1.setText(haviModositasok.get(napokIndex - modositasIndex).getNapiIgenyek(i - 1).getName() + "");
+			lbSzeretne2.setText(haviModositasok.get(napokIndex - modositasIndex).getNapiIgenyek(i).getName() + "");
+			lbSzeretne3.setText(haviModositasok.get(napokIndex - modositasIndex).getNapiIgenyek(i + 1).getName() + "");
+			
+			szeretne1.setBackground(Color.ORANGE);
+			szeretne2.setBackground(Color.GREEN);
+			szeretne3.setBackground(Color.ORANGE);
+			
+			szeretne2.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+			szeretne1.setBorder(BorderFactory.createLineBorder(Color.ORANGE));
+			szeretne3.setBorder(BorderFactory.createLineBorder(Color.ORANGE));
+		}
+		
+		
+		
+		
+		
+	}
+
+	private Object szeretne(int i) {
+		// TODO Auto-generated method stub
+		
+		
+		if (i == 0) {
+			
+			btnSzeretneVisszsa.setEnabled(false);
+			lbSzeretne1.setText(haviIgenyek.get(napokIndex).getNapiIgenyek(0).getName() + "");
+			lbSzeretne2.setText(haviIgenyek.get(napokIndex).getNapiIgenyek(2).getName() + "");
+			lbSzeretne3.setText(haviIgenyek.get(napokIndex).getNapiIgenyek(3).getName() + "");
+			
+			szeretne1.setBackground(Color.GREEN);
+			szeretne2.setBackground(Color.ORANGE);
+			szeretne3.setBackground(Color.ORANGE);
+			
+			szeretne1.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+			szeretne2.setBorder(BorderFactory.createLineBorder(Color.ORANGE));
+			szeretne3.setBorder(BorderFactory.createLineBorder(Color.ORANGE));
+			
+		} else if (i == haviIgenyek.get(napokIndex).getLengthOfNap() - 1) {
+			
+			btnSzeretneNext.setEnabled(false);
+			int length = haviIgenyek.get(napokIndex).getLengthOfNap() - 1;
+			
+			lbSzeretne1.setText(haviIgenyek.get(napokIndex).getNapiIgenyek(length - 2).getName()  + "");
+			lbSzeretne2.setText(haviIgenyek.get(napokIndex).getNapiIgenyek(length - 1).getName() + "");
+			lbSzeretne3.setText(haviIgenyek.get(napokIndex).getNapiIgenyek(length).getName() + "");
+			
+			
+			szeretne1.setBackground(Color.ORANGE);
+			szeretne2.setBackground(Color.ORANGE);
+			szeretne3.setBackground(Color.GREEN);
+			
+			szeretne3.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+			szeretne1.setBorder(BorderFactory.createLineBorder(Color.ORANGE));
+			szeretne2.setBorder(BorderFactory.createLineBorder(Color.ORANGE));
+			
+		}
+		
+		else {
+			
+			btnSzeretneNext.setEnabled(true);
+			btnSzeretneVisszsa.setEnabled(true);
+			lbSzeretne1.setText(haviIgenyek.get(napokIndex).getNapiIgenyek(i - 1).getName() + "");
+			lbSzeretne2.setText(haviIgenyek.get(napokIndex).getNapiIgenyek(i).getName() + "");
+			lbSzeretne3.setText(haviIgenyek.get(napokIndex).getNapiIgenyek(i + 1).getName() + "");
+			
+			szeretne1.setBackground(Color.ORANGE);
+			szeretne2.setBackground(Color.GREEN);
+			szeretne3.setBackground(Color.ORANGE);
+			
+			szeretne2.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+			szeretne1.setBorder(BorderFactory.createLineBorder(Color.ORANGE));
+			szeretne3.setBorder(BorderFactory.createLineBorder(Color.ORANGE));
+		}
+		
+		return null;
+	}
 
 	private Object igenyRendereles(int mode) {
 		// TODO Auto-generated method stub
@@ -472,18 +619,6 @@ public class AdminWindow2 extends JFrame {
 		
 		napok = new ArrayList<String>();
 		
-		System.out.println(napokIndex);
-		
-		for (int i = 0; i < napokIndex; ++i) {
-			
-			napok.add(honap+ "." +  (i + 1));
-		}
-		
-		napokIndex = 0;
-		
-		lNap1.setText(napok.get(0) + "");
-		lNap2.setText(napok.get(1) + "");
-		lNap3.setText(napok.get(2) + "");
 		
 		
 		try {
@@ -501,19 +636,27 @@ public class AdminWindow2 extends JFrame {
 		// Igények
 		
 		haviIgenyek = new ArrayList<NapiIgenyek>();
+		haviModositasok = new ArrayList<NapiIgenyek>();
+		
 		
 		if (leadottIgenyek.size() > 0) {
 		
 		for (int i = 1; i <= napokH; ++i) {
 			
 			NapiIgenyek napiIgenyek = new NapiIgenyek();
+			NapiIgenyek napiModositasok = new NapiIgenyek();
 			
 			
 			for (int j = 0; j < leadottIgenyek.size(); ++j) {
 				
 				if (i == leadottIgenyek.get(j).getNap() && leadottIgenyek.get(j).getTipus() != IgenyTipus.Maradjon) {
 					
+					if (leadottIgenyek.get(j).getTipus() == IgenyTipus.SzabadHetkoznap || 
+							leadottIgenyek.get(j).getTipus() == IgenyTipus.SzabadHetvege) {
 					napiIgenyek.addNapiIgenyek(leadottIgenyek.get(j));
+					} else {
+						napiModositasok.addNapiIgenyek(leadottIgenyek.get(j));
+					}
 					
 				}
 			}
@@ -523,9 +666,55 @@ public class AdminWindow2 extends JFrame {
 				haviIgenyek.add(napiIgenyek);
 			}
 			
+			if (napiModositasok.getLengthOfNap() > 0) {
+				haviModositasok.add(napiModositasok);
+			}
+			
 			
 		}
+		
+		
+		
+		
+		
+		
+
+		
+		
+		System.out.println(napokIndex);
+		
+		for (int i = 0; i < haviIgenyek.size(); ++i) {
+			
+			napok.add(honap + "."+ haviIgenyek.get(i).getNapiIgenyek(0).getNap() + "");
 		}
+		
+		modositasIndex = haviIgenyek.size();
+		
+		for (int i = 0; i < haviModositasok.size(); ++i) {
+			napok.add(honap + "."+ haviModositasok.get(i).getNapiIgenyek(0).getNap() + "");
+		}
+		
+		napokIndex = 0;
+		
+		lNap1.setText(napok.get(0) + "");
+		lNap2.setText(napok.get(1) + "");
+		lNap3.setText(napok.get(2) + "");
+		
+		lbSzeretne1.setText(haviIgenyek.get(0).getNapiIgenyek(0).getName());
+		
+		if (haviIgenyek.get(0).getLengthOfNap() > 1) {
+			lbSzeretne2.setText(haviIgenyek.get(0).getNapiIgenyek(1).getName());
+			System.out.println("gsfgs");
+			
+			if (haviIgenyek.get(0).getLengthOfNap() > 2)
+			lbSzeretne3.setText(haviIgenyek.get(0).getNapiIgenyek(2).getName());
+		
+		}
+		
+		
+		}
+		
+		
 		
 		
 		
@@ -533,6 +722,16 @@ public class AdminWindow2 extends JFrame {
 	}
 
 	private void napEltolas(int i) {
+		
+		if (i >= modositasIndex) {
+			
+			this.btnHVK.setBackground(Color.green);
+			this.btnSzabadN.setBackground(Color.orange);
+		} else {
+			
+			this.btnHVK.setBackground(Color.orange);
+			this.btnSzabadN.setBackground(Color.green);
+		}
 		
 		if (i == 0) {
 			
@@ -584,6 +783,90 @@ public class AdminWindow2 extends JFrame {
 			nap2.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 			nap1.setBorder(BorderFactory.createLineBorder(Color.ORANGE));
 			nap3.setBorder(BorderFactory.createLineBorder(Color.ORANGE));
+		}
+		
+		if (napokIndex < modositasIndex) {
+		if (haviIgenyek.get(napokIndex).getLengthOfNap() > 0) {
+			
+			
+			//a szabadnapokat vesszük nap váltás után
+			btnSzabadN.setBackground(Color.green);
+			this.btnHVK.setBackground(Color.orange);
+			
+			lbSzeretne1.setText(haviIgenyek.get(napokIndex).getNapiIgenyek(0).getName());
+			
+			btnSzeretneNext.setEnabled(false);
+			btnSzeretneVisszsa.setEnabled(false);
+			lbSzeretne2.setText("");
+			lbSzeretne3.setText("");
+			
+			szeretne1.setBackground(Color.green);
+			szeretne2.setBackground(Color.orange);
+			szeretne3.setBackground(Color.orange);
+			szeretneIndex = 0;
+			
+			szeretne1.setBorder(BorderFactory.createLineBorder(Color.black));
+			szeretne2.setBorder(BorderFactory.createLineBorder(Color.orange));
+			szeretne3.setBorder(BorderFactory.createLineBorder(Color.orange));
+			
+			if (haviIgenyek.get(napokIndex).getLengthOfNap() > 1) {
+				btnSzeretneNext.setEnabled(true);
+				
+				lbSzeretne2.setText(haviIgenyek.get(napokIndex).getNapiIgenyek(1).getName());
+			}	
+			
+			if (haviIgenyek.get(napokIndex).getLengthOfNap() > 2) {
+				
+					lbSzeretne3.setText(haviIgenyek.get(napokIndex).getNapiIgenyek(2).getName());
+				}
+			
+			
+		}
+		} else {
+			
+			
+			
+			if (haviModositasok.get(napokIndex - haviIgenyek.size()).getLengthOfNap() > 0) {
+				
+				
+				//a szabadnapokat vesszük nap váltás után
+				btnSzabadN.setBackground(Color.orange);
+				this.btnHVK.setBackground(Color.green);
+				
+				lbSzeretne1.setText(haviModositasok.get(napokIndex - haviIgenyek.size()).getNapiIgenyek(0).getName());
+				
+				btnSzeretneNext.setEnabled(false);
+				btnSzeretneVisszsa.setEnabled(false);
+				lbSzeretne2.setText("");
+				lbSzeretne3.setText("");
+				
+				szeretne1.setBackground(Color.green);
+				szeretne2.setBackground(Color.orange);
+				szeretne3.setBackground(Color.orange);
+				szeretneIndex = 0;
+				
+				szeretne1.setBorder(BorderFactory.createLineBorder(Color.black));
+				szeretne2.setBorder(BorderFactory.createLineBorder(Color.orange));
+				szeretne3.setBorder(BorderFactory.createLineBorder(Color.orange));
+				
+				if (haviModositasok.get(napokIndex - haviIgenyek.size()).getLengthOfNap() > 1) {
+					btnSzeretneNext.setEnabled(true);
+					
+					lbSzeretne2.setText(haviModositasok.get(napokIndex - modositasIndex).getNapiIgenyek(1).getName());
+				}	
+				
+				if (haviModositasok.get(napokIndex - haviIgenyek.size()).getLengthOfNap() > 2) {
+					
+						lbSzeretne3.setText(haviModositasok.get(napokIndex).getNapiIgenyek(2).getName());
+					}
+				
+				
+			}
+			
+			
+			
+			
+			
 		}
 	}
 	
