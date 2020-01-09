@@ -44,6 +44,10 @@ final public class FileOperator {
 	private static String lineDelelottok;
 	private static String maradjon;
 	private static String megj;
+	private static String multHonap;
+	private static int napokPrew;
+	
+	
 
 	public static User getUserInfo(String expertCsiri, String [] speckok) throws IOException {
 		
@@ -163,6 +167,55 @@ final public class FileOperator {
 		
 		return user;
 	}
+	
+	public static ArrayList<NaponDolgozik> teljesPrevMonth() throws IOException {
+		
+		configBetoltes();
+		String[] speckok = spec.split(",");
+		
+		
+		ArrayList<User>  emberek = getInfoFromFile(multHonap, speckok);
+		
+		ArrayList<NaponDolgozik> napokK = new ArrayList<NaponDolgozik>();
+		
+		for (int i = napokPrew - 8; i < napokPrew - 1; ++i) {
+			
+			NaponDolgozik npSz = new NaponDolgozik(i + 1);
+			
+			for (int j = 1; j < emberek.size(); ++j) {
+				
+					
+					npSz.addUser(emberek.get(j));
+			}
+			
+			napokK.add(npSz);
+			
+		}
+		
+		return napokK;
+	}
+	
+	
+	public static ArrayList<User> getInfoFromFile(int mode) throws IOException {
+		
+		configBetoltes();
+		
+		//System.out.println("spec: " + spec);
+		
+		String[] speckok = spec.split(",");
+		
+		if (mode == 1) {
+			
+			return getInfoFromFile(expertCs, speckok);
+		} else {
+			
+			return getInfoFromFile(t1t2Cs, speckok);
+			
+		}
+	}
+	
+	
+	
 
 	public static ArrayList<User> getInfoFromFile(String expertCsiri, String[] speckok) throws IOException {
 		// TODO Auto-generated method stub
@@ -302,6 +355,9 @@ final public class FileOperator {
 				
 				 HVHT = br.readLine().split("=")[1];
 				 HTHV = br.readLine().split("=")[1];
+				 multHonap = br.readLine().split("=")[1];
+				 
+				 napokPrew = Integer.parseInt(br.readLine().split("=")[1]);
 				 
 				 br.close();
 			} catch (Exception ex) {}

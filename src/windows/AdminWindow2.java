@@ -21,14 +21,19 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import objects.Beo;
 import objects.FileOperator;
 import objects.Igeny;
 import objects.IgenyTipus;
 import objects.NapiIgenyek;
+import objects.NaponDolgozik;
+import objects.User;
+import objects.dolgozik;
 
 public class AdminWindow2 extends JFrame {
 
@@ -79,6 +84,12 @@ public class AdminWindow2 extends JFrame {
 	private ArrayList<NapiIgenyek> haviIgenyek;
 	private ArrayList<NapiIgenyek> haviModositasok;
 	private int modositasIndex;
+	private ArrayList<User> beosztasok;
+	private ArrayList<NaponDolgozik> szabadNapjaVan;
+	private ArrayList<NaponDolgozik> delelottDolgozikVan;
+	private ArrayList<NaponDolgozik> delutanDOlgozikVan;
+	private String multHonap;
+	private ArrayList<NaponDolgozik> korabbiHonap;
 
 	/**
 	 * Launch the application.
@@ -334,7 +345,7 @@ public class AdminWindow2 extends JFrame {
 		getContentPane().add(panel_7);
 		panel_7.setLayout(new BorderLayout(0, 0));
 		
-		btnSzabadN = new JButton("Szabadnap");
+		btnSzabadN = new JButton("Szabadnapot szeretne");
 		btnSzabadN.setBackground(Color.GREEN);
 		panel_7.add(btnSzabadN, BorderLayout.CENTER);
 		
@@ -342,7 +353,7 @@ public class AdminWindow2 extends JFrame {
 		getContentPane().add(panel_8);
 		panel_8.setLayout(new BorderLayout(0, 0));
 		
-		btnHVK = new JButton("HT");
+		btnHVK = new JButton("Du/De cserét szeretne");
 		btnHVK.setBackground(Color.ORANGE);
 		panel_8.add(btnHVK, BorderLayout.CENTER);
 		
@@ -491,8 +502,8 @@ public class AdminWindow2 extends JFrame {
 			
 			btnSzeretneVisszsa.setEnabled(false);
 			lbSzeretne1.setText(haviModositasok.get(napokIndex - modositasIndex).getNapiIgenyek(0).getName() + "");
-			lbSzeretne2.setText(haviModositasok.get(napokIndex - modositasIndex).getNapiIgenyek(2).getName() + "");
-			lbSzeretne3.setText(haviModositasok.get(napokIndex - modositasIndex).getNapiIgenyek(3).getName() + "");
+			lbSzeretne2.setText(haviModositasok.get(napokIndex - modositasIndex).getNapiIgenyek(1).getName() + "");
+			lbSzeretne3.setText(haviModositasok.get(napokIndex - modositasIndex).getNapiIgenyek(2).getName() + "");
 			
 			szeretne1.setBackground(Color.GREEN);
 			szeretne2.setBackground(Color.ORANGE);
@@ -609,6 +620,72 @@ public class AdminWindow2 extends JFrame {
 	private Object igenyRendereles(int mode) {
 		// TODO Auto-generated method stub
 		
+		
+		
+		try {
+			beosztasok = FileOperator.getInfoFromFile(mode);
+			
+			configBetoltes();
+			
+			szabadNapjaVan = new ArrayList<NaponDolgozik>();
+			delelottDolgozikVan = new ArrayList<NaponDolgozik>();
+			delutanDOlgozikVan = new ArrayList<NaponDolgozik>();
+			
+			for (int i = 0; i < napokH - 1; ++i) {
+				
+				NaponDolgozik npSz = new NaponDolgozik(i + 1);
+				NaponDolgozik npDe = new NaponDolgozik(i + 1);
+				NaponDolgozik npDu = new NaponDolgozik(i + 1);
+				
+				for (int j = 1; j < beosztasok.size(); ++j) {
+					
+					if (beosztasok.get(j).get(i).getUserke() == dolgozik.szabadH || 
+							beosztasok.get(j).get(i).getUserke() == dolgozik.szabadV) {
+						
+						npSz.addUser(beosztasok.get(j));
+						npSz.setErtek(1);
+						
+					} else if (beosztasok.get(j).get(i).getUserke() == dolgozik.dolgHde || 
+							beosztasok.get(j).get(i).getUserke() == dolgozik.dolgVde) {
+						
+						npDe.addUser(beosztasok.get(j));
+						npDe.setErtek(1);
+						
+					} else if (beosztasok.get(j).get(i).getUserke() == dolgozik.dolgHdu ||
+							beosztasok.get(j).get(i).getUserke() == dolgozik.dolgVdu) {
+						npDu.addUser(beosztasok.get(j));
+						npDu.setErtek(1);
+					}
+					
+				}
+				
+				if (npSz.getLength() > 0) {
+					szabadNapjaVan.add(npSz);
+				}
+				
+				if (npDu.getLength() > 0) {
+					delutanDOlgozikVan.add(npDu);
+				}
+				
+				if (npDe.getLength() > 0) {
+					
+					delelottDolgozikVan.add(npDe);
+				}
+				
+			}
+			
+			korabbiHonap = FileOperator.teljesPrevMonth();
+			
+			toroldARosszakat(delelottDolgozikVan, 0);
+			toroldARosszakat(delutanDOlgozikVan, 1);
+			toroldARosszakat(szabadNapjaVan, 2);
+			
+			
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			JOptionPane.showMessageDialog(this, e1);
+		}
+		
 		contentPane.setVisible(true);
 		
 		configBetoltes();
@@ -715,10 +792,64 @@ public class AdminWindow2 extends JFrame {
 		}
 		
 		
+		// végig megyünk a napokon, azon belül pedig a felhasználók, du, de, szabad cserenapjain,
+		//ha van csere nap, akkor módosítuk a user értékét
+		
+		//szabadNapjaVan = new ArrayList<NaponDolgozik>();
+		//delelottDolgozikVan = new ArrayList<NaponDolgozik>();
+		//delutanDOlgozikVan = new ArrayList<NaponDolgozik>();
+		
+		
+		for (int i = 0; i < haviIgenyek.size(); ++i) { // végig megyünk a hónapon
+			
+			for (int j = 0; j < haviIgenyek.get(i).getLengthOfNap(); ++j) { // végig megyünk egy napra betett embereken
+				
+				for (int k = 0; k < haviIgenyek.get(i).getNapiIgenyek(j).lengthOfAdnaErte(); ++k) {
+					
+					if (haviIgenyek.get(i).getNapiIgenyek(j).getTipus() == IgenyTipus.SzabadHetkoznap ||
+							haviIgenyek.get(i).getNapiIgenyek(j).getTipus() == IgenyTipus.SzabadHetkoznap) {
+						// ha szabadnapnak adná az aktuálisat
+						
+						szabadNapjaVan.get(i).setErtekNevAlapjan(haviIgenyek.get(i).getNapiIgenyek(j).getName(), 2);
+						
+
+						delelottDolgozikVan.get(i).setErtekNevAlapjan(haviIgenyek.get(i).getNapiIgenyek(j).getName(), 2);
+						
+
+						delutanDOlgozikVan.get(i).setErtekNevAlapjan(haviIgenyek.get(i).getNapiIgenyek(j).getName(), 2);
+						
+					}
+				}
+			}
+			
+		}
+		
 		
 		
 		
 		return null;
+	}
+	
+	
+	private boolean karacsonyfa(User us, Beo b1, Beo b2, Beo b3) {
+		
+		return true;
+	}
+	
+    /**-
+     * 
+     * @param lista
+     * @param i
+     * 
+     * A lista és a korábbi lista alapján kitörli azokat a napokat, amelyeket
+     * nem cserélhet különböző okok miatt, pl. karácsonyfa
+     * 
+     * 
+     * 
+     */
+	private void toroldARosszakat(ArrayList<NaponDolgozik> lista, int i) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	private void napEltolas(int i) {
@@ -857,7 +988,7 @@ public class AdminWindow2 extends JFrame {
 				
 				if (haviModositasok.get(napokIndex - haviIgenyek.size()).getLengthOfNap() > 2) {
 					
-						lbSzeretne3.setText(haviModositasok.get(napokIndex).getNapiIgenyek(2).getName());
+						lbSzeretne3.setText(haviModositasok.get(napokIndex - modositasIndex).getNapiIgenyek(2).getName());
 					}
 				
 				
@@ -902,6 +1033,8 @@ public class AdminWindow2 extends JFrame {
 			
 			 HVHT = br.readLine().split("=")[1];
 			 HTHV = br.readLine().split("=")[1];
+			 
+			 multHonap = br.readLine().split("=")[1];
 			 
 			 br.close();
 		} catch (Exception ex) {}
