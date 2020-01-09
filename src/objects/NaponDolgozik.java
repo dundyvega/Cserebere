@@ -65,7 +65,7 @@ public class NaponDolgozik {
 			if (nameS.equals(nevek.get(i).getName())) {
 				megtalalt = true;
 				ertek.set(i, ertekS);
-				//System.out.println(nevek.get(i).getName());
+				//System.out.println(nevek.get(i).getName() + "psztpaszta" + ertekS);
 				
 			}
 		}

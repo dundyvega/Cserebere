@@ -482,7 +482,7 @@ public class AdminWindow2 extends JFrame {
 		
 		if (napokIndex < this.modositasIndex) {
 			
-			System.out.println("érték: " + i);
+			//System.out.println("érték: " + i);
 			
 			szeretne(i);
 		} else {
@@ -631,7 +631,9 @@ public class AdminWindow2 extends JFrame {
 			delelottDolgozikVan = new ArrayList<NaponDolgozik>();
 			delutanDOlgozikVan = new ArrayList<NaponDolgozik>();
 			
-			for (int i = 0; i < napokH - 1; ++i) {
+			//System.out.println(beosztasok.get(1).get(30).getLeiras());
+			
+			for (int i = 0; i < napokH; ++i) {
 				
 				NaponDolgozik npSz = new NaponDolgozik(i + 1);
 				NaponDolgozik npDe = new NaponDolgozik(i + 1);
@@ -753,12 +755,12 @@ public class AdminWindow2 extends JFrame {
 		
 		
 		
-		
+		//System.out.println(this.delelottDolgozikVan.get(29).getName(0));
 		
 
 		
 		
-		System.out.println(napokIndex);
+		//System.out.println(napokIndex);
 		
 		for (int i = 0; i < haviIgenyek.size(); ++i) {
 			
@@ -781,7 +783,7 @@ public class AdminWindow2 extends JFrame {
 		
 		if (haviIgenyek.get(0).getLengthOfNap() > 1) {
 			lbSzeretne2.setText(haviIgenyek.get(0).getNapiIgenyek(1).getName());
-			System.out.println("gsfgs");
+			//System.out.println("gsfgs");
 			
 			if (haviIgenyek.get(0).getLengthOfNap() > 2)
 			lbSzeretne3.setText(haviIgenyek.get(0).getNapiIgenyek(2).getName());
@@ -800,29 +802,67 @@ public class AdminWindow2 extends JFrame {
 		//delutanDOlgozikVan = new ArrayList<NaponDolgozik>();
 		
 		
-		for (int i = 0; i < haviIgenyek.size(); ++i) { // végig megyünk a hónapon
+		
+		System.out.println(delelottDolgozikVan.get(30).getName(0)); // idáig jó
+		
+		
+		
+		
+		for (int i = 0; i < haviIgenyek.size(); ++i) { // végig megyünk a hó napjain
 			
-			for (int j = 0; j < haviIgenyek.get(i).getLengthOfNap(); ++j) { // végig megyünk egy napra betett embereken
+			for (int j = 0; j < haviIgenyek.get(i).getLengthOfNap(); ++j) { // ennyien adtak fel igényt a napra
 				
-				for (int k = 0; k < haviIgenyek.get(i).getNapiIgenyek(j).lengthOfAdnaErte(); ++k) {
+				
+				for (int k = 0; k < haviIgenyek.get(i).getNapiIgenyek(j).lengthOfAdnaErte(); ++k) {//mit adna érte j
+						this.szabadNapjaVan.get(haviIgenyek.get(i).getNapiIgenyek(j).getAdnaErte(k) - 1).setErtekNevAlapjan(haviIgenyek.get(i).getNapiIgenyek(j).getName(), 2);
 					
-					if (haviIgenyek.get(i).getNapiIgenyek(j).getTipus() == IgenyTipus.SzabadHetkoznap ||
-							haviIgenyek.get(i).getNapiIgenyek(j).getTipus() == IgenyTipus.SzabadHetkoznap) {
-						// ha szabadnapnak adná az aktuálisat
-						
-						szabadNapjaVan.get(i).setErtekNevAlapjan(haviIgenyek.get(i).getNapiIgenyek(j).getName(), 2);
-						
-
-						delelottDolgozikVan.get(i).setErtekNevAlapjan(haviIgenyek.get(i).getNapiIgenyek(j).getName(), 2);
-						
-
-						delutanDOlgozikVan.get(i).setErtekNevAlapjan(haviIgenyek.get(i).getNapiIgenyek(j).getName(), 2);
-						
-					}
 				}
+				
+				
 			}
 			
+			
 		}
+		
+		
+		
+		for (int i = 0; i < haviModositasok.size(); ++i) { // végig megyünk a hó napjain, akik módositast kértek
+			
+			for (int j = 0; j < haviModositasok.get(i).getLengthOfNap(); ++j) { // ennyien adtak fel igényt a napra
+				
+				
+				for (int k = 0; k < haviModositasok.get(i).getNapiIgenyek(j).lengthOfAdnaErte(); ++k) { //végigmegyünk
+					
+					if (haviModositasok.get(i).getNapiIgenyek(j).getTipus() == IgenyTipus.Delelott) {
+						
+						this.delelottDolgozikVan.get(haviModositasok.get(i).getNapiIgenyek(j).getAdnaErte(k) - 1).setErtekNevAlapjan(haviModositasok.get(i).getNapiIgenyek(j).getName(), 2);
+						
+					} else {
+						
+						this.delutanDOlgozikVan.get(haviModositasok.get(i).getNapiIgenyek(j).getAdnaErte(k) - 1).setErtekNevAlapjan(haviModositasok.get(i).getNapiIgenyek(j).getName(), 2);
+						
+						
+					}
+					
+				}
+				
+				
+			}
+			
+			
+		}
+
+			
+		
+		
+		for (int j = 0; j <= 30; ++j) 
+		for (int i = 0; i < delelottDolgozikVan.get(j).getLength(); ++i) {
+			if (this.delelottDolgozikVan.get(j).getErtek(i) == 2)
+			System.out.println((j + 1) + this.delelottDolgozikVan.get(j).getName(i) + this.delelottDolgozikVan.get(j).getErtek(i));
+			
+		}
+			
+		
 		
 		
 		
