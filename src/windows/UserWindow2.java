@@ -703,6 +703,12 @@ public class UserWindow2 {
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				//ide jön
+				
+				int dialogResult = JOptionPane.showConfirmDialog(frame, "Szeretnéd elmenteni a fájlt?");
+	    		
+	    		if (dialogResult == JOptionPane.YES_OPTION) {
+				
+				
 				String szabadHetvSzoveg = "0=0";
 				String szabadHetkSzoveg = "0=0";
 				String delutanokSzoveg = "0=0";
@@ -772,7 +778,15 @@ public class UserWindow2 {
 				
 				JOptionPane.showMessageDialog(null, "Elmentve");
 				megjegyzes.setEnabled(false);
+				csereButton.setEnabled(false);
+				visszaButton.setEnabled(false);
 				
+				
+				for (int i = 0; i < gombok.size(); ++i) {
+					
+					gombok.get(i).setEnabled(false);
+					
+				}
 				
 				// szabad hétvégék:
 				
@@ -780,7 +794,7 @@ public class UserWindow2 {
 				
 			}
 			
-		});
+		}});
 		
 
 		scrollPane.setColumnHeaderView(megjegyzes);
@@ -834,6 +848,7 @@ public class UserWindow2 {
 			    		
 			    		if (dialogResult == JOptionPane.YES_OPTION) {
 			    			
+			    			csereButton.setEnabled(false);
 			    			
 			    			String[] sorok = ass.split("\n");
 			    			
@@ -931,7 +946,7 @@ public class UserWindow2 {
 			    			
 			    			
 			    			
-			    		} else {
+			    		} else if (dialogResult == JOptionPane.NO_OPTION){
 			    			jComboBox1ActionPerformed(e);
 			    			
 			    			

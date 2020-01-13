@@ -7,7 +7,16 @@ public class NaponDolgozik {
 	private int nap;
 	private ArrayList<User> nevek;
 	private ArrayList<Integer> ertek;
+	private int eztAnapotCsereli;
 	
+	public int getEztAnapotCsereli() {
+		return eztAnapotCsereli;
+	}
+
+	public void setEztAnapotCsereli(int eztAnapotCsereli) {
+		this.eztAnapotCsereli = eztAnapotCsereli;
+	}
+
 	public NaponDolgozik(int n) {
 		
 		nap = n;
@@ -70,6 +79,18 @@ public class NaponDolgozik {
 			}
 		}
 		
+	}
+
+	public void setCsere(int cser) {
+		// TODO Auto-generated method stub
+		
+		this.eztAnapotCsereli = cser;
+		
+	}
+
+	public boolean benneVan(User user) {
+		// TODO Auto-generated method stub
+		return nevek.contains(user);
 	}
 	
 	

@@ -90,6 +90,11 @@ public class AdminWindow2 extends JFrame {
 	private ArrayList<NaponDolgozik> delutanDOlgozikVan;
 	private String multHonap;
 	private ArrayList<NaponDolgozik> korabbiHonap;
+	private ArrayList<User> velukCserelhet;
+	private int velukCserelhetIndex;
+	private JPanel vele2;
+	private JPanel vele3;
+	private ArrayList<NapiIgenyek> haviMaradjon;
 
 	/**
 	 * Launch the application.
@@ -430,7 +435,7 @@ public class AdminWindow2 extends JFrame {
 		lbVele1 = new JLabel("Név1");
 		vele1.add(lbVele1, BorderLayout.CENTER);
 		
-		JPanel vele2 = new JPanel();
+		vele2 = new JPanel();
 		vele2.setBackground(Color.ORANGE);
 		getContentPane().add(vele2);
 		vele2.setLayout(new BorderLayout(0, 0));
@@ -438,7 +443,7 @@ public class AdminWindow2 extends JFrame {
 		lbVele2 = new JLabel("Név2");
 		vele2.add(lbVele2, BorderLayout.CENTER);
 		
-		JPanel vele3 = new JPanel();
+		vele3 = new JPanel();
 		vele3.setBackground(Color.ORANGE);
 		getContentPane().add(vele3);
 		vele3.setLayout(new BorderLayout(0, 0));
@@ -716,6 +721,7 @@ public class AdminWindow2 extends JFrame {
 		
 		haviIgenyek = new ArrayList<NapiIgenyek>();
 		haviModositasok = new ArrayList<NapiIgenyek>();
+		haviMaradjon = new ArrayList<NapiIgenyek>();
 		
 		
 		if (leadottIgenyek.size() > 0) {
@@ -724,6 +730,7 @@ public class AdminWindow2 extends JFrame {
 			
 			NapiIgenyek napiIgenyek = new NapiIgenyek();
 			NapiIgenyek napiModositasok = new NapiIgenyek();
+			NapiIgenyek napiMaradjon = new NapiIgenyek();
 			
 			
 			for (int j = 0; j < leadottIgenyek.size(); ++j) {
@@ -737,6 +744,8 @@ public class AdminWindow2 extends JFrame {
 						napiModositasok.addNapiIgenyek(leadottIgenyek.get(j));
 					}
 					
+				} else if (leadottIgenyek.get(j).getTipus() == IgenyTipus.Maradjon && i == leadottIgenyek.get(j).getNap()){
+					napiMaradjon.addNapiIgenyek(leadottIgenyek.get(j));
 				}
 			}
 			
@@ -747,6 +756,10 @@ public class AdminWindow2 extends JFrame {
 			
 			if (napiModositasok.getLengthOfNap() > 0) {
 				haviModositasok.add(napiModositasok);
+			}
+			
+			if (napiMaradjon.getLengthOfNap() > 0) {
+				haviMaradjon.add(napiMaradjon);
 			}
 			
 			
@@ -851,23 +864,206 @@ public class AdminWindow2 extends JFrame {
 			
 			
 		}
+		
+		
+		// az első csere lehetőségek betöltése
+		
+		
+
+			
+		// töröljük a maradjon napokat 
+		
+		// először a szabad napokon megyünk végig
+		
+		
+		toroldMaradjonErtekek(szabadNapjaVan);
+		toroldMaradjonErtekek(delutanDOlgozikVan);
+		toroldMaradjonErtekek(delelottDolgozikVan);
+		
 
 			
 		
 		
-		for (int j = 0; j <= 30; ++j) 
-		for (int i = 0; i < delelottDolgozikVan.get(j).getLength(); ++i) {
-			if (this.delelottDolgozikVan.get(j).getErtek(i) == 2)
-			System.out.println((j + 1) + this.delelottDolgozikVan.get(j).getName(i) + this.delelottDolgozikVan.get(j).getErtek(i));
-			
-		}
-			
+		
+		
+		
+		listaElkeszitese();
 		
 		
 		
 		
 		
 		return null;
+	}
+	
+	private void toroldMaradjonErtekek(ArrayList<NaponDolgozik> lista) {
+		// TODO Auto-generated method stub
+		
+		for (int i = 0; i < haviMaradjon.size(); ++i) { // végig megyünk a maradjon napokon
+			
+			for (int j = 0; j < haviMaradjon.get(i).getLengthOfNap(); ++j) {
+				
+				
+				
+				
+			}
+			
+		}
+		
+	}
+
+
+
+	/**
+	 * a dátum, és haviIgények lista kiválasztott elemei alapján elészíti a csere listát
+	 * 
+	 * FOntos paraméterek: 
+	 * 
+	 * napokIndex: ez a nap lett kiválasztva
+	 * szeretne index: kinek nézzük az igényeit
+	 * haviIgenyek
+	 *    
+	 */
+	private void listaElkeszitese() {
+		
+		//nevLista
+		
+		int minuszosDatum = Integer.parseInt(napok.get(napokIndex).split("\\.")[1]) -1;
+		
+		//System.out.println("nap: " + minuszosDatum);
+		
+		Igeny kivalasztott = haviIgenyek.get(minuszosDatum).getNapiIgenyek(szeretneIndex);
+		
+
+		
+		
+		velukCserelhet = new ArrayList<User>();
+		
+		velukCserelhetIndex = 0;
+		
+		
+		IgenyTipus tip = kivalasztott.getTipus(); // ilyen típusű csere kell
+		
+		NaponDolgozik nagyonSzabad;	// velük cserélhet, ha a csere nap is jó
+		
+		
+		
+		if (tip == IgenyTipus.SzabadHetkoznap || tip == IgenyTipus.SzabadHetvege) {
+			
+			nagyonSzabad = szabadNapjaVan.get(minuszosDatum);
+			
+		} else if (tip == IgenyTipus.Delelott) {
+			
+			
+			nagyonSzabad = delelottDolgozikVan.get(minuszosDatum);
+		} else {
+			
+			nagyonSzabad = delutanDOlgozikVan.get(minuszosDatum);
+			
+		}
+
+		
+		for (int i = 0; i < nagyonSzabad.getLength(); ++i) { // ők szabadok az igénybe leadott napon
+			
+			for (int j = 0; j < kivalasztott.lengthOfAdnaErte(); ++j) { // az igénylő ezeket a napokat adná
+				
+				// először a du/de cseréket csináljuk meg, mivel az egyszerűbb
+				
+				
+			
+				
+				if (tip == IgenyTipus.Delelott) {
+					
+					// nagyonSzabad_i - egy olyan ember, akinek van egy olyan t napja, amilyen az igénylőnek kell
+					
+					
+					
+						if (delelottDolgozikVan.get(kivalasztott.getAdnaErte(j) - 1).benneVan(nagyonSzabad.getUser(i))) {
+							
+							velukCserelhet.add(nagyonSzabad.getUser(i));
+							nagyonSzabad.getUser(i).setCser(kivalasztott.getAdnaErte(j));
+							
+						} 
+				} else if (tip == IgenyTipus.Delutan){
+							
+							
+							if (delutanDOlgozikVan.get(kivalasztott.getAdnaErte(j) - 1).benneVan(nagyonSzabad.getUser(i))) {
+								
+								velukCserelhet.add(nagyonSzabad.getUser(i));
+								nagyonSzabad.getUser(i).setCser(kivalasztott.getAdnaErte(j));
+								
+							}
+							
+						} else if (tip == IgenyTipus.SzabadHetkoznap || tip == IgenyTipus.SzabadHetvege) {
+							
+							
+							if (delutanDOlgozikVan.get(kivalasztott.getAdnaErte(j) - 1).benneVan(nagyonSzabad.getUser(i)) ||
+									delutanDOlgozikVan.get(kivalasztott.getAdnaErte(j) - 1).benneVan(nagyonSzabad.getUser(i))) {
+								
+								velukCserelhet.add(nagyonSzabad.getUser(i));
+								nagyonSzabad.getUser(i).setCser(kivalasztott.getAdnaErte(j));
+								
+							}
+							
+							
+						}
+							
+				
+					
+				}
+				
+		}
+				
+				
+				
+
+		
+		
+		// az első három értéket feltöltjük a mozgatható helyekre
+		
+		//karacsonyfa(); // kieszedi azokat, akikkel nem cserélhet valamilyen ok miatt
+		
+		
+		vele1.setBorder(BorderFactory.createLineBorder(Color.orange));
+		vele2.setBorder(BorderFactory.createLineBorder(Color.orange));
+		vele3.setBorder(BorderFactory.createLineBorder(Color.orange));
+		
+		vele1.setBackground(Color.gray);
+		vele2.setBackground(Color.gray);
+		vele3.setBackground(Color.gray);
+		
+		btnVeleVissza.setEnabled(false);
+		btnVeleNext.setEnabled(false);
+		
+		if (velukCserelhet.size() > 0) {
+			
+			lbVele1.setText(velukCserelhet.get(0).getName() + " " +  velukCserelhet.get(0).getCser());
+			
+
+			vele1.setBackground(Color.green);
+			vele1.setBorder(BorderFactory.createLineBorder(Color.black));
+
+			
+			
+		
+			if (velukCserelhet.size() > 1) {
+				lbVele2.setText(velukCserelhet.get(1).getName() +  velukCserelhet.get(0).getCser());
+				vele2.setBackground(Color.orange);
+		
+				if (velukCserelhet.size() > 2) {
+					this.lbVele3.setText(velukCserelhet.get(2).getName() +  velukCserelhet.get(0).getCser());
+					vele3.setBackground(Color.orange);
+				}
+			}
+		}
+		
+		
+		for (int i = 0; i < velukCserelhet.size(); ++i) {
+			
+			System.out.println(velukCserelhet.get(i) + " " + velukCserelhet.get(i).getCser());
+		}
+		
+		
 	}
 	
 	

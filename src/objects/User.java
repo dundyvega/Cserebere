@@ -8,6 +8,8 @@ public class User {
 	
 	private ArrayList<Beo> list = new ArrayList<Beo>();
 
+	private String cser = "";
+
 	public String getName() {
 		return name;
 	}
@@ -47,6 +49,21 @@ public class User {
 	
 	public String toString() {
 		return name;
+	}
+
+	public void setEztAnapotAdnaErte(int cser) {
+		// TODO Auto-generated method stub
+		this.cser = this.cser += cser + ",";
+		
+	}
+
+	public String getCser() {
+		
+		return cser;
+	}
+
+	public void setCser(int cser) {
+		this.cser = this.cser += cser + ",";
 	}
 	
 }
