@@ -34,6 +34,7 @@ import objects.IgenyTipus;
 import objects.ListaPelda;
 import objects.NapiIgenyek;
 import objects.NaponDolgozik;
+import objects.PossibleAssigment;
 import objects.User;
 import objects.dolgozik;
 
@@ -73,8 +74,8 @@ public class AdminWindow2 extends JFrame {
 	private JLabel lNap2;
 	private JLabel lbVele1;
 	
-	private int napokIndex;
-	private int szeretneIndex;
+	//private int l1.getListaIndex();
+	//private int szeretneIndex;
 	private ArrayList<String> napok;
 	private int napokH;
 	private int kezdo;
@@ -103,6 +104,8 @@ public class AdminWindow2 extends JFrame {
 	private ArrayList<NapiIgenyek> haviMaradjon;
 	
 	private ListaPelda<Igeny> l2 = null;
+	private ListaPelda<String> l1;
+	private ListaPelda<User> l3;
 
 	/**
 	 * Launch the application.
@@ -295,7 +298,7 @@ public class AdminWindow2 extends JFrame {
 		contentPane.setVisible(false);
 		
 		
-		contentPane.setLayout(new GridLayout(3,1));
+		contentPane.setLayout(new GridLayout(4,1));
 		
 		
 		
@@ -339,7 +342,7 @@ public class AdminWindow2 extends JFrame {
 		
 		btnNapVissza = new JButton("<<");
 		panel_4.add(btnNapVissza, BorderLayout.EAST);
-		btnNapVissza.addActionListener(e->napEltolas(--napokIndex));
+		btnNapVissza.addActionListener(e->napEltolas(--l1.getListaIndex()));
 		btnNapVissza.setEnabled(false);
 		
 		
@@ -349,7 +352,7 @@ public class AdminWindow2 extends JFrame {
 		
 		btnNapNext = new JButton(">>");
 		panel_5.add(btnNapNext, BorderLayout.WEST);
-		btnNapNext.addActionListener(e->napEltolas(++napokIndex));
+		btnNapNext.addActionListener(e->napEltolas(++l1.getListaIndex()));
 		
 		JPanel panel_6 = new JPanel();
 		getContentPane().add(panel_6);
@@ -493,7 +496,7 @@ public class AdminWindow2 extends JFrame {
 	
 	private void valamitSzeretne(int i) {
 		
-		if (napokIndex < this.modositasIndex) {
+		if (l1.getListaIndex() < this.modositasIndex) {
 			
 			//System.out.println("érték: " + i);
 			
@@ -514,9 +517,9 @@ public class AdminWindow2 extends JFrame {
 		if (i == 0) {
 			
 			btnSzeretneVisszsa.setEnabled(false);
-			lbSzeretne1.setText(haviModositasok.get(napokIndex - modositasIndex).getNapiIgenyek(0).getName() + "");
-			lbSzeretne2.setText(haviModositasok.get(napokIndex - modositasIndex).getNapiIgenyek(1).getName() + "");
-			lbSzeretne3.setText(haviModositasok.get(napokIndex - modositasIndex).getNapiIgenyek(2).getName() + "");
+			lbSzeretne1.setText(haviModositasok.get(l1.getListaIndex() - modositasIndex).getNapiIgenyek(0).getName() + "");
+			lbSzeretne2.setText(haviModositasok.get(l1.getListaIndex() - modositasIndex).getNapiIgenyek(1).getName() + "");
+			lbSzeretne3.setText(haviModositasok.get(l1.getListaIndex() - modositasIndex).getNapiIgenyek(2).getName() + "");
 			
 			szeretne1.setBackground(Color.GREEN);
 			szeretne2.setBackground(Color.ORANGE);
@@ -528,14 +531,14 @@ public class AdminWindow2 extends JFrame {
 			
 		} else 
 			
-			if (i == haviModositasok.get(napokIndex - modositasIndex).getLengthOfNap() - 1) {
+			if (i == haviModositasok.get(l1.getListaIndex() - modositasIndex).getLengthOfNap() - 1) {
 			
 			btnSzeretneNext.setEnabled(false);
-			int length = haviModositasok.get(napokIndex - modositasIndex).getLengthOfNap() - 1;
+			int length = haviModositasok.get(l1.getListaIndex() - modositasIndex).getLengthOfNap() - 1;
 			
-			lbSzeretne1.setText(haviModositasok.get(napokIndex - modositasIndex).getNapiIgenyek(length - 2).getName()  + "");
-			lbSzeretne2.setText(haviModositasok.get(napokIndex - modositasIndex).getNapiIgenyek(length - 1).getName() + "");
-			lbSzeretne3.setText(haviModositasok.get(napokIndex - modositasIndex).getNapiIgenyek(length).getName() + "");
+			lbSzeretne1.setText(haviModositasok.get(l1.getListaIndex() - modositasIndex).getNapiIgenyek(length - 2).getName()  + "");
+			lbSzeretne2.setText(haviModositasok.get(l1.getListaIndex() - modositasIndex).getNapiIgenyek(length - 1).getName() + "");
+			lbSzeretne3.setText(haviModositasok.get(l1.getListaIndex() - modositasIndex).getNapiIgenyek(length).getName() + "");
 			
 			
 			szeretne1.setBackground(Color.ORANGE);
@@ -552,9 +555,9 @@ public class AdminWindow2 extends JFrame {
 			
 			btnSzeretneNext.setEnabled(true);
 			btnSzeretneVisszsa.setEnabled(true);
-			lbSzeretne1.setText(haviModositasok.get(napokIndex - modositasIndex).getNapiIgenyek(i - 1).getName() + "");
-			lbSzeretne2.setText(haviModositasok.get(napokIndex - modositasIndex).getNapiIgenyek(i).getName() + "");
-			lbSzeretne3.setText(haviModositasok.get(napokIndex - modositasIndex).getNapiIgenyek(i + 1).getName() + "");
+			lbSzeretne1.setText(haviModositasok.get(l1.getListaIndex() - modositasIndex).getNapiIgenyek(i - 1).getName() + "");
+			lbSzeretne2.setText(haviModositasok.get(l1.getListaIndex() - modositasIndex).getNapiIgenyek(i).getName() + "");
+			lbSzeretne3.setText(haviModositasok.get(l1.getListaIndex() - modositasIndex).getNapiIgenyek(i + 1).getName() + "");
 			
 			szeretne1.setBackground(Color.ORANGE);
 			szeretne2.setBackground(Color.GREEN);
@@ -578,9 +581,9 @@ public class AdminWindow2 extends JFrame {
 		if (i == 0) {
 			
 			btnSzeretneVisszsa.setEnabled(false);
-			lbSzeretne1.setText(haviIgenyek.get(napokIndex).getNapiIgenyek(0).getName() + "");
-			lbSzeretne2.setText(haviIgenyek.get(napokIndex).getNapiIgenyek(2).getName() + "");
-			lbSzeretne3.setText(haviIgenyek.get(napokIndex).getNapiIgenyek(3).getName() + "");
+			lbSzeretne1.setText(haviIgenyek.get(l1.getListaIndex()).getNapiIgenyek(0).getName() + "");
+			lbSzeretne2.setText(haviIgenyek.get(l1.getListaIndex()).getNapiIgenyek(2).getName() + "");
+			lbSzeretne3.setText(haviIgenyek.get(l1.getListaIndex()).getNapiIgenyek(3).getName() + "");
 			
 			szeretne1.setBackground(Color.GREEN);
 			szeretne2.setBackground(Color.ORANGE);
@@ -590,14 +593,14 @@ public class AdminWindow2 extends JFrame {
 			szeretne2.setBorder(BorderFactory.createLineBorder(Color.ORANGE));
 			szeretne3.setBorder(BorderFactory.createLineBorder(Color.ORANGE));
 			
-		} else if (i == haviIgenyek.get(napokIndex).getLengthOfNap() - 1) {
+		} else if (i == haviIgenyek.get(l1.getListaIndex()).getLengthOfNap() - 1) {
 			
 			btnSzeretneNext.setEnabled(false);
-			int length = haviIgenyek.get(napokIndex).getLengthOfNap() - 1;
+			int length = haviIgenyek.get(l1.getListaIndex()).getLengthOfNap() - 1;
 			
-			lbSzeretne1.setText(haviIgenyek.get(napokIndex).getNapiIgenyek(length - 2).getName()  + "");
-			lbSzeretne2.setText(haviIgenyek.get(napokIndex).getNapiIgenyek(length - 1).getName() + "");
-			lbSzeretne3.setText(haviIgenyek.get(napokIndex).getNapiIgenyek(length).getName() + "");
+			lbSzeretne1.setText(haviIgenyek.get(l1.getListaIndex()).getNapiIgenyek(length - 2).getName()  + "");
+			lbSzeretne2.setText(haviIgenyek.get(l1.getListaIndex()).getNapiIgenyek(length - 1).getName() + "");
+			lbSzeretne3.setText(haviIgenyek.get(l1.getListaIndex()).getNapiIgenyek(length).getName() + "");
 			
 			
 			szeretne1.setBackground(Color.ORANGE);
@@ -614,9 +617,9 @@ public class AdminWindow2 extends JFrame {
 			
 			btnSzeretneNext.setEnabled(true);
 			btnSzeretneVisszsa.setEnabled(true);
-			lbSzeretne1.setText(haviIgenyek.get(napokIndex).getNapiIgenyek(i - 1).getName() + "");
-			lbSzeretne2.setText(haviIgenyek.get(napokIndex).getNapiIgenyek(i).getName() + "");
-			lbSzeretne3.setText(haviIgenyek.get(napokIndex).getNapiIgenyek(i + 1).getName() + "");
+			lbSzeretne1.setText(haviIgenyek.get(l1.getListaIndex()).getNapiIgenyek(i - 1).getName() + "");
+			lbSzeretne2.setText(haviIgenyek.get(l1.getListaIndex()).getNapiIgenyek(i).getName() + "");
+			lbSzeretne3.setText(haviIgenyek.get(l1.getListaIndex()).getNapiIgenyek(i + 1).getName() + "");
 			
 			szeretne1.setBackground(Color.ORANGE);
 			szeretne2.setBackground(Color.GREEN);
@@ -770,7 +773,7 @@ public class AdminWindow2 extends JFrame {
 		
 		
 		
-		napokIndex = napokH;
+		//l1.getListaIndex() = napokH;
 		
 		napok = new ArrayList<String>();
 		
@@ -788,9 +791,9 @@ public class AdminWindow2 extends JFrame {
 			napok.add(honap + "."+ haviModositasok.get(i).getNapiIgenyek(0).getNap() + "");
 		}
 		
-		napokIndex = 0;
+		//l1.getListaIndex() = 0;
 		
-		ListaPelda<String> l1 = new ListaPelda<String>(napok, "Napok: ");
+		l1 = new ListaPelda<String>(napok, "Napok: ");
 		l2 = new ListaPelda<Igeny>(haviIgenyek.get(0).getArrayList(), "Kezelők");
 		
 		contentPane.add(l1);
@@ -840,7 +843,7 @@ public class AdminWindow2 extends JFrame {
 					}
 				} else 
 					if (haviModositasok.get(l1.getListaIndex() - haviIgenyek.size()).getLengthOfNap() > 0) {
-						//haviModositasok.get(napokIndex - haviIgenyek.size()
+						//haviModositasok.get(l1.getListaIndex() - haviIgenyek.size()
 						
 							 l2.setLista((haviModositasok.get(l1.getListaIndex() - haviIgenyek.size()).getArrayList()));;
 							 
@@ -857,15 +860,15 @@ public class AdminWindow2 extends JFrame {
 		 * 
 		 * 
 		 * 
-		 * if (napokIndex < modositasIndex) {
-		if (haviIgenyek.get(napokIndex).getLengthOfNap() > 0) {
+		 * if (l1.getListaIndex() < modositasIndex) {
+		if (haviIgenyek.get(l1.getListaIndex()).getLengthOfNap() > 0) {
 			
 			
 			//a szabadnapokat vesszük nap váltás után
 			btnSzabadN.setBackground(Color.green);
 			this.btnHVK.setBackground(Color.orange);
 			
-			lbSzeretne1.setText(haviIgenyek.get(napokIndex).getNapiIgenyek(0).getName());
+			lbSzeretne1.setText(haviIgenyek.get(l1.getListaIndex()).getNapiIgenyek(0).getName());
 			
 			btnSzeretneNext.setEnabled(false);
 			btnSzeretneVisszsa.setEnabled(false);
@@ -881,15 +884,15 @@ public class AdminWindow2 extends JFrame {
 			szeretne2.setBorder(BorderFactory.createLineBorder(Color.orange));
 			szeretne3.setBorder(BorderFactory.createLineBorder(Color.orange));
 			
-			if (haviIgenyek.get(napokIndex).getLengthOfNap() > 1) {
+			if (haviIgenyek.get(l1.getListaIndex()).getLengthOfNap() > 1) {
 				btnSzeretneNext.setEnabled(true);
 				
-				lbSzeretne2.setText(haviIgenyek.get(napokIndex).getNapiIgenyek(1).getName());
+				lbSzeretne2.setText(haviIgenyek.get(l1.getListaIndex()).getNapiIgenyek(1).getName());
 			}	
 			
-			if (haviIgenyek.get(napokIndex).getLengthOfNap() > 2) {
+			if (haviIgenyek.get(l1.getListaIndex()).getLengthOfNap() > 2) {
 				
-					lbSzeretne3.setText(haviIgenyek.get(napokIndex).getNapiIgenyek(2).getName());
+					lbSzeretne3.setText(haviIgenyek.get(l1.getListaIndex()).getNapiIgenyek(2).getName());
 				}
 			
 			
@@ -898,14 +901,14 @@ public class AdminWindow2 extends JFrame {
 			
 			
 			
-			if (haviModositasok.get(napokIndex - haviIgenyek.size()).getLengthOfNap() > 0) {
+			if (haviModositasok.get(l1.getListaIndex() - haviIgenyek.size()).getLengthOfNap() > 0) {
 				
 				
 				//a szabadnapokat vesszük nap váltás után
 				btnSzabadN.setBackground(Color.orange);
 				this.btnHVK.setBackground(Color.green);
 				
-				lbSzeretne1.setText(haviModositasok.get(napokIndex - haviIgenyek.size()).getNapiIgenyek(0).getName());
+				lbSzeretne1.setText(haviModositasok.get(l1.getListaIndex() - haviIgenyek.size()).getNapiIgenyek(0).getName());
 				
 				btnSzeretneNext.setEnabled(false);
 				btnSzeretneVisszsa.setEnabled(false);
@@ -921,15 +924,15 @@ public class AdminWindow2 extends JFrame {
 				szeretne2.setBorder(BorderFactory.createLineBorder(Color.orange));
 				szeretne3.setBorder(BorderFactory.createLineBorder(Color.orange));
 				
-				if (haviModositasok.get(napokIndex - haviIgenyek.size()).getLengthOfNap() > 1) {
+				if (haviModositasok.get(l1.getListaIndex() - haviIgenyek.size()).getLengthOfNap() > 1) {
 					btnSzeretneNext.setEnabled(true);
 					
-					lbSzeretne2.setText(haviModositasok.get(napokIndex - modositasIndex).getNapiIgenyek(1).getName());
+					lbSzeretne2.setText(haviModositasok.get(l1.getListaIndex() - modositasIndex).getNapiIgenyek(1).getName());
 				}	
 				
-				if (haviModositasok.get(napokIndex - haviIgenyek.size()).getLengthOfNap() > 2) {
+				if (haviModositasok.get(l1.getListaIndex() - haviIgenyek.size()).getLengthOfNap() > 2) {
 					
-						lbSzeretne3.setText(haviModositasok.get(napokIndex - modositasIndex).getNapiIgenyek(2).getName());
+						lbSzeretne3.setText(haviModositasok.get(l1.getListaIndex() - modositasIndex).getNapiIgenyek(2).getName());
 					}
 				
 				
@@ -959,9 +962,33 @@ public class AdminWindow2 extends JFrame {
 		
 		 */
 		
+		
+		//cserélhetőség feltöltése
+		
+		
+		listaElkeszitese();
+		
+		l3 = new ListaPelda<User>(velukCserelhet, "Velük cserélhet");
+		
+		contentPane.add(l3);
+		
+		l2.addChangedListener(new ChangedListener() {
+
+			@Override
+			public void somethingHappend() {
+				// TODO Auto-generated method stub
+				listaElkeszitese();
+				l3.setLista(velukCserelhet);
+				
+			}
+			
+		});
+		
+		
+		
 		this.contentPane.setVisible(true);
 		
-		napEltolas(napokIndex);
+		napEltolas(l1.getListaIndex());
 
 		
 		
@@ -1049,7 +1076,7 @@ public class AdminWindow2 extends JFrame {
 		
 		// napok rész
 		
-		napokIndex = napokH;
+		l1.getListaIndex() = napokH;
 		
 		napok = new ArrayList<String>();
 		
@@ -1123,7 +1150,7 @@ public class AdminWindow2 extends JFrame {
 
 		
 		
-		//System.out.println(napokIndex);
+		//System.out.println(l1.getListaIndex());
 		
 		for (int i = 0; i < haviIgenyek.size(); ++i) {
 			
@@ -1136,7 +1163,7 @@ public class AdminWindow2 extends JFrame {
 			napok.add(honap + "."+ haviModositasok.get(i).getNapiIgenyek(0).getNap() + "");
 		}
 		
-		napokIndex = 0;
+		l1.getListaIndex() = 0;
 		
 		lNap1.setText(napok.get(0) + "");
 		lNap2.setText(napok.get(1) + "");
@@ -1275,7 +1302,7 @@ public class AdminWindow2 extends JFrame {
 	 * 
 	 * FOntos paraméterek: 
 	 * 
-	 * napokIndex: ez a nap lett kiválasztva
+	 * l1.getListaIndex(): ez a nap lett kiválasztva
 	 * szeretne index: kinek nézzük az igényeit
 	 * haviIgenyek
 	 *    
@@ -1284,11 +1311,11 @@ public class AdminWindow2 extends JFrame {
 		
 		//nevLista
 		
-		int minuszosDatum = Integer.parseInt(napok.get(napokIndex).split("\\.")[1]) -1;
+		int minuszosDatum = Integer.parseInt(napok.get(l1.getListaIndex()).split("\\.")[1]) -1;
 		
 		//System.out.println("nap: " + minuszosDatum);
 		
-		Igeny kivalasztott = haviIgenyek.get(minuszosDatum).getNapiIgenyek(szeretneIndex);
+		Igeny kivalasztott = haviIgenyek.get(minuszosDatum).getNapiIgenyek(l2.getListaIndex());
 		
 
 		
@@ -1373,53 +1400,6 @@ public class AdminWindow2 extends JFrame {
 		}
 				
 				
-			
-
-		
-		
-		// az első három értéket feltöltjük a mozgatható helyekre
-		
-		//karacsonyfa(); // kieszedi azokat, akikkel nem cserélhet valamilyen ok miatt
-		
-		
-		vele1.setBorder(BorderFactory.createLineBorder(Color.orange));
-		vele2.setBorder(BorderFactory.createLineBorder(Color.orange));
-		vele3.setBorder(BorderFactory.createLineBorder(Color.orange));
-		
-		vele1.setBackground(Color.gray);
-		vele2.setBackground(Color.gray);
-		vele3.setBackground(Color.gray);
-		
-		btnVeleVissza.setEnabled(false);
-		btnVeleNext.setEnabled(false);
-		
-		if (velukCserelhet.size() > 0) {
-			
-			lbVele1.setText(velukCserelhet.get(0).getName() + " " +  velukCserelhet.get(0).getCser());
-			
-
-			vele1.setBackground(Color.green);
-			vele1.setBorder(BorderFactory.createLineBorder(Color.black));
-
-			
-			
-		
-			if (velukCserelhet.size() > 1) {
-				lbVele2.setText(velukCserelhet.get(1).getName() +  velukCserelhet.get(0).getCser());
-				vele2.setBackground(Color.orange);
-		
-				if (velukCserelhet.size() > 2) {
-					this.lbVele3.setText(velukCserelhet.get(2).getName() +  velukCserelhet.get(0).getCser());
-					vele3.setBackground(Color.orange);
-				}
-			}
-		}
-		
-		
-		for (int i = 0; i < velukCserelhet.size(); ++i) {
-			
-			System.out.println(velukCserelhet.get(i) + " " + velukCserelhet.get(i).getCser());
-		}
 		
 		
 	}
@@ -1513,15 +1493,15 @@ public class AdminWindow2 extends JFrame {
 			nap3.setBorder(BorderFactory.createLineBorder(Color.ORANGE));
 		}
 		
-		if (napokIndex < modositasIndex) {
-		if (haviIgenyek.get(napokIndex).getLengthOfNap() > 0) {
+		if (l1.getListaIndex() < modositasIndex) {
+		if (haviIgenyek.get(l1.getListaIndex()).getLengthOfNap() > 0) {
 			
 			
 			//a szabadnapokat vesszük nap váltás után
 			btnSzabadN.setBackground(Color.green);
 			this.btnHVK.setBackground(Color.orange);
 			
-			lbSzeretne1.setText(haviIgenyek.get(napokIndex).getNapiIgenyek(0).getName());
+			lbSzeretne1.setText(haviIgenyek.get(l1.getListaIndex()).getNapiIgenyek(0).getName());
 			
 			btnSzeretneNext.setEnabled(false);
 			btnSzeretneVisszsa.setEnabled(false);
@@ -1531,21 +1511,21 @@ public class AdminWindow2 extends JFrame {
 			szeretne1.setBackground(Color.green);
 			szeretne2.setBackground(Color.orange);
 			szeretne3.setBackground(Color.orange);
-			szeretneIndex = 0;
+			//szeretneIndex = 0;
 			
 			szeretne1.setBorder(BorderFactory.createLineBorder(Color.black));
 			szeretne2.setBorder(BorderFactory.createLineBorder(Color.orange));
 			szeretne3.setBorder(BorderFactory.createLineBorder(Color.orange));
 			
-			if (haviIgenyek.get(napokIndex).getLengthOfNap() > 1) {
+			if (haviIgenyek.get(l1.getListaIndex()).getLengthOfNap() > 1) {
 				btnSzeretneNext.setEnabled(true);
 				
-				lbSzeretne2.setText(haviIgenyek.get(napokIndex).getNapiIgenyek(1).getName());
+				lbSzeretne2.setText(haviIgenyek.get(l1.getListaIndex()).getNapiIgenyek(1).getName());
 			}	
 			
-			if (haviIgenyek.get(napokIndex).getLengthOfNap() > 2) {
+			if (haviIgenyek.get(l1.getListaIndex()).getLengthOfNap() > 2) {
 				
-					lbSzeretne3.setText(haviIgenyek.get(napokIndex).getNapiIgenyek(2).getName());
+					lbSzeretne3.setText(haviIgenyek.get(l1.getListaIndex()).getNapiIgenyek(2).getName());
 				}
 			
 			
@@ -1554,14 +1534,14 @@ public class AdminWindow2 extends JFrame {
 			
 			
 			
-			if (haviModositasok.get(napokIndex - haviIgenyek.size()).getLengthOfNap() > 0) {
+			if (haviModositasok.get(l1.getListaIndex() - haviIgenyek.size()).getLengthOfNap() > 0) {
 				
 				
 				//a szabadnapokat vesszük nap váltás után
 				btnSzabadN.setBackground(Color.orange);
 				this.btnHVK.setBackground(Color.green);
 				
-				lbSzeretne1.setText(haviModositasok.get(napokIndex - haviIgenyek.size()).getNapiIgenyek(0).getName());
+				lbSzeretne1.setText(haviModositasok.get(l1.getListaIndex() - haviIgenyek.size()).getNapiIgenyek(0).getName());
 				
 				btnSzeretneNext.setEnabled(false);
 				btnSzeretneVisszsa.setEnabled(false);
@@ -1571,21 +1551,21 @@ public class AdminWindow2 extends JFrame {
 				szeretne1.setBackground(Color.green);
 				szeretne2.setBackground(Color.orange);
 				szeretne3.setBackground(Color.orange);
-				szeretneIndex = 0;
+				//szeretneIndex = 0;
 				
 				szeretne1.setBorder(BorderFactory.createLineBorder(Color.black));
 				szeretne2.setBorder(BorderFactory.createLineBorder(Color.orange));
 				szeretne3.setBorder(BorderFactory.createLineBorder(Color.orange));
 				
-				if (haviModositasok.get(napokIndex - haviIgenyek.size()).getLengthOfNap() > 1) {
+				if (haviModositasok.get(l1.getListaIndex() - haviIgenyek.size()).getLengthOfNap() > 1) {
 					btnSzeretneNext.setEnabled(true);
 					
-					lbSzeretne2.setText(haviModositasok.get(napokIndex - modositasIndex).getNapiIgenyek(1).getName());
+					lbSzeretne2.setText(haviModositasok.get(l1.getListaIndex() - modositasIndex).getNapiIgenyek(1).getName());
 				}	
 				
-				if (haviModositasok.get(napokIndex - haviIgenyek.size()).getLengthOfNap() > 2) {
+				if (haviModositasok.get(l1.getListaIndex() - haviIgenyek.size()).getLengthOfNap() > 2) {
 					
-						lbSzeretne3.setText(haviModositasok.get(napokIndex - modositasIndex).getNapiIgenyek(2).getName());
+						lbSzeretne3.setText(haviModositasok.get(l1.getListaIndex() - modositasIndex).getNapiIgenyek(2).getName());
 					}
 				
 				
