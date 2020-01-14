@@ -1,18 +1,10 @@
 package windows;
-import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-//import com.jgoodies.forms.layout.FormLayout;
-//import com.jgoodies.forms.layout.ColumnSpec;
-//import com.jgoodies.forms.layout.RowSpec;
-
-import objects.FileOperator;
-import objects.User;
-import objects.dolgozik;
-
 import java.awt.BorderLayout;
-import javax.swing.JPanel;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.EventQueue;
 import java.awt.GridLayout;
+import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
@@ -21,19 +13,23 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JButton;
-import java.awt.Color;
-import java.awt.Component;
-
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
-import java.awt.SystemColor;
-import javax.swing.JTextArea;
-import javax.swing.JScrollBar;
+import javax.swing.JFrame;
+//import com.jgoodies.forms.layout.FormLayout;
+//import com.jgoodies.forms.layout.ColumnSpec;
+//import com.jgoodies.forms.layout.RowSpec;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+
+import objects.FileOperator;
+import objects.User;
+import objects.dolgozik;
 
 public class UserWindow2 {
 
@@ -1727,8 +1723,6 @@ public class UserWindow2 {
 public boolean configBetoltes() {
 	{
 		// TODO Auto-generated method stub
-		
-		File config = new File ("series.conf");
 		
 		try {
 		

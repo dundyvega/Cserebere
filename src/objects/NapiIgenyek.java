@@ -25,4 +25,9 @@ public class NapiIgenyek {
 		napiIgenyek.add(ig);
 	}
 
+	public ArrayList<Igeny> getArrayList() {
+		// TODO Auto-generated method stub
+		return napiIgenyek;
+	}
+
 }

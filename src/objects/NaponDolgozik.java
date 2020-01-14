@@ -92,6 +92,27 @@ public class NaponDolgozik {
 		// TODO Auto-generated method stub
 		return nevek.contains(user);
 	}
+
+	public void remove(String name) {
+		// TODO Auto-generated method stub
+		
+		int i = 0;
+		boolean talalt = false;
+		
+		while (i < nevek.size()) {
+			
+			if (nevek.get(i).getName().equals(name)) {
+				nevek.remove(i);
+				//System.out.println(this.getNap() + "töröltük " + name);
+				talalt = false;
+			}
+			
+			i++;
+			
+			
+		}
+		
+	}
 	
 	
 

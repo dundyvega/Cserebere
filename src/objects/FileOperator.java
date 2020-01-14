@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -15,11 +14,8 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import org.apache.poi.sl.usermodel.VerticalAlignment;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.FillPatternType;
-import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -164,6 +160,7 @@ final public class FileOperator {
 			}
 		}
 		
+		workbook.close();
 		
 		return user;
 	}
@@ -319,7 +316,7 @@ final public class FileOperator {
 		}
 		}
 		
-		
+		workbook.close();
 		
 		return users;
 	}
@@ -327,8 +324,6 @@ final public class FileOperator {
 	
 	public static  void configBetoltes() {
 			// TODO Auto-generated method stub
-			
-			File config = new File ("series.conf");
 			
 			//configBetoltes();
 			try {
@@ -537,6 +532,7 @@ final public class FileOperator {
 		  workbook.write(excelFile);
 		  
 		  excelFile.close();
+		  workbook.close();
 		  
 		} catch (Exception ex) {
 			
@@ -648,8 +644,15 @@ final public class FileOperator {
 			}
 			
 			
-			return elso + "\n" + br.readLine() + "\n" + br.readLine() +
-					"\n" + br.readLine()+ "\n"  + br.readLine() + "\n" +  br.readLine();
+			String st1 = br.readLine();
+			String st2 = br.readLine();
+			String st3 = br.readLine();
+			String st4 = br.readLine();
+			String st5 = br.readLine();
+			br.close();
+			
+			return elso + "\n" + st1 + "\n" + st2 +
+					"\n" + st3+ "\n"  + st4 + "\n" +  st5;
 			
 			
 		} catch (Exception ex) {
@@ -749,6 +752,7 @@ final public class FileOperator {
 				 lineDelelottok = br.readLine();
 				 maradjon = br.readLine();
 				 megj = br.readLine();
+				 br.close();
 				 
 				 
 				

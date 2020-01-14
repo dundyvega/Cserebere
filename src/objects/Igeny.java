@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public class Igeny {
 	
 	private String name;
+	private User user;
 	private int nap;
 	private ArrayList<Integer> adnaErte;
 	
@@ -54,12 +55,19 @@ public class Igeny {
 	
 	public String toString() {
 		
-		String st = this.name + ": ;Szeretné: " + nap + "-t; Adná érte: ";
-		for (int i = 0; i < adnaErte.size(); ++i) {
-			st += adnaErte.get(i) + ", ";
-		}
+		String st = this.name;
 		
 		return st;
+		
+	}
+	
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		// TODO Auto-generated method stub
+		this.user = user;
 		
 	}
 }

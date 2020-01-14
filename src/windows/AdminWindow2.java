@@ -2,13 +2,13 @@ package windows;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Event;
 import java.awt.EventQueue;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -27,9 +27,11 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import objects.Beo;
+import objects.ChangedListener;
 import objects.FileOperator;
 import objects.Igeny;
 import objects.IgenyTipus;
+import objects.ListaPelda;
 import objects.NapiIgenyek;
 import objects.NaponDolgozik;
 import objects.User;
@@ -37,6 +39,10 @@ import objects.dolgozik;
 
 public class AdminWindow2 extends JFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private static int honap;
 	private JPanel contentPane;
 	private JMenuItem mntmMappaLtrehozsa;
@@ -95,6 +101,8 @@ public class AdminWindow2 extends JFrame {
 	private JPanel vele2;
 	private JPanel vele3;
 	private ArrayList<NapiIgenyek> haviMaradjon;
+	
+	private ListaPelda<Igeny> l2 = null;
 
 	/**
 	 * Launch the application.
@@ -273,10 +281,10 @@ public class AdminWindow2 extends JFrame {
 		JMenuItem mntmExpertIgnyek = new JMenuItem("Expert Igények");
 		mnIgnyek.add(mntmExpertIgnyek);
 		
-		mntmExpertIgnyek.addActionListener(e->igenyRendereles(1));
+		mntmExpertIgnyek.addActionListener(e->igenyRendereles2(1));
 		
 		JMenuItem mntmTtIgnyek = new JMenuItem("T1/T2 Igények");
-		mntmTtIgnyek.addActionListener(e->igenyRendereles(2));
+		mntmTtIgnyek.addActionListener(e->igenyRendereles2(0));
 		
 		mnIgnyek.add(mntmTtIgnyek);
 		contentPane = new JPanel();
@@ -287,11 +295,11 @@ public class AdminWindow2 extends JFrame {
 		contentPane.setVisible(false);
 		
 		
+		contentPane.setLayout(new GridLayout(3,1));
 		
 		
 		
-		
-		
+		/*
 		JPanel panel = new JPanel();
 		contentPane.add(panel);
 		panel.setLayout(new BorderLayout(0, 0));
@@ -479,7 +487,7 @@ public class AdminWindow2 extends JFrame {
 		btnElfogads = new JButton("Elfogadás");
 		panel_25.add(btnElfogads, BorderLayout.CENTER);
 		
-		
+		*/
 		
 	}
 	
@@ -621,7 +629,349 @@ public class AdminWindow2 extends JFrame {
 		
 		return null;
 	}
+	
+	
+	private Object igenyRendereles2(int mode) {
+		
+		try {
+		
+		beosztasok = FileOperator.getInfoFromFile(mode);
+		
+		leadottIgenyek = FileOperator.getIgenyek(mode);
+		configBetoltes();
+		
+		szabadNapjaVan = new ArrayList<NaponDolgozik>();
+		delelottDolgozikVan = new ArrayList<NaponDolgozik>();
+		delutanDOlgozikVan = new ArrayList<NaponDolgozik>();
+		
+		// megvan User szer beosztás, és név alapján megvannak az igények, az igényekhez beállítjuk a Usert?
+		
+		
+		for (int i = 0; i < leadottIgenyek.size(); ++i) {
+			
+			boolean talalt = false;
+			
+			for (int j = 1; j < beosztasok.size() && !talalt; ++j) {
+				
+				if (leadottIgenyek.get(i).getName().equals(beosztasok.get(j).getName())) {
+					
+					talalt = true;
+					
+					leadottIgenyek.get(i).setUser(beosztasok.get(j));
+				}
+				
+			}
+		}
+		
+		
+		haviIgenyek = new ArrayList<NapiIgenyek>();
+		haviModositasok = new ArrayList<NapiIgenyek>();
+		haviMaradjon = new ArrayList<NapiIgenyek>();
+		
+		
+		if (leadottIgenyek.size() > 0) {
+		
+		for (int i = 1; i <= napokH; ++i) {
+			
+			NapiIgenyek napiIgenyek = new NapiIgenyek();
+			NapiIgenyek napiModositasok = new NapiIgenyek();
+			NapiIgenyek napiMaradjon = new NapiIgenyek();
+			
+			
+			for (int j = 0; j < leadottIgenyek.size(); ++j) {
+				
+				if (i == leadottIgenyek.get(j).getNap() && leadottIgenyek.get(j).getTipus() != IgenyTipus.Maradjon) {
+					
+					if (leadottIgenyek.get(j).getTipus() == IgenyTipus.SzabadHetkoznap || 
+							leadottIgenyek.get(j).getTipus() == IgenyTipus.SzabadHetvege) {
+					napiIgenyek.addNapiIgenyek(leadottIgenyek.get(j));
+					} else {
+						napiModositasok.addNapiIgenyek(leadottIgenyek.get(j));
+					}
+					
+				} else if (leadottIgenyek.get(j).getTipus() == IgenyTipus.Maradjon && i == leadottIgenyek.get(j).getNap()){
+					napiMaradjon.addNapiIgenyek(leadottIgenyek.get(j));
+				}
+			}
+			
+			//csak akkor vizsgáljuk a napokra leadott igényeket, ha voltak rá igények
+			if (napiIgenyek.getLengthOfNap() > 0) {
+				haviIgenyek.add(napiIgenyek);
+			}
+			
+			if (napiModositasok.getLengthOfNap() > 0) {
+				haviModositasok.add(napiModositasok);
+			}
+			
+			if (napiMaradjon.getLengthOfNap() > 0) {
+				haviMaradjon.add(napiMaradjon);
+			}
+		}
+		}
+		
+		
+		
+		
+		szabadNapjaVan = new ArrayList<NaponDolgozik>();
+		delelottDolgozikVan = new ArrayList<NaponDolgozik>();
+		delutanDOlgozikVan = new ArrayList<NaponDolgozik>();
+		
+		//System.out.println(beosztasok.get(1).get(30).getLeiras());
+		
+		for (int i = 0; i < napokH; ++i) {
+			
+			NaponDolgozik npSz = new NaponDolgozik(i + 1);
+			NaponDolgozik npDe = new NaponDolgozik(i + 1);
+			NaponDolgozik npDu = new NaponDolgozik(i + 1);
+			
+			for (int j = 1; j < beosztasok.size(); ++j) {
+				
+				if (beosztasok.get(j).get(i).getUserke() == dolgozik.szabadH || 
+						beosztasok.get(j).get(i).getUserke() == dolgozik.szabadV) {
+					
+					npSz.addUser(beosztasok.get(j));
+					npSz.setErtek(1);
+					
+				} else if (beosztasok.get(j).get(i).getUserke() == dolgozik.dolgHde || 
+						beosztasok.get(j).get(i).getUserke() == dolgozik.dolgVde) {
+					
+					npDe.addUser(beosztasok.get(j));
+					npDe.setErtek(1);
+					
+				} else if (beosztasok.get(j).get(i).getUserke() == dolgozik.dolgHdu ||
+						beosztasok.get(j).get(i).getUserke() == dolgozik.dolgVdu) {
+					npDu.addUser(beosztasok.get(j));
+					npDu.setErtek(1);
+				}
+				
+			}
+			
+			if (npSz.getLength() > 0) {
+				szabadNapjaVan.add(npSz);
+			}
+			
+			if (npDu.getLength() > 0) {
+				delutanDOlgozikVan.add(npDu);
+			}
+			
+			if (npDe.getLength() > 0) {
+				
+				delelottDolgozikVan.add(npDe);
+			}
+			
+		}
+		
+		korabbiHonap = FileOperator.teljesPrevMonth();
+		
+		toroldARosszakat(delelottDolgozikVan, 0);
+		toroldARosszakat(delutanDOlgozikVan, 1);
+		toroldARosszakat(szabadNapjaVan, 2);
+		
+		
+		
+		
+		napokIndex = napokH;
+		
+		napok = new ArrayList<String>();
+		
+		
+		
+		
+		for (int i = 0; i < haviIgenyek.size(); ++i) {
+			
+			napok.add(honap + "."+ haviIgenyek.get(i).getNapiIgenyek(0).getNap() + "");
+		}
+		
+		modositasIndex = haviIgenyek.size();
+		
+		for (int i = 0; i < haviModositasok.size(); ++i) {
+			napok.add(honap + "."+ haviModositasok.get(i).getNapiIgenyek(0).getNap() + "");
+		}
+		
+		napokIndex = 0;
+		
+		ListaPelda<String> l1 = new ListaPelda<String>(napok, "Napok: ");
+		l2 = new ListaPelda<Igeny>(haviIgenyek.get(0).getArrayList(), "Kezelők");
+		
+		contentPane.add(l1);
+		
+		
+		JPanel ketGomb = new JPanel();
+		ketGomb.setLayout(new GridLayout(1, 0, 20, 20));
+		
+		JPanel kv1 = new JPanel();
+		JPanel kv2 = new JPanel();
+		JPanel kv3 = new JPanel();
+		btnSzabadN = new JButton("Szabadnap csere");
+		btnHVK = new JButton("DU/De csere");
+		ketGomb.add(kv1);
+		ketGomb.add(this.btnSzabadN);
+		ketGomb.add(this.btnHVK);
+		ketGomb.add(kv2);
+		ketGomb.add(kv2);
+		
+		contentPane.add(ketGomb);
+		
+		contentPane.add(l2);
+		
+		
+		
+		
+		
+		
+		l1.addChangedListener(new ChangedListener() {
+			
+			
 
+			@Override
+			public void somethingHappend() {
+				// TODO Auto-generated method stub
+				System.out.println("dfgfd");
+				
+				if (l1.getListaIndex() < modositasIndex) {
+					
+					if (haviIgenyek.get(l1.getListaIndex()).getLengthOfNap() > 0) {
+
+							l2.setLista(haviIgenyek.get(l1.getListaIndex()).getArrayList());
+							
+							btnSzabadN.setBackground(Color.GREEN);
+							btnHVK.setBackground(Color.ORANGE);
+						
+					}
+				} else 
+					if (haviModositasok.get(l1.getListaIndex() - haviIgenyek.size()).getLengthOfNap() > 0) {
+						//haviModositasok.get(napokIndex - haviIgenyek.size()
+						
+							 l2.setLista((haviModositasok.get(l1.getListaIndex() - haviIgenyek.size()).getArrayList()));;
+							 
+							 btnSzabadN.setBackground(Color.ORANGE);
+								btnHVK.setBackground(Color.GREEN);
+					}
+				
+			}
+			
+		});
+		
+		/*
+		 * 
+		 * 
+		 * 
+		 * 
+		 * if (napokIndex < modositasIndex) {
+		if (haviIgenyek.get(napokIndex).getLengthOfNap() > 0) {
+			
+			
+			//a szabadnapokat vesszük nap váltás után
+			btnSzabadN.setBackground(Color.green);
+			this.btnHVK.setBackground(Color.orange);
+			
+			lbSzeretne1.setText(haviIgenyek.get(napokIndex).getNapiIgenyek(0).getName());
+			
+			btnSzeretneNext.setEnabled(false);
+			btnSzeretneVisszsa.setEnabled(false);
+			lbSzeretne2.setText("");
+			lbSzeretne3.setText("");
+			
+			szeretne1.setBackground(Color.green);
+			szeretne2.setBackground(Color.orange);
+			szeretne3.setBackground(Color.orange);
+			szeretneIndex = 0;
+			
+			szeretne1.setBorder(BorderFactory.createLineBorder(Color.black));
+			szeretne2.setBorder(BorderFactory.createLineBorder(Color.orange));
+			szeretne3.setBorder(BorderFactory.createLineBorder(Color.orange));
+			
+			if (haviIgenyek.get(napokIndex).getLengthOfNap() > 1) {
+				btnSzeretneNext.setEnabled(true);
+				
+				lbSzeretne2.setText(haviIgenyek.get(napokIndex).getNapiIgenyek(1).getName());
+			}	
+			
+			if (haviIgenyek.get(napokIndex).getLengthOfNap() > 2) {
+				
+					lbSzeretne3.setText(haviIgenyek.get(napokIndex).getNapiIgenyek(2).getName());
+				}
+			
+			
+		}
+		} else {
+			
+			
+			
+			if (haviModositasok.get(napokIndex - haviIgenyek.size()).getLengthOfNap() > 0) {
+				
+				
+				//a szabadnapokat vesszük nap váltás után
+				btnSzabadN.setBackground(Color.orange);
+				this.btnHVK.setBackground(Color.green);
+				
+				lbSzeretne1.setText(haviModositasok.get(napokIndex - haviIgenyek.size()).getNapiIgenyek(0).getName());
+				
+				btnSzeretneNext.setEnabled(false);
+				btnSzeretneVisszsa.setEnabled(false);
+				lbSzeretne2.setText("");
+				lbSzeretne3.setText("");
+				
+				szeretne1.setBackground(Color.green);
+				szeretne2.setBackground(Color.orange);
+				szeretne3.setBackground(Color.orange);
+				szeretneIndex = 0;
+				
+				szeretne1.setBorder(BorderFactory.createLineBorder(Color.black));
+				szeretne2.setBorder(BorderFactory.createLineBorder(Color.orange));
+				szeretne3.setBorder(BorderFactory.createLineBorder(Color.orange));
+				
+				if (haviModositasok.get(napokIndex - haviIgenyek.size()).getLengthOfNap() > 1) {
+					btnSzeretneNext.setEnabled(true);
+					
+					lbSzeretne2.setText(haviModositasok.get(napokIndex - modositasIndex).getNapiIgenyek(1).getName());
+				}	
+				
+				if (haviModositasok.get(napokIndex - haviIgenyek.size()).getLengthOfNap() > 2) {
+					
+						lbSzeretne3.setText(haviModositasok.get(napokIndex - modositasIndex).getNapiIgenyek(2).getName());
+					}
+				
+				
+			}
+			
+			
+			
+			
+			
+		}
+		 * 
+		 * 
+		 * 
+		 * lNap1.setText(napok.get(0) + "");
+		lNap2.setText(napok.get(1) + "");
+		lNap3.setText(napok.get(2) + "");
+		
+		lbSzeretne1.setText(haviIgenyek.get(0).getNapiIgenyek(0).getName());
+		
+		if (haviIgenyek.get(0).getLengthOfNap() > 1) {
+			lbSzeretne2.setText(haviIgenyek.get(0).getNapiIgenyek(1).getName());
+			//System.out.println("gsfgs");
+			
+			if (haviIgenyek.get(0).getLengthOfNap() > 2)
+			lbSzeretne3.setText(haviIgenyek.get(0).getNapiIgenyek(2).getName());
+		}
+		
+		 */
+		
+		this.contentPane.setVisible(true);
+		
+		napEltolas(napokIndex);
+
+		
+		
+		} catch (Exception ex) {}
+		
+		
+		return null;
+	}
+	
+/*
 	private Object igenyRendereles(int mode) {
 		// TODO Auto-generated method stub
 		
@@ -880,6 +1230,8 @@ public class AdminWindow2 extends JFrame {
 		toroldMaradjonErtekek(delutanDOlgozikVan);
 		toroldMaradjonErtekek(delelottDolgozikVan);
 		
+		
+		
 
 			
 		
@@ -896,15 +1248,19 @@ public class AdminWindow2 extends JFrame {
 		return null;
 	}
 	
+	*/
+	
 	private void toroldMaradjonErtekek(ArrayList<NaponDolgozik> lista) {
 		// TODO Auto-generated method stub
+		
+		System.out.println("Maradjonokat töröljük!");
 		
 		for (int i = 0; i < haviMaradjon.size(); ++i) { // végig megyünk a maradjon napokon
 			
 			for (int j = 0; j < haviMaradjon.get(i).getLengthOfNap(); ++j) {
 				
 				
-				
+				lista.get(haviMaradjon.get(i).getNapiIgenyek(j).getNap() - 1).remove(haviMaradjon.get(i).getNapiIgenyek(j).getName());
 				
 			}
 			
@@ -980,6 +1336,8 @@ public class AdminWindow2 extends JFrame {
 					
 						if (delelottDolgozikVan.get(kivalasztott.getAdnaErte(j) - 1).benneVan(nagyonSzabad.getUser(i))) {
 							
+							
+							
 							velukCserelhet.add(nagyonSzabad.getUser(i));
 							nagyonSzabad.getUser(i).setCser(kivalasztott.getAdnaErte(j));
 							
@@ -1015,7 +1373,7 @@ public class AdminWindow2 extends JFrame {
 		}
 				
 				
-				
+			
 
 		
 		
@@ -1087,8 +1445,11 @@ public class AdminWindow2 extends JFrame {
 		// TODO Auto-generated method stub
 		
 	}
+	
+
 
 	private void napEltolas(int i) {
+		
 		
 		if (i >= modositasIndex) {
 			
@@ -1241,8 +1602,6 @@ public class AdminWindow2 extends JFrame {
 	
 	public void configBetoltes() {
 		// TODO Auto-generated method stub
-		
-		File config = new File ("series.conf");
 		
 		//configBetoltes();
 		try {
