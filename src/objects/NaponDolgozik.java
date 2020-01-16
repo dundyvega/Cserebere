@@ -114,6 +114,52 @@ public class NaponDolgozik {
 		
 	}
 	
+	/**
+	 * 
+	 * 
+	 * @param day
+	 * @return
+	 * @dundyvega
+	 * 
+	 * Visszatéríti a két napon dolgozók metszetét
+	 * 
+	 */
+	public ArrayList<User> segment(NaponDolgozik day) {
+		
+		ArrayList<User> returner = new ArrayList<User>();
+		
+		for (int i = 0; i < nevek.size(); ++i) {
+			for (int j = 0; j < day.getLength(); ++j) {
+				
+				if (nevek.get(i).equals(day.getUser(j))) {
+					
+					returner.add(nevek.get(i));
+					
+				}
+			}
+			
+		}
+		
+		
+		return returner;
+	}
+
+	public int getUserID(String name) {
+		// TODO Auto-generated method stub
+		
+		boolean nemTalalt = false;
+		int t = -1;
+		for (int i = 0; i < nevek.size() && !nemTalalt; ++i) {
+			if (nevek.get(i).getName().equals(name)) {
+				nemTalalt = true;
+				t = i;
+			}
+			
+		}
+		
+		return t;
+	}
+	
 	
 
 }

@@ -101,6 +101,7 @@ public class ListaPelda <T> extends JPanel {
 		
 		button.addActionListener(e->mozgasd(--listaIndex));
 		
+		
 		button_1 = new JButton(">>");
 		contentPane.add(button_1);
 		button_1.addActionListener(e->mozgasd(++listaIndex));
@@ -129,11 +130,12 @@ public class ListaPelda <T> extends JPanel {
 		
 		if (i == lista.size() - 1) {
 			
+
 			
 			button_1.setEnabled(false);
 			
 			fesdKiATobbit(getLastPanel());
-			if (lista.size() > 0) {
+			if (lista.size() > 1) {
 				button.setEnabled(true);
 			}
 			
@@ -353,6 +355,7 @@ public class ListaPelda <T> extends JPanel {
 	public void megjelenites() {
 		
 		label1.setText("faszom");
+	
 		
 		if (lista.size() == 0) {
 			

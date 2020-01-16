@@ -165,6 +165,19 @@ final public class FileOperator {
 		return user;
 	}
 	
+	public static ArrayList<User> getPrewMonthsUser() throws IOException {
+		
+		configBetoltes();
+		
+		String[] speckok = spec.split(",");
+		
+		
+		ArrayList<User>  emberek = getInfoFromFile(multHonap, speckok);
+		
+		return emberek;
+	}
+	
+	
 	public static ArrayList<NaponDolgozik> teljesPrevMonth() throws IOException {
 		
 		configBetoltes();
@@ -175,7 +188,7 @@ final public class FileOperator {
 		
 		ArrayList<NaponDolgozik> napokK = new ArrayList<NaponDolgozik>();
 		
-		for (int i = napokPrew - 8; i < napokPrew - 1; ++i) {
+		for (int i = napokPrew - 8; i < napokPrew; ++i) {
 			
 			NaponDolgozik npSz = new NaponDolgozik(i + 1);
 			

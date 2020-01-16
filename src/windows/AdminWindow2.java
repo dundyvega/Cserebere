@@ -32,6 +32,7 @@ import objects.FileOperator;
 import objects.Igeny;
 import objects.IgenyTipus;
 import objects.ListaPelda;
+import objects.ModifiedUser;
 import objects.NapiIgenyek;
 import objects.NaponDolgozik;
 import objects.PossibleAssigment;
@@ -106,6 +107,7 @@ public class AdminWindow2 extends JFrame {
 	private ListaPelda<Igeny> l2 = null;
 	private ListaPelda<String> l1;
 	private ListaPelda<User> l3;
+	private ArrayList<User> korabbiHonapEmberei;
 
 	/**
 	 * Launch the application.
@@ -764,7 +766,7 @@ public class AdminWindow2 extends JFrame {
 			
 		}
 		
-		korabbiHonap = FileOperator.teljesPrevMonth();
+		korabbiHonapEmberei = FileOperator.getPrewMonthsUser();
 		
 		toroldARosszakat(delelottDolgozikVan, 0);
 		toroldARosszakat(delutanDOlgozikVan, 1);
@@ -968,9 +970,9 @@ public class AdminWindow2 extends JFrame {
 		
 		listaElkeszitese();
 		
-		l3 = new ListaPelda<User>(velukCserelhet, "Velük cserélhet");
+		//l3 = new ListaPelda<User>(velukCserelhet, "Velük cserélhet");
 		
-		contentPane.add(l3);
+		//contentPane.add(l3);
 		
 		l2.addChangedListener(new ChangedListener() {
 
@@ -978,7 +980,7 @@ public class AdminWindow2 extends JFrame {
 			public void somethingHappend() {
 				// TODO Auto-generated method stub
 				listaElkeszitese();
-				l3.setLista(velukCserelhet);
+				//l3.setLista(velukCserelhet);
 				
 			}
 			
@@ -1309,102 +1311,213 @@ public class AdminWindow2 extends JFrame {
 	 */
 	private void listaElkeszitese() {
 		
-		//nevLista
+		int napIndexed = Integer.parseInt(napok.get(l1.getListaIndex()).split("\\.")[1]) - 1;
 		
-		int minuszosDatum = Integer.parseInt(napok.get(l1.getListaIndex()).split("\\.")[1]) -1;
+		ArrayList<ModifiedUser> userers = new ArrayList<ModifiedUser>();
 		
-		//System.out.println("nap: " + minuszosDatum);
-		
-		Igeny kivalasztott = haviIgenyek.get(minuszosDatum).getNapiIgenyek(l2.getListaIndex());
-		
-
-		
-		
-		velukCserelhet = new ArrayList<User>();
-		
-		velukCserelhetIndex = 0;
-		
-		
-		IgenyTipus tip = kivalasztott.getTipus(); // ilyen típusű csere kell
-		
-		NaponDolgozik nagyonSzabad;	// velük cserélhet, ha a csere nap is jó
-		
-		
-		
-		if (tip == IgenyTipus.SzabadHetkoznap || tip == IgenyTipus.SzabadHetvege) {
+		if (l1.getListaIndex() < haviIgenyek.size()) { // ha szabadNapról van szó
 			
-			nagyonSzabad = szabadNapjaVan.get(minuszosDatum);
-			
-		} else if (tip == IgenyTipus.Delelott) {
+			Igeny ig = haviIgenyek.get(l1.getListaIndex()).getArrayList().get(l2.getListaIndex());
 			
 			
-			nagyonSzabad = delelottDolgozikVan.get(minuszosDatum);
-		} else {
-			
-			nagyonSzabad = delutanDOlgozikVan.get(minuszosDatum);
-			
-		}
-
-		
-		for (int i = 0; i < nagyonSzabad.getLength(); ++i) { // ők szabadok az igénybe leadott napon
-			
-			for (int j = 0; j < kivalasztott.lengthOfAdnaErte(); ++j) { // az igénylő ezeket a napokat adná
+			for (int i = 0; i < ig.lengthOfAdnaErte(); ++i) { // végig megyünk a napokon amit adna
+				//System.out.println("Adná érte: " + ig.getAdnaErte(i));
 				
-				// először a du/de cseréket csináljuk meg, mivel az egyszerűbb
+				ArrayList<User> idrtr = szabadNapjaVan.get(napIndexed).segment(delutanDOlgozikVan.get(ig.getAdnaErte(i) -1));
+				ArrayList<User> idrtr2 = szabadNapjaVan.get(napIndexed).segment(delelottDolgozikVan.get(ig.getAdnaErte(i) - 1));
 				
 				
-			
-				
-				if (tip == IgenyTipus.Delelott) {
+				for (int j = 0; j < idrtr.size(); ++j) {
 					
-					// nagyonSzabad_i - egy olyan ember, akinek van egy olyan t napja, amilyen az igénylőnek kell
+					dolgozik dolg = ig.getUser().getList().get(napIndexed).getUserke();
 					
-					
-					
-						if (delelottDolgozikVan.get(kivalasztott.getAdnaErte(j) - 1).benneVan(nagyonSzabad.getUser(i))) {
-							
-							
-							
-							velukCserelhet.add(nagyonSzabad.getUser(i));
-							nagyonSzabad.getUser(i).setCser(kivalasztott.getAdnaErte(j));
-							
-						} 
-				} else if (tip == IgenyTipus.Delutan){
-							
-							
-							if (delutanDOlgozikVan.get(kivalasztott.getAdnaErte(j) - 1).benneVan(nagyonSzabad.getUser(i))) {
-								
-								velukCserelhet.add(nagyonSzabad.getUser(i));
-								nagyonSzabad.getUser(i).setCser(kivalasztott.getAdnaErte(j));
-								
-							}
-							
-						} else if (tip == IgenyTipus.SzabadHetkoznap || tip == IgenyTipus.SzabadHetvege) {
-							
-							
-							if (delutanDOlgozikVan.get(kivalasztott.getAdnaErte(j) - 1).benneVan(nagyonSzabad.getUser(i)) ||
-									delutanDOlgozikVan.get(kivalasztott.getAdnaErte(j) - 1).benneVan(nagyonSzabad.getUser(i))) {
-								
-								velukCserelhet.add(nagyonSzabad.getUser(i));
-								nagyonSzabad.getUser(i).setCser(kivalasztott.getAdnaErte(j));
-								
-							}
-							
-							
-						}
-							
-				
+					userers.add(new ModifiedUser(idrtr.get(j), 1, ig.getAdnaErte(i), dolg, ig.getNap()));
 					
 				}
 				
+				for (int j = 0; j < idrtr2.size(); ++j) {
+					
+					dolgozik dolg = ig.getUser().getList().get(napIndexed).getUserke();
+					userers.add(new ModifiedUser(idrtr2.get(j), 1, ig.getAdnaErte(i), dolg, ig.getNap()));
+					
+				}
+				
+				
+				
+			}
+			
+		/*for (int i = 0; i < userers.size(); ++i) {
+				
+				System.out.println(userers.get(i));
+				
+			}
+			
+			*/
+		System.out.println("második");
+			removeKaracsonyFak(userers, 0); //szabadság karácsonyfákat
+			
+			
+
+
+			
+			
+			
+		} else { // külön délután, külön délelőtt, de nem ma
+			
+			
 		}
-				
-				
-		
 		
 	}
 	
+	//kitörli azokat a lehetséges cseréket, amelyek karácsonyfát generálnának
 	
+	
+	private void removeKaracsonyFak(ArrayList<ModifiedUser> userers, int mode) {
+		/*
+		 * mode = 0 szabadság
+		 * mode = 1 delutan
+		 * mode = 2 delelőtt
+		 * 
+		 * 
+		 * a csere személy nem dolgozhat így:
+		 *  délelőtt szabadnap délelőtt   ->  délelőtt délelőtt délelőtt   != délelőtt délután délelőtt
+		 *  délelőtt szabadnap szabadnap  ->  délelőtt szabadnap délelőtt, délelőtt délután szabad
+		 *  szabadnap szabadnap délelőtt  ->  szabadnap délelőtt délelőtt != szabadnap, délután délelőtt
+		 *  szabadnap szabadnap szabadnap ->  ! szabad délelőtt szabad   ! szabad délután szabad
+		 * délután szabadnap délután  ->    délután délután délután != délután délelőtt délután
+		 * délután szabadnap szabadnap ->   délután délután szabad != délután délelott szabad
+		 * szabad szabad délután       -> szabad délelőtt délután , szabad délután délután  
+		 * 
+		 * 
+		 * szóval nem lehet:
+		 * délelőtt délután délelőtt
+		 * szabad délután délelőtt
+		 * szabad délelőtt szabad
+		 * szabad délután szabad
+		 * délután délelőtt délelőtt
+		 * délután délelőtt szabad
+		 * 
+		 * 
+		 * kor
+		 * 
+		 */
+		
+		
+		//korabbiHonap.get(korabbiHonap.size() - 1).getUser(user)?
+		
+		if (mode == 0) {
+			
+			
+				for (ModifiedUser us: userers) {
+					
+					//System.out.println("dolgozik" + us.getDolg());
+					
+					User user = us.getUser();
+					
+					dolgozik b1 = null;
+					dolgozik b3 = null;
+					
+					if (us.getEztAnapot() - 2 >= 0  && us.getEztAnapot()  <  user.getList().size()) {
+					    b1 = user.get(us.getEztAnapot() - 2).getUserke();
+					    b3 = user.get(us.getEztAnapot()).getUserke();
+					    
+					}  else if (us.getEztAnapot() - 2 < 0) {
+						// itt a korábbi hónap utolsó napját kell nézni
+						
+						b3 = user.get(us.getEztAnapot()).getUserke();
+						
+						int korabbiIndex = getUserFromPrewMontsUserList(user);
+						
+						if (korabbiIndex != -1) {
+							
+							int indexR = this.korabbiHonapEmberei.get(korabbiIndex).getList().size();
+							b1 = korabbiHonapEmberei.get(korabbiIndex).get(indexR - 1).getUserke();
+							
+							if (b1 == dolgozik.spec) {
+								b1 = dolgozik.dolgVdu;
+							}
+							
+							//System.out.println(korabbiHonapEmberei.get(korabbiIndex).getName() + " " + korabbiHonapEmberei.get(korabbiIndex).get(indexR - 1).getLeiras());
+							
+						} else {
+							b1 = us.getDolg();
+						}
+						
+					} else {
+						b1 = user.get(us.getEztAnapot() - 2).getUserke();
+						b3 = us.getDolg();
+					}
+					    //System.out.println(b1.getLeiras() + " " + b3.getLeiras() + " " + user.getName());
+					    
+					    int delelottB1 = b1 == dolgozik.dolgHde || b1 == dolgozik.dolgVde?1:10;
+					    int delutanB1 = b1 == dolgozik.dolgHdu || b1 == dolgozik.dolgVdu?-1:10;
+					    
+					    int B1NapErtek = delelottB1 + delutanB1;  //szabad = 20; délután = 9, delelott 11
+					    
+					    
+					    int delelottB3 = b3 == dolgozik.dolgHde || b3 == dolgozik.dolgVde?1:10;
+					    int delutanB3 = b3 == dolgozik.dolgHdu || b3 == dolgozik.dolgVdu?-1:10;
+					    
+					    int B3NapErtek = delelottB3 + delutanB3;  //szabad = 20; délután = 9, delelott 11
+					    
+					    
+					    int delelottB2 = us.getDolg() == dolgozik.dolgHde || us.getDolg() == dolgozik.dolgVde?1:10;
+					    int delutanB2 = us.getDolg() == dolgozik.dolgHdu || us.getDolg() == dolgozik.dolgVdu?-1:10;
+					
+					    //System.out.println(delelottB2 + " " + delutanB2 + " fsdfsdfsdfsdf");
+					
+					    int B2NapErtek = delelottB2 + delutanB2;  //szabad = 20; délután = 9, delelott 11
+					    
+					    
+					    //System.out.println(B1NapErtek + " "+ B2NapErtek + " " + B3NapErtek);
+					/*
+					 * délelőtt 11, délután 9 szabad 20
+					 * tiltottak: 
+						 * délelőtt délután délelőtt*
+						 * szabad délután délelőtt*
+						 * szabad délelőtt szabad*
+						 * szabad délután szabad*
+						 * délután délelőtt délelőtt
+						 * délután délelőtt szabad
+						 */
+					    
+					    
+					    if ((B1NapErtek == 11 && B2NapErtek == 9 && B3NapErtek == 11) || 
+					       (B1NapErtek == 20 && B2NapErtek == 9 && B3NapErtek == 11) ||
+					       (B1NapErtek == 20 && B2NapErtek == 11 && B3NapErtek == 20) || 
+					       (B1NapErtek == 20 && B2NapErtek == 9 && B3NapErtek == 20) ||
+					       (B1NapErtek == 9 && B2NapErtek == 11 && B3NapErtek == 11) ||
+					       (B1NapErtek == 9 && B2NapErtek == 11 && B3NapErtek == 20)) {
+					    	
+					    	us.setLehetetlenites(true);
+					    	
+					    //	System.out.println("fsdfd");
+					    	
+					    }
+					 					
+				}
+		}
+		
+		
+	}
+
+	private int getUserFromPrewMontsUserList(User user) {
+		// TODO Auto-generated method stub
+		boolean talalt = false;
+		int ret = -1;
+		
+		for (int i = 0; i < this.korabbiHonapEmberei.size() && !talalt; ++i) {
+			
+			if (korabbiHonapEmberei.get(i).getName().equals(user.getName())) {
+				
+				talalt = true;
+				ret = i;
+			}
+		}
+		
+		return ret;
+	}
+
 	private boolean karacsonyfa(User us, Beo b1, Beo b2, Beo b3) {
 		
 		return true;
