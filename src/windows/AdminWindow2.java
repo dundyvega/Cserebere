@@ -106,8 +106,10 @@ public class AdminWindow2 extends JFrame {
 	
 	private ListaPelda<Igeny> l2 = null;
 	private ListaPelda<String> l1;
-	private ListaPelda<User> l3;
+	private ListaPelda<ModifiedUser> l3;
 	private ArrayList<User> korabbiHonapEmberei;
+	private ArrayList<ModifiedUser> userers;
+	private ArrayList<ModifiedUser> theRealUserers;
 
 	/**
 	 * Launch the application.
@@ -970,9 +972,9 @@ public class AdminWindow2 extends JFrame {
 		
 		listaElkeszitese();
 		
-		//l3 = new ListaPelda<User>(velukCserelhet, "Velük cserélhet");
+		l3 = new ListaPelda<ModifiedUser>(theRealUserers, "Velük cserélhet");
 		
-		//contentPane.add(l3);
+		contentPane.add(l3);
 		
 		l2.addChangedListener(new ChangedListener() {
 
@@ -980,7 +982,7 @@ public class AdminWindow2 extends JFrame {
 			public void somethingHappend() {
 				// TODO Auto-generated method stub
 				listaElkeszitese();
-				//l3.setLista(velukCserelhet);
+				l3.setLista(theRealUserers);
 				
 			}
 			
@@ -1313,7 +1315,7 @@ public class AdminWindow2 extends JFrame {
 		
 		int napIndexed = Integer.parseInt(napok.get(l1.getListaIndex()).split("\\.")[1]) - 1;
 		
-		ArrayList<ModifiedUser> userers = new ArrayList<ModifiedUser>();
+		userers = new ArrayList<ModifiedUser>();
 		
 		if (l1.getListaIndex() < haviIgenyek.size()) { // ha szabadNapról van szó
 			
@@ -1330,6 +1332,7 @@ public class AdminWindow2 extends JFrame {
 				for (int j = 0; j < idrtr.size(); ++j) {
 					
 					dolgozik dolg = ig.getUser().getList().get(napIndexed).getUserke();
+					
 					
 					userers.add(new ModifiedUser(idrtr.get(j), 1, ig.getAdnaErte(i), dolg, ig.getNap()));
 					
@@ -1355,6 +1358,7 @@ public class AdminWindow2 extends JFrame {
 			*/
 		System.out.println("második");
 			removeKaracsonyFak(userers, 0); //szabadság karácsonyfákat
+			removeHatNapozik(userers);
 			
 			
 
@@ -1364,7 +1368,66 @@ public class AdminWindow2 extends JFrame {
 			
 		} else { // külön délután, külön délelőtt, de nem ma
 			
+			/*
+			 * if (l1.getListaIndex() < haviIgenyek.size()) { // ha szabadNapról van szó
 			
+			Igeny ig = haviIgenyek.get(l1.getListaIndex()).getArrayList().get(l2.getListaIndex());
+			 */
+			
+			/*
+			 * hányadik nap
+			 * 
+			 * 
+			 */
+			System.out.println("vajon miért?!");
+			
+			Igeny ig = haviModositasok.get(l1.getListaIndex() - haviIgenyek.size()).getArrayList().get(l2.getListaIndex());
+			System.out.println("gfdg");
+			
+			for (int i = 0; i < ig.lengthOfAdnaErte(); ++i) {
+				
+				ArrayList<User> idrtr = null;
+				 if (ig.getTipus() == IgenyTipus.Delelott) {
+					 
+					  idrtr = delelottDolgozikVan.get(napIndexed).segment(delutanDOlgozikVan.get(ig.getAdnaErte(i) -1));
+						
+				 } else {
+					 
+					  idrtr = delutanDOlgozikVan.get(napIndexed).segment(delelottDolgozikVan.get(ig.getAdnaErte(i) -1));
+						
+				 }
+				 
+					for (int j = 0; j < idrtr.size(); ++j) {
+						
+						dolgozik dolg = ig.getUser().getList().get(napIndexed).getUserke();
+						
+						
+						userers.add(new ModifiedUser(idrtr.get(j), 1, ig.getAdnaErte(i), dolg, ig.getNap()));
+						
+					}
+				 
+				 
+			}
+			
+			
+			
+			
+			removeKaracsonyFak(userers, 0); // megnézi, hogy az igényelt nap miatt ne legyen karacsonyfa
+			removeKaracsonyFak(userers, 3); // megnézi, hogy a cserélendő nap miatt nem lesz-e karacsonyfa
+			
+
+			
+			
+		}
+		
+		theRealUserers = new ArrayList<ModifiedUser>();
+		
+		for (int i = 0; i < userers.size(); ++i) {
+			
+			if (!userers.get(i).isLehetetlen()) {
+				theRealUserers.add(userers.get(i));
+				
+			}
 		}
 		
 	}
@@ -1372,6 +1435,13 @@ public class AdminWindow2 extends JFrame {
 	//kitörli azokat a lehetséges cseréket, amelyek karácsonyfát generálnának
 	
 	
+	private void removeHatNapozik(ArrayList<ModifiedUser> userers2) {
+		// TODO Auto-generated method stub
+		
+		//addig megy jobbra balra az index elemtől, amig talál 1-1 szabadnapot
+		
+	}
+
 	private void removeKaracsonyFak(ArrayList<ModifiedUser> userers, int mode) {
 		/*
 		 * mode = 0 szabadság
@@ -1496,6 +1566,111 @@ public class AdminWindow2 extends JFrame {
 					    }
 					 					
 				}
+		} else {
+			/*
+			 * 
+			 * 
+			 * Itt két dolgot kell nézni:
+			 * 
+			 * 1. A cserélendő nap két oldalán ép
+			 */
+			
+			// végig megyünk a teljes listán
+			
+			
+			
+			for (ModifiedUser us: userers) {
+				
+				//System.out.println("dolgozik" + us.getDolg());
+				
+				User user = us.getUser();
+				
+				dolgozik b1 = null;
+				dolgozik b3 = null;
+				
+				if (us.getNap() - 2 >= 0  && us.getNap()  <  user.getList().size()) {
+				    b1 = user.get(us.getNap() - 2).getUserke();
+				    b3 = user.get(us.getNap()).getUserke();
+				    
+				}  else if (us.getNap() - 2 < 0) {
+					// itt a korábbi hónap utolsó napját kell nézni
+					
+					b3 = user.get(us.getNap()).getUserke();
+					
+					int korabbiIndex = getUserFromPrewMontsUserList(user);
+					
+					if (korabbiIndex != -1) {
+						
+						int indexR = this.korabbiHonapEmberei.get(korabbiIndex).getList().size();
+						b1 = korabbiHonapEmberei.get(korabbiIndex).get(indexR - 1).getUserke();
+						
+						if (b1 == dolgozik.spec) {
+							b1 = dolgozik.dolgVdu;
+						}
+						
+						//System.out.println(korabbiHonapEmberei.get(korabbiIndex).getName() + " " + korabbiHonapEmberei.get(korabbiIndex).get(indexR - 1).getLeiras());
+						
+					} else {
+						b1 = us.getDolg();
+					}
+					
+				} else {
+					b1 = user.get(us.getNap() - 2).getUserke();
+					b3 = us.getDolg();
+				}
+				    //System.out.println(b1.getLeiras() + " " + b3.getLeiras() + " " + user.getName());
+				    
+				    int delelottB1 = b1 == dolgozik.dolgHde || b1 == dolgozik.dolgVde?1:10;
+				    int delutanB1 = b1 == dolgozik.dolgHdu || b1 == dolgozik.dolgVdu?-1:10;
+				    
+				    int B1NapErtek = delelottB1 + delutanB1;  //szabad = 20; délután = 9, delelott 11
+				    
+				    
+				    int delelottB3 = b3 == dolgozik.dolgHde || b3 == dolgozik.dolgVde?1:10;
+				    int delutanB3 = b3 == dolgozik.dolgHdu || b3 == dolgozik.dolgVdu?-1:10;
+				    
+				    int B3NapErtek = delelottB3 + delutanB3;  //szabad = 20; délután = 9, delelott 11
+				    
+				    
+				    int delelottB2 = us.getDolg() == dolgozik.dolgHde || us.getDolg() == dolgozik.dolgVde?1:10;
+				    int delutanB2 = us.getDolg() == dolgozik.dolgHdu || us.getDolg() == dolgozik.dolgVdu?-1:10;
+				
+				    //System.out.println(delelottB2 + " " + delutanB2 + " fsdfsdfsdfsdf");
+				
+				    int B2NapErtek = delelottB2 + delutanB2;  //szabad = 20; délután = 9, delelott 11
+				    
+				    
+				    //System.out.println(B1NapErtek + " "+ B2NapErtek + " " + B3NapErtek);
+				/*
+				 * délelőtt 11, délután 9 szabad 20
+				 * tiltottak: 
+					 * délelőtt délután délelőtt*
+					 * szabad délután délelőtt*
+					 * szabad délelőtt szabad*
+					 * szabad délután szabad*
+					 * délután délelőtt délelőtt
+					 * délután délelőtt szabad
+					 */
+				    
+				    
+				    if ((B1NapErtek == 11 && B2NapErtek == 9 && B3NapErtek == 11) || 
+				       (B1NapErtek == 20 && B2NapErtek == 9 && B3NapErtek == 11) ||
+				       (B1NapErtek == 20 && B2NapErtek == 11 && B3NapErtek == 20) || 
+				       (B1NapErtek == 20 && B2NapErtek == 9 && B3NapErtek == 20) ||
+				       (B1NapErtek == 9 && B2NapErtek == 11 && B3NapErtek == 11) ||
+				       (B1NapErtek == 9 && B2NapErtek == 11 && B3NapErtek == 20)) {
+				    	
+				    	us.setLehetetlenites(true);
+				    	
+				    //	System.out.println("fsdfd");
+				    	
+				    }
+				 					
+			}
+			
+
+			
+			
 		}
 		
 		

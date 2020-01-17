@@ -925,7 +925,7 @@ final public class FileOperator {
 			
 			
 			
-			String fname = file.getName().split("\\.")[0];
+			String fname = file.getName().split("\\.txt")[0];
 			if (lineSzabadHV != null)  {
 				igenyBeallitas(lineSzabadHV, leadottIgenyek, IgenyTipus.SzabadHetvege, fname);
 				igenyBeallitas(lineSzabadHK, leadottIgenyek, IgenyTipus.SzabadHetkoznap, fname);

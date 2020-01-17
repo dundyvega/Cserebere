@@ -728,11 +728,13 @@ public class UserWindow2 {
 					if (hasznalt.get(i).getBackground().equals(panel_6.getBackground())) {
 						//délelőtt dolgozik, délután szeretne
 						delelottokSzoveg = (i + 1) + "," + delelottokSzoveg;
+						delutanokSzoveg = delutanokSzoveg + "," + (i+1);
 					}
 					
 					if (hasznalt.get(i).getBackground().equals(panel_5.getBackground())) {
 						//délután dolgozik, délelőtt szeretne
 						delutanokSzoveg = (i + 1) + "," + delutanokSzoveg;
+						delelottokSzoveg = delelottokSzoveg + "," + (i+1);
 					}
 					
 					if (hasznalt.get(i).getBackground().equals(panel_7.getBackground())) {

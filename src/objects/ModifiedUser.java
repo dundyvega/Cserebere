@@ -21,7 +21,12 @@ public class ModifiedUser {
 	
 	public String toString() {
 		
-		return user + " adja: " + nap;
+		
+		//hasznalt.get(i).setText("<html>" + szoveg.replaceAll("\\n", "<br>") + "</html>");
+		
+		String szov = user + "\n" + "adja: " + nap;
+		return "<html>" + szov.replaceAll("\\n", "<br>") + "</html>";
+		//return user + " adja: " + nap;
 	}
 	
 	public User getUser() {
