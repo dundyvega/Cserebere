@@ -728,13 +728,13 @@ public class UserWindow2 {
 					if (hasznalt.get(i).getBackground().equals(panel_6.getBackground())) {
 						//délelőtt dolgozik, délután szeretne
 						delelottokSzoveg = (i + 1) + "," + delelottokSzoveg;
-						delutanokSzoveg = delutanokSzoveg + "," + (i+1);
+						//delutanokSzoveg = delutanokSzoveg + "," + (i+1);
 					}
 					
 					if (hasznalt.get(i).getBackground().equals(panel_5.getBackground())) {
 						//délután dolgozik, délelőtt szeretne
 						delutanokSzoveg = (i + 1) + "," + delutanokSzoveg;
-						delelottokSzoveg = delelottokSzoveg + "," + (i+1);
+						//delelottokSzoveg = delelottokSzoveg + "," + (i+1);
 					}
 					
 					if (hasznalt.get(i).getBackground().equals(panel_7.getBackground())) {
@@ -824,8 +824,12 @@ public class UserWindow2 {
 		//jComboBox1.setEnabled(false);
 		panel_10.add(jComboBox1);
 		
+		JButton btnNewButton = new JButton("Keresés");
+	
+		panel_10.add(btnNewButton);
 		
-		jComboBox1.addActionListener(new ActionListener() {
+		
+		btnNewButton.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -1011,6 +1015,25 @@ public class UserWindow2 {
     			
     			if (hasznalt.get(i).getBackground().equals(panel_5.getBackground())) {
     				du++;
+    			}
+    			
+    			if (hasznalt.get(i).getBackground().equals(panel_7.getBackground())) {
+    				
+    				if (szabadHetvege.contains(hasznalt.get(i))) {
+    					
+    					hvSz++;
+    				} else if (szabadHetkoznap.contains(hasznalt.get(i))) {
+    					
+    					hkSz++;
+    					
+    					
+    				} else if (delelottok.contains(hasznalt.get(i))) {
+    					
+    					de++;
+    			} else if (delutanok.contains(hasznalt.get(i))) {
+					
+					du++;
+    			}
     			}
     			
     		}
@@ -1219,11 +1242,11 @@ public class UserWindow2 {
     				
     				String szoveg = "";
     				if (panel4.size() > panel18.size()) {
-    					szoveg += "Nem adtál meg elég szabad hétköznapot.\n";
+    					szoveg += "Nem adtál meg elég szabad hétköznapi napot.\n";
     				}
     				
     				if (panel3.size() > panel16.size()) {
-    					szoveg += "Nem adtál meg elég szabad hétköznapot.\n";
+    					szoveg += "Nem adtál meg elég szabad hétvégi napot.\n";
     				}
     				
     				if (panel5.size() > panel20.size()) {
