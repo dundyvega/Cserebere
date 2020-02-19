@@ -9,6 +9,7 @@ public class Igeny {
 	private int nap;
 	private ArrayList<Integer> adnaErte;
 	
+	
 	private IgenyTipus tipus;
 	
 	

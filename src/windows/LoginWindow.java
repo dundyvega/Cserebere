@@ -6,7 +6,10 @@
 package windows;
 
 import java.awt.event.WindowEvent;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 
 /**
@@ -35,6 +38,16 @@ public class LoginWindow extends javax.swing.JFrame {
     
     // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
     private void initComponents() {
+    	
+    	
+    	 try {
+ 			BufferedImage image = ImageIO.read(getClass().getResource("/img/image.png"));
+ 			this.setIconImage(image);
+ 			this.setTitle("Kombájn");
+ 		} catch (IOException e1) {
+ 			// TODO Auto-generated catch block
+ 			e1.printStackTrace();
+ 		}
 
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
@@ -93,7 +106,7 @@ public class LoginWindow extends javax.swing.JFrame {
     	UserWindow2 secondForm = new UserWindow2();
     	//secondForm.setBounds(0, 0, 1000	, 1000);
 
-    	secondForm.setTitle("Ezeket a napokat szeretném módosítani");
+    	secondForm.setTitle("Kombájn");
     	secondForm.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     	secondForm.setSize(900, 700);
     	secondForm.setLocationRelativeTo(null);
@@ -131,7 +144,7 @@ public class LoginWindow extends javax.swing.JFrame {
                 System.out.println("itt fog bejönni az adminoldal");
                 
                 AdminWindow2 admin = new AdminWindow2();
-                admin.setTitle("Ezeket a napokat szeretném módosítani");
+                admin.setTitle("Kombájn");
             	admin.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             	admin.setSize(900, 700);
             	admin.setLocationRelativeTo(null);

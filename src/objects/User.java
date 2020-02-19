@@ -65,5 +65,17 @@ public class User {
 	public void setCser(int cser) {
 		this.cser = this.cser += cser + ",";
 	}
+
+	public void addBeokPrev(Beo beo1, Beo beo2, Beo beo3, Beo beo4, Beo beo5, Beo beo6, Beo beo7) {
+		// TODO Auto-generated method stub
+		list.add(0, beo7);
+		list.add(0, beo6);
+		list.add(0, beo5);
+		list.add(0, beo4);
+		list.add(0, beo3);
+		list.add(0, beo2);
+		list.add(0, beo1);
+		
+	}
 	
 }

@@ -17,6 +17,7 @@ import java.util.Iterator;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
@@ -717,6 +718,174 @@ final public class FileOperator {
 		// TODO Auto-generated method stub
 		
 	}
+	
+	
+	private static void generaldIgenyeket2(String mappa, XSSFWorkbook workbook) throws IOException {
+		
+		String fullPathName = "./" + mappa + "/";
+		
+		File folder = new File(fullPathName);
+		
+		File[] listOfFiles = folder.listFiles();
+		
+		String hetvegeIgeny = "";
+		String hetvegeCsere = "";
+		
+		String hetkoznapIgeny = "";
+		String hetkoznapCsere = "";
+		
+		String deIgeny = "";
+		String deCsere = "";
+		
+		String duIgeny = "";
+		String duCsere = "";
+		
+		String megjegyzes = "";
+		
+		String marad = "";
+		
+		
+		XSSFSheet sheet = workbook.createSheet(mappa.split("\\.")[0]);
+		
+		
+		int rowIndex = 0;
+		int cellIndex = 0;
+		/**
+		Row foRow = sheet.createRow(rowIndex++);
+		foRow.createCell(0).setCellValue("Kezelő");
+		foRow.createCell(1).setCellValue("Módosítást kérek");
+		foRow.createCell(2).setCellValue("Helyette szívesen bejövök");
+		foRow.createCell(3).setCellValue("Egyéb megjegyzés");
+		**/
+		
+		Row foRow = sheet.createRow(rowIndex++);
+		
+		foRow.createCell(0).setCellValue("Kezelő");
+		foRow.createCell(1).setCellValue("Szabad hétvége");
+		foRow.createCell(3).setCellValue("Szabad hétköznap");
+		foRow.createCell(5).setCellValue("Délelőtt");
+		foRow.createCell(7).setCellValue("Délután");
+		foRow.createCell(9).setCellValue("Maradjon");
+		foRow.createCell(10).setCellValue("Megjegyzés");
+		
+		sheet.addMergedRegionUnsafe(new CellRangeAddress(rowIndex-1, rowIndex-1, 1,2));
+		sheet.addMergedRegionUnsafe(new CellRangeAddress(rowIndex-1, rowIndex-1, 3,4));
+		sheet.addMergedRegionUnsafe(new CellRangeAddress(rowIndex-1, rowIndex-1, 5,6));
+		sheet.addMergedRegionUnsafe(new CellRangeAddress(rowIndex-1, rowIndex-1, 7,8));
+		
+		foRow = sheet.createRow(rowIndex++);
+		
+		foRow.createCell(1).setCellValue("Szeretné");
+		foRow.createCell(2).setCellValue("Adná");
+		
+		foRow.createCell(3).setCellValue("Szeretné");
+		foRow.createCell(4).setCellValue("Adná");
+		
+		foRow.createCell(5).setCellValue("Szeretné");
+		foRow.createCell(6).setCellValue("Adná");
+		
+		foRow.createCell(7).setCellValue("Szeretné");
+		foRow.createCell(8).setCellValue("Adná");
+		
+		String lineSzabadHV = "";
+		String lineSzabadHK = "";
+		String lineDelutanok = "";
+		String lineDelelottok = "";
+		String maradjon = "";
+		String megj = "";
+		
+		
+		for (File file: listOfFiles) {
+			
+			BufferedReader br = new BufferedReader(new FileReader(file));
+			try {
+				
+			  lineSzabadHV = br.readLine();
+			  lineSzabadHK = br.readLine();
+			  lineDelutanok = br.readLine();
+			  lineDelelottok = br.readLine();
+			  maradjon = br.readLine();
+			  megj = br.readLine();
+			  br.close();
+			 
+			} catch (Exception ex) {
+				
+				
+				 lineSzabadHV = "0=0";
+				 lineSzabadHK = "0=0";
+				 lineDelutanok = "0=0";
+				 lineDelelottok = "0=0";
+				 maradjon = "0";
+				 megj = "";
+			}
+			
+			
+		/*
+		 * String hetvegeIgeny = "";
+		String hetvegeCsere = "";
+		
+		String hetkoznapIgeny = "";
+		String hetkoznapCsere = "";
+		
+		String deIgeny = "";
+		String deCsere = "";
+		
+		String duIgeny = "";
+		String duCsere = "";
+		
+		String megjegyzes = "";
+		
+		String marad = "";
+			 */
+			
+			
+		try {	
+		 hetvegeIgeny = lineSzabadHV.split("=")[0];
+		 hetvegeCsere = lineSzabadHV.split("=")[1];
+		} catch (Exception ex) {}
+		 try {
+		 hetkoznapIgeny = lineSzabadHK.split("=")[0];
+		 hetkoznapCsere = lineSzabadHK.split("=")[0];
+		 } catch (Exception ex) {}
+		 
+		 try {
+		 deIgeny = lineDelelottok.split("=")[0];
+		 deCsere = lineDelelottok.split("=")[0];
+		 } catch (Exception ex) {}
+		 
+		 try {
+		 duIgeny = lineDelutanok.split("=")[0];
+		 duCsere = lineDelutanok.split("=")[0];	
+		 } catch (Exception ex) {}
+		 
+		 try {
+		 marad = maradjon.contains("0")?maradjon.split("0,")[1]:"";
+		 } catch (Exception ex) {}
+		 
+		 try {
+		 megjegyzes = megj == null || megj.equals("")?"":megj;
+		 } catch (Exception ex) {}
+		 
+		 Row row = sheet.createRow(rowIndex++);
+		 
+		 row.getCell(0).setCellValue(file.getName().split("\\.")[0]);
+		// row.getCell(1).setCellValue(hetvegeIgeny);
+		 //row.getCell(1).setCellValue(hetvegeCsere);
+		 //row.getCell(1).setCellValue(hetkoznapIgeny);
+		 //row.getCell(1).setCellValue(hetkoznapCsere);
+		 //row.getCell(1).setCellValue(deIgeny);
+		 //row.getCell(1).setCellValue(deCsere);
+		 //row.getCell(1).setCellValue(duIgeny);
+		 //row.getCell(1).setCellValue(duCsere);
+		 //row.getCell(1).setCellValue(marad);
+		 //row.getCell(1).setCellValue(megjegyzes);
+		 
+		 
+		}
+		
+		
+		
+	}
 
 	/**excelbe írja a mappa neveként kapott mappába 
 	 * @throws IOException */
@@ -739,6 +908,18 @@ final public class FileOperator {
 		String maradjon = "";
 		String megj = "";
 		
+		String hetvegeIgeny = "";
+		String hetvegeCsere = "";
+		
+		String hetkoznapIgeny = "";
+		String hetkoznapCsere = "";
+		
+		String deIgeny = "";
+		String deCsere = "";
+		
+		String duIgeny = "";
+		String duCsere = "";
+		
 		String st1 = "";
 		String st2 = "";
 		String megjegyzesS = "";
@@ -749,11 +930,45 @@ final public class FileOperator {
 		int rowIndex = 0;
 		int cellIndex = 0;
 		
-		Row foRow = sheet.createRow(rowIndex++);
+		/*Row foRow = sheet.createRow(rowIndex++);
 		foRow.createCell(0).setCellValue("Kezelő");
 		foRow.createCell(1).setCellValue("Módosítást kérek");
 		foRow.createCell(2).setCellValue("Helyette szívesen bejövök");
-		foRow.createCell(3).setCellValue("Egyéb megjegyzés");
+		foRow.createCell(3).setCellValue("Egyéb megjegyzés");*/
+		
+		
+		Row foRow = sheet.createRow(rowIndex++);
+		
+		foRow.createCell(0).setCellValue("Kezelő");
+		foRow.createCell(1).setCellValue("Szabad hétvége");
+		foRow.createCell(3).setCellValue("Szabad hétköznap");
+		foRow.createCell(5).setCellValue("Délelőtt");
+		foRow.createCell(7).setCellValue("Délután");
+		foRow.createCell(9).setCellValue("Maradjon");
+		foRow.createCell(10).setCellValue("Megjegyzés");
+		
+		sheet.addMergedRegionUnsafe(new CellRangeAddress(rowIndex-1, rowIndex-1, 1,2));
+		sheet.addMergedRegionUnsafe(new CellRangeAddress(rowIndex-1, rowIndex-1, 3,4));
+		sheet.addMergedRegionUnsafe(new CellRangeAddress(rowIndex-1, rowIndex-1, 5,6));
+		sheet.addMergedRegionUnsafe(new CellRangeAddress(rowIndex-1, rowIndex-1, 7,8));
+		
+		foRow = sheet.createRow(rowIndex++);
+		
+		foRow.createCell(1).setCellValue("Szeretné");
+		foRow.createCell(2).setCellValue("Adná");
+		
+		foRow.createCell(3).setCellValue("Szeretné");
+		foRow.createCell(4).setCellValue("Adná");
+		
+		foRow.createCell(5).setCellValue("Szeretné");
+		foRow.createCell(6).setCellValue("Adná");
+		
+		foRow.createCell(7).setCellValue("Szeretné");
+		foRow.createCell(8).setCellValue("Adná");
+		
+		
+		
+		
 		
 		for (File file: listOfFiles) {
 			
@@ -791,6 +1006,13 @@ final public class FileOperator {
 			Cell cell1 = row.createCell(cellIndex++);
 			Cell cell2 = row.createCell(cellIndex++);
 			Cell cell3 = row.createCell(cellIndex++);
+			Cell cell4 = row.createCell(cellIndex++);
+			Cell cell5 = row.createCell(cellIndex++);
+			Cell cell6 = row.createCell(cellIndex++);
+			Cell cell7 = row.createCell(cellIndex++);
+			Cell cell8 = row.createCell(cellIndex++);
+			Cell cell9 = row.createCell(cellIndex++);
+			Cell cell10 = row.createCell(cellIndex++);
 			
 			//igények
 			
@@ -802,64 +1024,88 @@ final public class FileOperator {
 			
 			if(!cser1[0].equals("0")) {
 				
-				st1 = "Szabad hétvégét szeretnék:  " + cser1[0].substring(0, cser1[0].length() - 2) + "; ";
+				hetvegeIgeny = cser1[0].substring(0, cser1[0].length() - 2);
 				
 			}
 			
 			if (!cser1[1].equals("0")) {
-				st2 = "Szabad hétvégéket adnám: " + cser1[1].substring(2, cser1[1].length())+ "; ";
+				hetvegeCsere =  cser1[1].substring(2, cser1[1].length());
 			}
 			
 			
 			if(!cser2[0].equals("0")) {
 				
-				st1 += "Szabad hétköznapokat szeretnék:  " + cser2[0].substring(0, cser2[0].length() - 2) + "; ";
+				hetkoznapIgeny =  cser2[0].substring(0, cser2[0].length() - 2);
 				
 			}
 			
 			if (!cser2[1].equals("0")) {
-				st2 += "Szabad hétköznapokat adnám: " + cser2[1].substring(2, cser2[1].length()) + "; ";
+				hetkoznapCsere =  cser2[1].substring(2, cser2[1].length());
 			}
 			
 			
 			if(!cser3[0].equals("0")) {
 				
-				st1 += "Délután szeretnék dolgozni:  " + cser3[0].substring(0, cser3[0].length() - 2) + "; ";
+				deIgeny =   cser3[0].substring(0, cser3[0].length() - 2);
 				
 			}
 			
 			if (!cser3[1].equals("0")) {
-				st2 += "Délutánt adnám: " + cser3[1].substring(2, cser3[1].length()) + "; ";
+				deCsere = cser3[1].substring(2, cser3[1].length());
 			}
 			
 			if(!cser4[0].equals("0")) {
 				
-				st1 += "Délelőtt szeretnék dolgozni:  " + cser4[0].substring(0, cser4[0].length() - 2) + "; ";
+				duIgeny =   cser4[0].substring(0, cser4[0].length() - 2);
 				
 			}
 			
 			if (!cser4[1].equals("0")) {
-				st2 += "Délelőttöt adnám: " + cser4[1].substring(2, cser4[1].length()) + "; ";
+				duCsere = cser4[1].substring(2, cser4[1].length());
+			}
+			
+			
+			if (maradjon.equals("0")) {
+				maradjon = "";
+			} else {
+				maradjon =   maradjon.substring(0, maradjon.length() - 2);
 			}
 			
 			
 			
 			
-			
-			
-			 megjegyzesS = "Maradjon így: " + maradjon + "; " + megj;
 			
 			} catch (Exception ex) {
 			
-				st1 = "";
-				st2 = "";
-				megjegyzesS = "";
+				hetvegeIgeny = "";
+				 hetvegeCsere = "";
+				
+				 hetkoznapIgeny = "";
+				 hetkoznapCsere = "";
+				
+				 deIgeny = "";
+				 deCsere = "";
+				
+				 duIgeny = "";
+				 duCsere = "";
+				 megj = "";
+				 maradjon = "";
 			}
 			
-			cell1.setCellValue(st1);
-			cell2.setCellValue(st2);
-			cell3.setCellValue(megjegyzesS);
+			cell1.setCellValue(hetvegeIgeny);
+			cell2.setCellValue(hetvegeCsere);
+	
+			cell3.setCellValue(hetkoznapIgeny);
+			cell4.setCellValue(hetkoznapCsere);
 			
+			cell5.setCellValue(deIgeny);
+			cell6.setCellValue(deCsere);
+			
+			cell7.setCellValue(duIgeny);
+			cell8.setCellValue(duCsere);
+			
+			cell9.setCellValue(maradjon);
+			cell10.setCellValue(megj);
 		}
 		
 		

@@ -7,12 +7,14 @@ import java.awt.EventQueue;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -131,6 +133,15 @@ public class AdminWindow2 extends JFrame {
 	 * Create the 
 	 */
 	public AdminWindow2() {
+		
+		 try {
+	 			BufferedImage image = ImageIO.read(getClass().getResource("/img/image.png"));
+	 			this.setIconImage(image);
+	 		} catch (IOException e1) {
+	 			// TODO Auto-generated catch block
+	 			e1.printStackTrace();
+	 		}
+		
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setBounds(100, 100, 777, 488);
 		
